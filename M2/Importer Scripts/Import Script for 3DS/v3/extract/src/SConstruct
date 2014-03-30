@@ -1,0 +1,11 @@
+
+from glob import glob
+
+mpq_src = glob('libmpq/*.c')
+zlib_src = glob('zlib/*.c')
+
+#zlib = StaticLibrary('zlib',zlib_src)
+mpq = StaticLibrary('mpq', mpq_src+zlib_src, CCFLAGS=['-Izlib/'])
+
+from shutil import copy2
+copy2('libmpq/mpq.h', './')

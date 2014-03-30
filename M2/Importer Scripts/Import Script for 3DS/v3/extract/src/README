@@ -1,0 +1,30 @@
+wow extension sources
+
+
+mpq.pyd/mpq.dll/mpq.so: python binding for libmpq
+vec.pyd/vec.dll/vec.so: 2d, 3d and 4d (quat) vector lib
+
+
+build:
+
+scons
+python setup.py
+
+
+dummy test:
+
+python test.py
+
+
+needed:
+
+c compiler: gcc or msvc7
+pyrex: generating c code for python extensions (on win32 add a 3rd arg to swig_sources() in Pyrex/Distutils/build_ext.py(35))
+scons: platform independent software construction tool (scons should be in the PATH)
+
+
+tested with:
+
+win32 + msvc7
+win32 + cygwin gcc
+ubuntu linux

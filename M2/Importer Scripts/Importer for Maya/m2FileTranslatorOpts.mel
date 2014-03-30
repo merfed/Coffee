@@ -1,0 +1,79 @@
+// Copyright (C) 2006 Esa Nuuros
+//
+global proc int m2FileTranslatorOpts(	string $parent,
+										string $action,
+										string $initialSettings,
+										string $resultCallback)
+//
+// Description:
+//		This script posts the M2 file translator options.
+//		The optionsString is of the form:
+//			varName1=value1;varName2=value2;...
+//
+//	Parameters:
+//		$parent -	the elf parent layout for this options layout. It is
+//							always a scrollLayout
+//		$action -	the action that is to be performed with this invokation
+//							of this proc. Valid options are:
+//							"query" -	construct the options string and pass it
+//								to the resultCallback.
+//							"post" -	post  all the elf controls.
+//		$initialSettings -	the current options string in effect at the time 
+//							this script is invoked.
+//		$resultCallback -	This is the proc to be called with the result 
+//							string.
+//	Returns:
+//		1 if successfull.
+//		0 otherwise.
+//
+{
+	string $currentOptions;
+	int $result;
+
+	if($action == "post")
+	{
+		setParent $parent;
+		
+		setUITemplate -pushTemplate DefaultTemplate;
+
+		frameLayout -label "Import Options" -cl false;
+			columnLayout -adj true;
+			
+				columnLayout;
+					checkBox -l "Verbose" optVerbose;
+					checkBox -e -value 1 optVerbose;
+					checkBox -l "Import Bones" optBones;
+					checkBox -e -value 0 optBones;
+					
+				setParent ..;
+			
+			setParent ..;
+		setParent ..;
+					
+		setUITemplate -popTemplate;
+	}
+	else if($action == "query")
+	{
+		if(`checkBox -q -v optVerbose` == 1)
+		{
+			$currentOptions = $currentOptions + "verbose=1;";
+		}
+		else
+		{
+			$currentOptions = $currentOptions + "verbose=0;";
+		}
+		
+		if(`checkBox -q -v optBones` == 1)
+		{
+			$currentOptions = $currentOptions + "bones=1;";
+		}
+		else
+		{
+			$currentOptions = $currentOptions + "bones=0;";
+		}
+
+		eval($resultCallback+" \""+$currentOptions+"\"");
+	}
+	
+	return $result;
+}

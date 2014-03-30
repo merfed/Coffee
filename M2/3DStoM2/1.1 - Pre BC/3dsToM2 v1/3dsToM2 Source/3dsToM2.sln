@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3dsToM2", "3dsToM2\3dsToM2.vcproj", "{0BAC89D7-777E-46EE-8A22-E34A1E1CD8E4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "m2diff", "m2diff\m2diff.vcproj", "{2F5CEB1A-BC4E-44A9-9FC8-722D55359364}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BAC89D7-777E-46EE-8A22-E34A1E1CD8E4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0BAC89D7-777E-46EE-8A22-E34A1E1CD8E4}.Debug|Win32.Build.0 = Debug|Win32
+		{0BAC89D7-777E-46EE-8A22-E34A1E1CD8E4}.Release|Win32.ActiveCfg = Release|Win32
+		{0BAC89D7-777E-46EE-8A22-E34A1E1CD8E4}.Release|Win32.Build.0 = Release|Win32
+		{2F5CEB1A-BC4E-44A9-9FC8-722D55359364}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2F5CEB1A-BC4E-44A9-9FC8-722D55359364}.Debug|Win32.Build.0 = Debug|Win32
+		{2F5CEB1A-BC4E-44A9-9FC8-722D55359364}.Release|Win32.ActiveCfg = Release|Win32
+		{2F5CEB1A-BC4E-44A9-9FC8-722D55359364}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

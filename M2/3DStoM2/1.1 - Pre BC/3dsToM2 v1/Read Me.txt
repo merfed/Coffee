@@ -1,0 +1,2 @@
+These tools are used in conjunction with 3D Max Studio for editing m2's.
+View the readme here for help.
