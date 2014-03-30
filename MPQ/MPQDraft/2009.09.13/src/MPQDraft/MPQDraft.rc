@@ -1,0 +1,399 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\MPQDraft.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\MPQDraft.ico"
+IDI_DIABLO              ICON                    "res\\Diablo.ico"
+IDI_DIABLO2             ICON                    "res\\Diablo2.ico"
+IDI_STARCRAFT           ICON                    "res\\Starcraft.ico"
+IDI_STAREDIT            ICON                    "res\\StarEdit.ico"
+IDI_WAR2BNE             ICON                    "res\\War2BNE.ico"
+IDI_WAR2EDIT            ICON                    "res\\War2Edit.ico"
+IDI_PLUGIN              ICON                    "res\\DLL.ico"
+IDI_MPQ                 ICON                    "res\\MPQ.ico"
+IDI_WARCRAFT3           ICON                    "res\\War3.ico"
+IDI_LOMSE               ICON                    "res\\lomse.ico"
+IDI_HELLFIRE            ICON                    "res\\hellfire.ico"
+IDI_WAR3HEADER          ICON                    "res\\War3Head.ico"
+IDI_WAR3EDIT            ICON                    "res\\War3Edit.ico"
+IDI_WAR3X               ICON                    "res\\War3x.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAINMENU DIALOGEX 0, 0, 280, 168
+STYLE DS_SETFONT | DS_3DLOOK | DS_CENTER | WS_POPUP
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    CONTROL         "Load MPQ &Patch",IDC_LOADMPQS,"Button",BS_OWNERDRAW | WS_GROUP | WS_TABSTOP,160,139,108,20
+    CONTROL         "Create Self-Executing &MPQ",IDC_CREATESEMPQ,"Button",BS_OWNERDRAW | WS_TABSTOP,12,139,108,20
+    CONTROL         "Min",IDC_MINIMIZE,"Button",BS_OWNERDRAW | WS_GROUP,258,4,8,7
+    CONTROL         "Close",IDC_CLOSE,"Button",BS_OWNERDRAW,267,4,8,7
+END
+
+IDD_PATCHTARGETPAGE DIALOGEX 0, 0, 330, 200
+STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CAPTION
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         157,IDC_FRAME,"Static",SS_BITMAP | SS_CENTERIMAGE | SS_SUNKEN,0,0,105,200
+    LTEXT           "",IDC_INFORMATION,114,0,216,32
+    LTEXT           "&Programs:",IDC_PROGRAMSLABEL,114,36,216,8
+    CONTROL         "List1",IDC_PROGRAMS,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,114,46,216,44,WS_EX_CLIENTEDGE
+    LTEXT           "&Components:",IDC_COMPONENTLABEL,114,94,216,8
+    CONTROL         "List1",IDC_COMPONENTS,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,114,104,216,44,WS_EX_CLIENTEDGE
+    CONTROL         "&Redirect extended calls (Advanced Users ONLY)",IDC_REDIROPENFILEEX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,114,152,216,8
+    LTEXT           "Program Executable:",IDC_FILENAMELABLE,114,164,216,8
+    EDITTEXT        IDC_FILENAME,114,173,182,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Browse",IDC_BROWSE,298,172,32,14
+    LTEXT           "Parameters:",IDC_PARAMSLABEL,114,189,40,8
+    EDITTEXT        IDC_PARAMETERS,156,187,174,12,ES_AUTOHSCROLL
+END
+
+IDD_PATCHWIZARD2 DIALOGEX 0, 0, 330, 200
+STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CAPTION
+CAPTION "Patching Wizard - Select MPQs (Step 2 of 3)"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         157,IDC_FRAME,"Static",SS_BITMAP | SS_CENTERIMAGE | SS_SUNKEN,0,0,105,200
+    LTEXT           "The following MPQs have been found in the current directory. Select one or more of them to use to patch. Higher MPQs take precidence. If the MPQ(s) you want do not appear in the list, click the Browse for MPQs button to search for them yourself.",IDC_INFORMATION,114,0,216,32
+    CONTROL         "List1",IDC_MPQS,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,114,36,216,124,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "Move &Up",IDC_MOVEUP,122,164,96,14
+    PUSHBUTTON      "Move &Down",IDC_MOVEDOWN,226,164,96,14
+    PUSHBUTTON      "&Browse for MPQs",IDC_BROWSE,266,186,64,14
+END
+
+IDD_PLUGINPAGE DIALOGEX 0, 0, 330, 200
+STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CAPTION
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         157,IDC_FRAME,"Static",SS_BITMAP | SS_CENTERIMAGE | SS_SUNKEN,0,0,105,200
+    LTEXT           "Select plug-ins to be used. Plug-ins provide additional patching functionality for MPQDraft and your selected MPQs.",IDC_INFORMATION,114,0,216,18
+    CONTROL         "List1",IDC_PLUGINS,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,114,19,216,142,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "&Configure Plugin",IDC_CONFIGURE,234,164,88,14
+    PUSHBUTTON      "&Browse for Plugins",IDC_BROWSE,262,186,67,14
+END
+
+IDD_SEMPQWIZARD1 DIALOGEX 0, 0, 330, 200
+STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CAPTION
+CAPTION "Self-Executing MPQ Wizard - SEMPQ Information (Step 1 of 3)"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         157,IDC_FRAME,"Static",SS_BITMAP | SS_CENTERIMAGE | SS_SUNKEN,0,0,105,200
+    LTEXT           "To customize your SEMPQ, type in a name for your SEMPQ custom; click Browse to select an MPQ to make into an SEMPQ; click Browse to select a filename to save your SEMPQ as; and click Browse to choose an icon for your SEMPQ.",IDC_INFORMATION,114,0,216,32
+    LTEXT           "Custom &Name:",IDC_NAMELABEL,114,36,216,8
+    EDITTEXT        IDC_SEMPQNAME,114,46,216,12,ES_AUTOHSCROLL
+    LTEXT           "Input MPQ Filename:",IDC_MPQNAMELABEL,114,62,216,8
+    EDITTEXT        IDC_MPQNAME,114,71,180,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Browse",IDC_BROWSEMPQ,298,70,32,14
+    LTEXT           "Output SEMPQ Executable Filename:",IDC_EXENAMELABEL,114,88,216,8
+    EDITTEXT        IDC_EXENAME,114,97,180,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Browse",IDC_BROWSEEXE,298,96,32,14
+    ICON            "",IDC_ICONDISPLAY,114,116,20,20,SS_CENTERIMAGE | SS_REALSIZEIMAGE | NOT WS_VISIBLE
+    LTEXT           "Icon for SEMPQ:",IDC_ICONLABEL,140,114,192,8,NOT WS_VISIBLE
+    EDITTEXT        IDC_ICONNAME,140,125,154,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_VISIBLE
+    PUSHBUTTON      "Browse",IDC_BROWSEICON,298,124,32,14,NOT WS_VISIBLE
+END
+
+IDD_SEMPQWIZARD22 DIALOGEX 0, 0, 330, 200
+STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CAPTION
+CAPTION "SEMPQ Wizard - Select Program (Step 2 of 3)"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         157,IDC_FRAME,"Static",SS_BITMAP | SS_CENTERIMAGE | SS_SUNKEN,0,0,105,200
+    LTEXT           "The following programs are supported natively by MPQDraft. Select the one you wish to patch. If the desired program does not appear in the lists, click the Browse button to search for it yourself.",IDC_INFORMATION,114,0,216,32
+    LTEXT           "&Programs:",IDC_PROGRAMSLABEL,114,36,216,8
+    CONTROL         "List1",IDC_PROGRAMS,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,114,46,216,44,WS_EX_CLIENTEDGE
+    LTEXT           "&Components:",IDC_COMPONENTLABEL,114,94,216,8
+    CONTROL         "List1",IDC_COMPONENTS,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,114,104,216,44,WS_EX_CLIENTEDGE
+    CONTROL         "&Redirect extended calls (Advanced Users ONLY)",IDC_REDIROPENFILEEX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,114,152,216,8
+    LTEXT           "Program Executable:",IDC_FILENAMELABLE,114,164,216,8
+    EDITTEXT        IDC_FILENAME,114,173,182,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Browse",IDC_BROWSE,298,172,32,14
+    LTEXT           "Parameters:",IDC_PARAMSLABEL,114,189,40,8
+    EDITTEXT        IDC_PARAMETERS,156,187,174,12,ES_AUTOHSCROLL
+END
+
+IDD_SEMPQWIZARD33 DIALOGEX 0, 0, 330, 200
+STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CAPTION
+CAPTION "SEMPQ Wizard - Select Plug-Ins (Step 3 of 3)"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         157,IDC_FRAME,"Static",SS_BITMAP | SS_CENTERIMAGE | SS_SUNKEN,0,0,105,200
+    LTEXT           "Select plug-ins to be used. Plug-ins provide additional patching functionality for MPQDraft and your selected MPQs.",IDC_INFORMATION,114,0,216,18
+    CONTROL         "List1",IDC_PLUGINS,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,114,19,216,142,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "&Configure Plugin",IDC_CONFIGURE,234,164,88,14
+    PUSHBUTTON      "&Browse for Plugins",IDC_BROWSE,262,186,67,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2009,9,13,1
+ PRODUCTVERSION 2009,9,13,1
+ FILEFLAGSMASK 0x1fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "The Remnant and Campaign Creations"
+            VALUE "FileDescription", "MPQDraft for Windows"
+            VALUE "FileVersion", "2009, 9, 13, 1"
+            VALUE "InternalName", "MPQDraft"
+            VALUE "LegalCopyright", "Copyright © 2009 Justin Olbrantz(Quantam)"
+            VALUE "OriginalFilename", "MPQDraft.exe"
+            VALUE "ProductName", "MPQDraft for Windows"
+            VALUE "ProductVersion", "2009, 9, 13, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_MAINMENU            BITMAP                  "res\\MainMenu.bmp"
+IDB_SEMPQBUTTONUP       BITMAP                  "res\\SEMPQButtonUp.bmp"
+IDB_SEMPQBUTTONDOWN     BITMAP                  "res\\SEMPQButtonDown.bmp"
+IDB_PATCHBUTTONUP       BITMAP                  "res\\PatchButtonUp.bmp"
+IDB_PATCHBUTTONDOWN     BITMAP                  "res\\PatchButtonDown.bmp"
+IDB_XBUTTONUP           BITMAP                  "res\\XButtonUp.bmp"
+IDB_MINBUTTONUP         BITMAP                  "res\\MinButtonUp.bmp"
+IDB_XBUTTONDOWN         BITMAP                  "res\\XButtonDown.bmp"
+IDB_MINBUTTONDOWN       BITMAP                  "res\\MinButtonDown.bmp"
+IDB_WIZARD              BITMAP                  "res\\Wizard.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DLL
+//
+
+IDR_PATCHERDLL          DLL                     "MPQDraftDLL.dll"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// EXE
+//
+
+IDR_SEMPQSTUB           EXE                     "MPQStub.exe"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_REGKEY              "Team MoPaQ"
+    IDS_PATCHWIZARD         "Patch Wizard"
+    IDS_SEMPQWIZARD         "SEMPQ Wizard"
+    IDS_OPENPATCHMPQ        "Select MPQ Archive to Use for Patch"
+    IDS_OPENSEMPQMPQ        "Select MPQ Archive to Use for SEMPQ"
+    IDS_OPENMPQSETTINGS     "MPQ Archives (*.mpq)|*.mpq|Mod-Manager Files (*.d2m)|*.d2m|All Files (*.*)|*.*||"
+    IDS_MPQLISTHEADER       "MPQ Archives - %s"
+    IDS_MPQFILTER           "*.mpq"
+    IDS_D2MFILTER           "*.d2m"
+    IDS_PATCHWIZARD3TITLE   "Patching Wizard - Select Plug-Ins (Step 3 of 3)"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_OPENPATCHTARGET     "Select Executable to Be Patched"
+    IDS_OPENSEMPQTARGET     "Select Executable to Be Patched by SEMPQ"
+    IDS_SAVESEMPQ           "Save SEMPQ As"
+    IDS_OPENEXESETTINGS     "Executables (*.exe)|*.exe|All Files (*.*)|*.*||"
+    IDS_DEFEXEEXT           ".exe"
+    IDS_SELECTSEMPQICON     "Select an Icon for SEMPQ"
+    IDS_OPENICONSETTINGS    "Icons (*.ico)|*.ico|All Files (*.*)|*.*||"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_CANTLOADDEFICON     "Cannot load default icon."
+    IDS_TOOMANYMPQS         "You have selected too many MPQs to use to patch. You can select no more than %d."
+    IDS_NOSEMPQTARGET       "You must select a program for your SEMPQ to patch."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_NOPATCHTARGET       "You must select a program to patch."
+    IDS_ODDSEMPQTARGET      "You have chosen to patch a nonstandard program or component with your SEMPQ. On all computers your SEMPQ is run on, the filename and path must exactly match the filename AND path you entered. Do you wish to continue?"
+    IDS_PATCHFAILED         "Unable to perform the patch due to a Windows error."
+    IDS_SEMPQFAILED         "Unable to create Self-Executing MPQ"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SEMPQCAPTION        "Creating Self-Extracting MPQ..."
+    IDS_WRITINGEXE          "Writing Executable Code...\n"
+    IDS_WRITINGMPQ          "Writing MPQ Data...\n"
+    IDS_CANTCREATEFILE      "Cannot create file %s."
+    IDS_BADMPQ              "The MPQ %s does not exist."
+    IDS_CANTOPENFILE        "Cannot open the file %s."
+    IDS_CANTMALLOC          "Cannot allocate %d bytes of memory."
+    IDS_INTERNALERROR       "Internal error. MPQDraft.exe may be corrupt."
+    IDS_CANTWRITE           "Disk error writing to file %s."
+    IDS_NOSEMPQNAME         "You must specify a name for your Self-Executing MPQ."
+    IDS_NOSEMPQMPQ          "You must select an MPQ to make into a Self-Executing MPQ."
+    IDS_NOSEMPQFILENAME     "You must select a filename to save your Self-Executing MPQ as."
+    IDS_USEDEFSEMPQICON     "You have not selected an icon to use for your SEMPQ. Do you wish to continue and use a default icon?"
+    IDS_PATCHKEY            "Patch Wizard"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SEMPQKEY            "SEMPQ Wizard"
+    IDS_SELAPPKEY           "Selected Application"
+    IDS_SELFILEKEY          "Selected Component"
+    IDS_APPPATHKEY          "Application Path"
+    IDS_USEPATHKEY          "Use Path"
+    IDS_MPQDIRKEY           "MPQ Directory"
+    IDS_SEMPQPATHKEY        "SEMPQ Path"
+    IDS_TGTPATHKEY          "Target Path"
+    IDS_ICONPATHKEY         "Icon Path"
+    IDS_SRCPATHKEY          "MPQ Path"
+    IDS_SEMPQNAMEKEY        "Custom Name"
+    IDS_OPENPLUGIN          "Select Plugins"
+    IDS_OPENPLUGINSETTINGS  "MPQDraft Plugins (*.qdp)|*.qdp|All Files (*.*)|*.*||"
+    IDS_PLUGINDIRKEY        "Plugin Directory"
+    IDS_CANTLOCATE          "Cannot locate %s. It may have been uninstalled or deleted."
+    IDS_TOOMANYPLUGINS      "You have selected too many plugins to use. You can select no more than %d plugins."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_PLUGINVALUETEMPLATE "Plugin %2.2d"
+    IDS_PLUGINDATATEMPLATE  "%s;%1.1d"
+    IDS_PLUGINFILTER        "*.qdp"
+    IDS_PLUGINLISTTEMPLATE  "%s (%s)"
+    IDS_PLUGINLISTHEADER    "MPQDraft Plugins - %s"
+    IDS_WINDOWSERROR        "Critical Windows Error"
+    IDS_WRITINGPLUGINS      "Writing Plugins...\n"
+    IDS_PLUGINNOTREADY      "The plugin '%s' is not properly configured. Do you wish to continue without it?"
+    IDS_REDIRWARNING        "It is highly recommended that you do not change 'Redirect SFileOpenFileEx calls' unless you are completely sure what you are doing. Do you wish to continue?"
+    IDS_REDIROPENFILEEXKEY  "Redirect SFileOpenFileEx"
+    IDS_PARAMETERSKEY       "Parameters"
+    IDS_PATCHWIZARD1TITLE   "Patching Wizard - Select Program (Step 1 of 3)"
+    IDS_SEMPQWIZARD2TITLE   "SEMPQ Wizard - Select Program (Step 2 of 3)"
+    IDS_PATCHWIZARD1INFO    "The following supported programs have been detected on your computer. Select the one you wish to patch. If the desired program does not appear in the lists, click the Browse button to search for it yourself."
+    IDS_SEMPQWIZARD2INFO    "The following programs are supported natively by MPQDraft. Select the one you wish to patch. If the desired program does not appear in the lists, click the Browse button to search for it yourself."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SEMPQWIZARD3TITLE   "SEMPQ Wizard - Select Plug-Ins (Step 3 of 3)"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\MPQDraft.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

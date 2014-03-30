@@ -1,0 +1,1 @@
+This is the MPQDraft patcher DLL. The DLL is the heart of MPQDraft, and does all the work inside the process being patched, including the patching itself. The DLL also uses the Common.* files in the MPQDraft root.

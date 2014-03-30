@@ -1,0 +1,12 @@
+Used for packing MPQs from the SVN automatically. Usage:
+*CreateListing.bat - Prepare for packing. Use this when new files got added.
+*CreateMPQ.bat - Use this for creating the MPQ. Use it when files got updated or added.
+You don't need to use CreateListing.bat more than once when no new files got added to the SVN. If the files just got updated, run CreateMPQ.bat. If they also added new files, recreate the listing.
+
+Configuration:
+CreateMPQ.bat:: Where is the MPQ Editor?
+set ladik=I:\MPQEditor.exe
+CreateMPQ.bat:: How is the output MPQ named?
+set mpq=patch-2.mpq
+CreateMPQ.bat, CreateListing.bat:: How is the directory with the data called?
+set files=patch-d.mpq

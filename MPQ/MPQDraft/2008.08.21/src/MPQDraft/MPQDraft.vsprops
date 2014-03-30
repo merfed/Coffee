@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="MPQDraft"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="3"
+		EnableIntrinsicFunctions="true"
+		WholeProgramOptimization="true"
+		PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;VISUALCPPNET"
+		StringPooling="true"
+		BufferSecurityCheck="false"
+		RuntimeTypeInfo="false"
+		CallingConvention="1"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		GenerateDebugInformation="true"
+		GenerateMapFile="true"
+		MapExports="true"
+		SubSystem="2"
+		OptimizeReferences="2"
+		EnableCOMDATFolding="2"
+		OptimizeForWindows98="1"
+		LinkTimeCodeGeneration="1"
+		SetChecksum="true"
+	/>
+</VisualStudioPropertySheet>

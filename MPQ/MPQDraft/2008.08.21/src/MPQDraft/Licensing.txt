@@ -1,0 +1,16 @@
+As stated in the SourceForge project information, MPQDraft is, in general, licensed under the Sun Common Development and Distrubution License; this includes all code by the original developer (Justin Olbrantz). Several files, however, were not written by the original author, and were modules freely distributed as open source, though with different licenses; typically, these files are licensed as Free Open Source Software for non-commercial use (in contrast to the CDDL, which allows commercial use provided the rules are followed). This file attempts to list all such licensing hazards. All text files in MPQ have a header detailing their license, and that is the authority on licensing for each file. This file attempts to summarize the list of files not licensed under the CDDL.
+
+BitmapDialog.h/cpp, dib256.h/cpp, dibpal.h/cpp, ProgressWnd.h/cpp:
+Licensed under specific non-commercial licenses. Files may be used freely for non-profit use, but the consent of the author is required to use them commercially.
+
+StarDraft.ico
+This was taken from StarDraft, a predecessor of MPQDraft, written by separate authors, where it was used as the icon for Self-Executing CWADs (a precursor to Self-Executing MPQs). To be honest, I don't know where this icon originated from, or who created it. Best not used commercially.
+
+Game/component icons:
+These are from the games they represent, and owned by their publishers (Sierra for lomse.ico and hellfire.ico, Blizzard for all others). The icons are used here as part of the modding community, to which the companies have been very friendly in matters such as this. These should not be used for anything not directly relating to the source games, and definitely not in any commercial programs.
+
+DLL.ico, MPQ.ico:
+These are taken from the library of icons built into Windows, and are presumably owned by Microsoft. Not for commercial use.
+
+Dialog bitmaps:
+These were created by Joel Steudler for use in MPQDraft. Not for commercial use.

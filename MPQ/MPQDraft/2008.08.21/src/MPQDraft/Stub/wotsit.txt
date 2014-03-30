@@ -1,0 +1,1 @@
+This is the SEMPQ stub code which launches the target process and initiates patching (though the patching itself is performed by the patcher DLL). The stub also uses the Common.* files in the MPQDraft root.
