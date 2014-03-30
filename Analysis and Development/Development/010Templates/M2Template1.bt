@@ -1,0 +1,1437 @@
+//some enums for purposes ^^
+typedef enum <uint32> { 
+    GF_NORMAL = 0, 
+    GF_TILTINGX  = 1,
+    GF_TILTINGY__ = 2,
+    GF_TILTINGXY = 3,
+	GF_ADDITIONAL_HEADER_FIELD = 8,
+	GF_UNKNONWN = 16
+} E_GLOBALFLAGS;
+
+typedef enum <uint16>{
+	IT_None =0,
+	IT_Linear =1,
+	IT_Hermite =2,
+	IT_Bezier =3
+}InterpolationType;
+
+typedef enum <uint32> { 
+    AL_Looped = 0, 
+    AL_NotLooped = 1
+} E_ANIMATIONLOOP;
+
+typedef enum <int32> { 
+//  CT_Unk = -1, 
+	CT_Potrait = 0,
+    CT_CharInfo = 1
+} E_CAMERATYPE;
+
+typedef enum <int32>  { 
+    BF_None = 0, 
+    BF_Billboard = 8, 
+    BF_Transformed = 512, 
+    BF_BillboardAndTransformed = 520
+} E_BONESFLAGS;
+
+typedef enum <uchar>  {
+    TU_Animated = 0, 
+    TU_Static = 16
+} E_VIEW_TEXUNITFLAGS;
+
+typedef enum <uchar>{
+	HT_HEAD =0,
+	HT_TAIL =1,
+	HT_BOTH =2
+} E_HEAD_OR_TAIL;
+
+typedef enum <ushort>  { 
+    RF_None = 0, 
+    RF_Unlit = 1, 
+    RF_Unfogged = 2,
+	RF_Unlit_Unfogged = 3,
+    RF_TwoSided = 4, 
+	RF_Unlit_Two_Sided = 5,
+	RF_Unfogged_TwoSided = 6,
+	RF_Unlit_Unfogged_TwoSided = 7,
+	RF_Billboard =8,
+	RF_Unlit_Billboard =9,
+	RF_Unfogged_Billboard =10,
+	RF_Unlit_Unfogged_Billboard =11,
+	RF_Billboard_TwoSided =12,
+	RF_Unlit_Billboard_TwoSided =13,
+	RF_Unfogged_Billboard_TwoSided =14,
+	RF_Unlit_Unfogged_Billboard_TwoSided =15,
+    RF_Not_ZBuffered = 16,
+	RF_Not_ZBuffered_Unlit =17,
+	RF_Not_ZBuffered_Unfogged  =18,
+	RF_Not_ZBuffered_Unlit_Unfogged =19,
+	RF_Not_ZBuffered_TwoSided =20,
+	RF_Not_ZBuffered_Unlit_Two_Sided =21,
+	RF_Not_ZBuffered_Unfogged_TwoSided =22,
+	RF_Not_ZBuffered_Unlit_Unfogged_TwoSided =23,
+	RF_Not_ZBuffered_Billboard =24,
+	RF_Not_ZBuffered_Unlit_Billboard =25,
+	RF_Not_ZBuffered_Unfogged_Billboard =26,
+	RF_Not_ZBuffered_Unlit_Unfogged_Billboard =27,
+	RF_Not_ZBuffered_Billboard_TwoSided =28,
+	RF_Not_ZBuffered_Unlit_Billboard_TwoSided =29,
+	RF_Not_ZBuffered_Unfogged_Billboard_TwoSided =30,
+	RF_Not_ZBuffered_Unlit_Unfogged_Billboard_TwoSided =31
+} E_RENDERFLAGS;
+
+typedef enum <ushort>  { 
+    RM_Opaque = 0, 
+    RM_AlphaTesting, 
+    RM_AlphaBlending, 
+    RM_Additive , 
+    RM_AdditiveAlpha, 
+    RM_Modulate, 
+    RM_DeeprumTram 
+} E_RENDERMODES;
+
+typedef enum <uint32> { 
+    TT_Hardcoded = 0, 
+    TT_BodyOrClothes = 1, 
+    TT_Cape = 2, 
+    TT_HairOrBeard = 6 , 
+    TT_TaurenFur = 8, 
+    TT_CreatureSkin1 = 11, 
+    TT_CreatureSkin2 = 12, 
+    TT_CreatureSkin3 = 13 
+} E_TEXTURETYPES;
+
+typedef enum <uint32> { 
+    TF_None = 0, 
+    TF_WrapX, 
+    TF_WrapY
+} E_TEXTUREFLAGS;
+
+typedef enum <uint16> {
+    A_Stand = 0,
+    A_Death,
+    A_Spell,
+    A_Stop,
+    A_Walk,
+    A_Run,
+    A_Dead,
+    A_Rise,
+    A_StandWound,
+    A_CombatWound,
+    A_CombatCritical,
+    A_ShuffleLeft,
+    A_ShuffleRight,
+    A_Walkbackwards,
+    A_Stun,
+    A_HandsClosed,
+    A_AttackUnarmed,
+    A_Attack1H,
+    A_Attack2H,
+    A_Attack2HL,
+    A_ParryUnarmed,
+    A_Parry1H,
+    A_Parry2H,
+    A_Parry2HL,
+    A_ShieldBlock,
+    A_ReadyUnarmed,
+    A_Ready1H,
+    A_Ready2H,
+    A_Ready2HL,
+    A_ReadyBow,
+    A_Dodge,
+    A_SpellPrecast,
+    A_SpellCast,
+    A_SpellCastArea,
+    A_NPCWelcome,
+    A_NPCGoodbye,
+    A_Block,
+    A_JumpStart,
+    A_Jump,
+    A_JumpEnd,
+    A_Fall,
+    A_SwimIdle,
+    A_Swim,
+    A_SwimLeft,
+    A_SwimRight,
+    A_SwimBackwards,
+    A_AttackBow,
+    A_FireBow,
+    A_ReadyRifle,
+    A_AttackRifle,
+    A_Loot,
+    A_ReadySpellDirected,
+    A_ReadySpellOmni,
+    A_SpellCastDirected,
+    A_SpellCastOmni,
+    A_BattleRoar,
+    A_ReadyAbility,
+    A_Special1H,
+    A_Special2H,,
+    A_ShieldBash,
+    A_EmoteTalk,
+    A_EmoteEat,
+    A_EmoteWork,
+    A_EmoteUseStanding,
+    A_EmoteTalkExclamation,
+    A_EmoteTalkQuestion,
+    A_EmoteBow,
+    A_EmoteWave,
+    A_EmoteCheer,
+    A_EmoteDance,
+    A_EmoteLaugh,
+    A_EmoteSleep,
+    A_EmoteSitGround,
+    A_EmoteRude,
+    A_EmoteRoar,
+    A_EmoteKneel,
+    A_EmoteKiss,
+    A_EmoteCry,
+    A_EmoteChicken,
+    A_EmoteBeg,
+    A_EmoteApplaud,
+    A_EmoteShout,
+    A_EmoteFlex,
+    A_EmoteShy,
+    A_EmotePoint,
+    A_Attack1HPierce,
+    A_Attack2HLoosePierce,
+    A_AttackOff,
+    A_AttackOffPierce,
+    A_Sheath,
+    A_HipSheath,
+    A_Mount,
+    A_RunRight,
+    A_RunLeft,
+    A_MountSpecial,
+    A_Kick,
+    A_SitGroundDown,
+    A_SitGround,
+    A_SitGroundUp,
+    A_SleepDown,
+    A_Sleep,
+    A_SleepUp,
+    A_SitChairLow,
+    A_SitChairMed,
+    A_SitChairHigh,
+    A_LoadBow,
+    A_LoadRifle,
+    A_AttackThrown,
+    A_ReadyThrown,
+    A_HoldBow,
+    A_HoldRifle,
+    A_HoldThrown,
+    A_LoadThrown,
+    A_EmoteSalute,
+    A_KneelStart,
+    A_KneelLoop,
+    A_KneelEnd,
+    A_AttackUnarmedOff,
+    A_SpecialUnarmed,
+    A_StealthWalk,
+    A_StealthStand,
+    A_Knockdown,
+    A_EatingLoop,
+    A_UseStandingLoop,
+    A_ChannelCastDirected,
+    A_ChannelCastOmni,
+    A_Whirlwind,
+    A_Birth,
+    A_UseStandingStart,
+    A_UseStandingEnd,
+    A_CreatureSpecial,
+    A_Drown,
+    A_Drowned,
+    A_FishingCast,
+    A_FishingLoop,
+    A_Fly,
+    A_EmoteWorkNoSheathe,
+    A_EmoteStunNoSheathe,
+    A_EmoteUseStandingNoSheathe,
+    A_SpellSleepDown,
+    A_SpellKneelStart,
+    A_SpellKneelLoop,
+    A_SpellKneelEnd,
+    A_Sprint,
+    A_InFlight,
+    A_Spawn,
+    A_Close,
+    A_Closed,
+    A_Open,
+    A_Opened,
+    A_Destroy,
+    A_Destroyed,
+    A_Rebuild,
+    A_Custom0,
+    A_Custom1,
+    A_Custom2,
+    A_Custom3,
+    A_Despawn,
+    A_Hold,
+    A_Decay,
+    A_BowPull,
+    A_BowRelease,
+    A_ShipStart,
+    A_ShipMoving,
+    A_ShipStop,
+    A_GroupArrow,
+    A_Arrow,
+    A_CorpseArrow,
+    A_GuideArrow,
+    A_Sway,
+    A_DruidCatPounce,
+    A_DruidCatRip,
+    A_DruidCatRake,
+    A_DruidCatRavage,
+    A_DruidCatClaw,
+    A_DruidCatCower,
+    A_DruidBearSwipe,
+    A_DruidBearBite,
+    A_DruidBearMaul,
+    A_DruidBearBash,
+    A_DragonTail,
+    A_DragonStomp,
+    A_DragonSpit,
+    A_DragonSpitHover,
+    A_DragonSpitFly,
+    A_EmoteYes,
+    A_EmoteNo,
+    A_JumpLandRun,
+    A_LootHold,
+    A_LootUp,
+    A_StandHigh,
+    A_Impact,
+    A_LiftOff,
+    A_Hover,
+    A_SuccubusEntice,
+    A_EmoteTrain,
+    A_EmoteDead,
+    A_EmoteDanceOnce,
+    A_Deflect,
+    A_EmoteEatNoSheathe,
+    A_Land,
+    A_Submerge,
+    A_Submerged,
+    A_Cannibalize,
+    A_ArrowBirth,
+    A_GroupArrowBirth,
+    A_CorpseArrowBirth,
+    A_GuideArrowBirth,
+    A_EmoteTalkNoSheathe,
+    A_EmotePointNoSheathe,
+    A_EmoteSaluteNoSheathe,
+    A_EmoteDanceSpecial,
+    A_Mutilate,
+    A_CustomSpell01,
+    A_CustomSpell02,
+    A_CustomSpell03,
+    A_CustomSpell04,
+    A_CustomSpell05,
+    A_CustomSpell06,
+    A_CustomSpell07,
+    A_CustomSpell08,
+    A_CustomSpell09,
+    A_CustomSpell10,
+    A_StealthRun
+} E_ANIMATIONS;
+
+
+typedef enum <uchar>{
+	Normal =0,
+	Quads,
+	Deeprun
+}PARTICLE_TYPE;
+
+typedef enum <uchar>{
+	Plane=1,
+	Sphere,
+	Spline_not_used
+}EMITTER_TYPE;
+
+typedef enum <uint16>{
+	Directional =0,
+	Point
+}LIGHT_TYPE;
+
+typedef enum <uint32>{
+	Mountpoint_or_LeftWrist =0,
+	Right_palm,
+	Left_palm,
+	Right_elbow,
+	Left_elbow,
+	Right_Shoulder,
+	Left_Shoulder,
+	Right_Knee,
+	Left_knee,
+	unk1,
+	unk2,
+	Helmet,
+	Back,
+	unk3,
+	unk4,
+	Bust,
+	Bust2,
+	Face,
+	Above_Char,
+	Ground,
+	Top_of_head,
+	Left_Palm2,
+	Right_Palm2,
+	unk5,
+	unk6,
+	unk7,
+	Right_Back_Sheath,
+	Left_Back_Sheath,
+	Middle_Back_Sheath,
+	Belly,
+	Left_Back,
+	Right_Back,
+	Left_Hip_Sheath,
+	Right_Hip_Sheath,
+	Bust3,
+	Right_Palm3,
+	unk8,
+	demolishervehicle1,
+	demolishervehicle2,
+	Vehicle_Seat1,
+	Vehicle_Seat2,
+	Vehicle_Seat3,
+	Vehicle_Seat4,
+	unk9,
+	unk10,
+	unk11,
+	unk12,
+	unk13
+}ATTACHMENT_ID;
+
+// colors for special puposes
+local int cOffset = cLtYellow;
+local int cFileName = cLtAqua;
+local int cVector = cLtPurple;
+
+// filename - ... because 010 want it so
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cFileName );
+   
+    string value;
+
+    SetStdColor();
+} filename <read=filenameRead>;
+    
+    string filenameRead(filename &f) {
+        return f.value;
+    };
+
+//substructure for timestamps yay
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i;
+	for(i=0;i<nValues;i++){
+		uint32 timestamp;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_T;
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+}SubAnimBlock;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock;
+
+//AnimBlocks for Float[3] and Short[4]
+
+typedef struct
+{
+	float val[3];
+}FloatVec3;
+
+typedef struct{
+	FloatVec3 val[3];
+}BigFloat;
+
+typedef struct
+{
+	float val[2];
+}FloatVec2;
+
+typedef struct
+{
+	short val[4];
+}ShortVec4;
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i=0;
+	while(i<nValues){
+		FloatVec3 anim;
+		i++;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_F;
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i=0;
+	while(i<nValues){
+		BigFloat anim;
+		i++;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_BF;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock_F substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock_F;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock_BF substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock_BF;
+
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i=0;
+	while(i<nValues){
+		float value;
+		i++;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_f;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	 i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock_f substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock_f;
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i=0;
+	while(i<nValues){
+		int value;
+		i++;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_i;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock_i substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock_i;
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i=0;
+	while(i<nValues){
+		byte value;
+		i++;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_b;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock_b substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock_b;
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i=0;
+	while(i<nValues){
+		ShortVec4 anim;
+		i++;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_S;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock_S substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock_S;
+
+
+typedef struct
+{
+	int32 nValues;
+	int32 ofsValues<format=hex>;
+	local int oldpos=FTell();
+	FSeek(ofsValues);
+	local int i=0;
+	while(i<nValues){
+		uint16 anim;
+		i++;
+	}
+	FSeek(oldpos);
+}SubAnimBlock_s;
+
+typedef struct 
+{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		SubAnimBlock_s substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+} ABlock_s;
+
+
+typedef struct{
+	local int oldpos;
+	local int i;
+	InterpolationType interpolation;
+	int16	GlobalSequenceID;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs<format=hex>;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		SubAnimBlock_T substruct;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+}ABlock_Events;
+
+
+typedef struct 
+{
+	char	Identifier[4];// 	 Some kind of ID, starts with '$'. Some identifiers below.
+	uint32	Data; //	 This data is passed when the event is fired. 
+	uint32	Bone;// 	Somewhere it has to be attached.
+	float	Position[3];// 	Relative to that bone of course.
+	ABlock_Events timer;
+} sEvents<read=ReadEvent>;
+
+string ReadEvent( sEvents &a) {
+    string s; SPrintf( s, "%c%c%c%c", a.Identifier[0], a.Identifier[1], a.Identifier[2], a.Identifier[3] ); 
+   return s;
+}
+
+typedef struct 
+{
+	ATTACHMENT_ID Id;//  	 Just an id. Is referenced in the lookup-block below too.
+	uint32 	Bone;//  	Somewhere it has to be attached.
+	float	Position[3];//  	Relative to that bone of course.
+	ABlock_i 	Data;// 	Its an integer in the data. It has been 1 on all models I saw. Whatever. 
+} sAttachments<read=ReadAttachment>;
+
+string ReadAttachment( sAttachments &a) {
+    string s; SPrintf( s, "%s", EnumToString(a.Id) ); 
+   return s;
+}
+
+typedef struct 
+{
+	float	Position[3];
+	byte	BoneWeight[4];
+	byte	BoneIndices[4];
+	float	Normal[3];
+	float	TextureCoords[2];
+	float	Unknown[2];
+} Vertices;
+
+typedef struct
+{
+	LIGHT_TYPE type;
+	uint16 bone;
+	float Postion[3];
+	ABlock_F ambientcolor;
+	ABlock_f ambientintensity;
+	ABlock_F diffusecolor;
+	ABlock_f diffuseambient;
+	ABlock_f attenuationstart;
+	ABlock_f attenuationend;
+	ABlock_i unk1;
+} Lights;
+
+typedef struct 
+{
+	E_ANIMATIONS animID;//	Animation id in AnimationData.dbc
+	uint16	SubAnimationID;//	Sub-animation id: Which number in a row of animations this one is.
+	uint32	Length;//	The length (timestamps) of the animation. I believe this actually the length of the animation in milliseconds.
+	float	MovingSpeed;//	As 2.x says: moving speed for walk/run animations.
+	E_ANIMATIONLOOP looped;//	Most likely. All flags I saw: 0b01101101
+	uint32	Flags<format=binary>;//	Only the first 4 bits are the actual flags. The rest is 1. Seen flags: 0,3,6,7
+	uint32	Unknown1;//	These two are connected. Most of the time, they are 0.
+	uint32	Unknown2;//	But if there is data in one, there is data in both of them.
+	uint32	PlaybackSpeed;//	Values: 0, 50, 100, 150, 200, 250, 300, 350, 500.
+	float	BoundingBox[6];//	A Bounding Box made out of 2 vectors.
+	float	Radius;//	The radius.
+	int16	NextAnimation;//	Id of the following animation of this AnimationID, points to an Index or is -1 if none.
+	uint16	Index;//	Id in the list of animations. 
+} sAnimations<read=ReadAnimation>;
+
+	string ReadAnimation( sAnimations &a) {
+    if(a.NextAnimation==-1) {
+        string s; SPrintf( s, "[%i]: %s",a.Length,EnumToString( a.animID) ); 
+    } else {
+        string s; SPrintf( s, "[%i]: %s, > %i",a.Length,EnumToString( a.animID), a.NextAnimation ); 
+    }
+    return s;
+}
+
+typedef struct 
+{
+	int32	KeyBoneID;
+	E_BONESFLAGS flags;
+	int16	ParentBone;
+	uint16	unk[3];
+	ABlock_F Translation;
+	ABlock_S Rotation;
+	ABlock_F Scaling;
+	float	PivotPoint[3];
+} Bone;
+
+typedef struct
+{
+	float	VertexBoxMin[3];
+	float	VertexBoxMax[3];
+	float	VertexBoxRadius;
+	float	BoundingBoxMin[3];
+	float	BoundingBoxMax[3];
+	float	BoundingBoxRadius;
+}TheFloats;
+
+typedef struct
+{
+    E_TEXTURETYPES type;
+    E_TEXTUREFLAGS flags;
+	uint32 FileName_length;
+	uint32 FileName_offset;
+	local int oldpos=FTell();
+	FSeek(FileName_offset);
+	filename texture;
+	FSeek(oldpos);
+}Texture<read=readTexture>;
+    string readTexture(Texture &o) {
+		if(o.type==0){
+			string s;
+			SPrintf(s,"Hardcoded: %s",o.texture.value);
+        return s;
+		}
+		else{
+		return EnumToString(o.type);
+		}
+    }
+	
+typedef struct {
+	local int oldpos;
+	local int i;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		short timestamp;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		short data;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+}FakeABlock_s;
+
+typedef struct {
+	local int oldpos;
+	local int i;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		short timestamp;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		FloatVec3 data;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+}FakeABlock_F;
+
+typedef struct {
+	local int oldpos;
+	local int i;
+	uint32	numberOfTimestampPairs;
+	uint32	offsetToTimestampPairs;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToTimestampPairs);
+	i=0;
+	while(i<numberOfTimestampPairs){
+		short timestamp;
+		i++;
+	}
+	FSeek(oldpos);
+	}Timestamps;
+	uint32	numberOfKeyFramePairs;
+	uint32	offsetToKeyFramePairs;
+	struct{
+	oldpos=FTell();
+	FSeek(offsetToKeyFramePairs);
+	i=0;
+	while(i<numberOfKeyFramePairs){
+		FloatVec2 data;
+		i++;
+	}
+	FSeek(oldpos);
+	}Values;
+}FakeABlock_ff;
+
+typedef struct {
+    int32 id;
+	int16 flags;
+	int16 flags2;
+	FloatVec3 pos;
+	int16 bone;
+	int16 texture;
+	int32 FileName1_length;
+	int32 FileName1_offset<format=hex>;
+	struct{
+	local int oldpos=FTell();
+	FSeek(FileName1_offset);
+	filename texture;
+	FSeek(oldpos);
+	}VModelFileName1;
+
+	int32 FileName2_length;
+	int32 FileName2_offset<format=hex>;
+	struct{
+	local int oldpos=FTell();
+	FSeek(FileName2_offset);
+	filename texture;
+	FSeek(oldpos);
+	}VModelFileName2;
+	char blend;
+    EMITTER_TYPE Emitter_type;
+	uint16 particle_color_Replaceable;
+	PARTICLE_TYPE Particly_type;
+    E_HEAD_OR_TAIL Head_or_Tail;
+	int16 Texturerot;
+	int16 rows;
+	int16 cols;
+    ABlock_f emissionspeed;
+    ABlock_f Speed_var;
+    ABlock_f Vertical_range;
+    ABlock_f Horizontal_range;
+    ABlock_f Gravity;
+    ABlock_f Lifespan;
+    int paddingoO;
+    ABlock_f Emissionrate;
+    int paddingoO2;
+    ABlock_f Emissionarea_length;
+    ABlock_f Emissionarea_width;
+    ABlock_f Gravity_strong;
+    FakeABlock_F Color;
+	FakeABlock_s Opacity;
+	FakeABlock_ff Scale;
+	int32 unk[2];
+	FakeABlock_s Intensity;
+	FakeABlock_s UnknownFB2;
+	FloatVec3 unk;
+	FloatVec3 scale;
+	float slowdown;
+    float unkfloats1[2];
+	float rotation;	//Sprite Rotation
+    float unkfloats2[2];
+	FloatVec3 Rot1;	//Model Rotation 1
+	FloatVec3 Rot2;	//Model Rotation 2
+	FloatVec3 Trans;	//Model Translation
+	float f2[6];
+	ABlock_b en;
+} Particles <optimize=false>;
+
+typedef struct {
+	int32 id;
+	int32 bone;
+	FloatVec3 pos;
+	int32 nTextures;
+	int32 ofsTextures <format=hex>;
+	struct{
+	local int oldpos=FTell();
+	FSeek(ofsTextures);
+	local int i=0;
+	while(i<nTextures){
+		int data;
+		i++;
+	}
+	FSeek(oldpos);
+	}VTextures;
+	int32 nBlend;
+	int32 ofsBlend <format=hex>;
+	struct{
+	local int oldpos=FTell();
+	FSeek(ofsBlend);
+	local int i=0;
+	while(i<nBlend){
+		int data;
+		i++;
+	}
+	FSeek(oldpos);
+	}VBlend;
+	ABlock_F color;
+	ABlock_s opacity;
+	ABlock_f above;
+	ABlock_f below;
+	float res, length, unk;
+	int16 s1, s2;
+	ABlock_s unk1;
+	ABlock_b enabled;
+	uint32 padding;
+} Ribbons;
+
+typedef struct{
+	ABlock_F Color;
+	ABlock_f Alpha;
+}Colors;
+
+typedef struct{
+	ABlock_F Translation;
+	ABlock_S Rotation;
+	ABlock_F Scaling;
+}Texture_Animations;
+
+typedef struct{
+    short index[3];
+}BoundingTriangle;
+
+typedef struct{
+    float coord[3];
+}BoundingVertex;
+
+typedef struct{
+    float coord[3];
+}BoundingNormal;
+
+typedef struct{
+	E_CAMERATYPE Id;
+	float FOV;
+	float FarClipping;
+	float NearClipping;
+	ABlock_BF TranslationPos;
+	float Pos[3];
+	ABlock_BF TranslationTar;
+	float Target[3];
+	ABlock_F RollEffect;
+}Cameras<read=ReadCam>;
+
+string ReadCam(Cameras &c){
+		return EnumToString(c.Id);
+}
+	
+	
+typedef struct{
+	E_RENDERFLAGS flag;
+	E_RENDERMODES blendingmode;
+}RenderFlags;
+
+
+
+struct {
+CHAR Magic[4];
+uint Version;
+uint lName;
+uint ofsName;
+E_GLOBALFLAGS type;
+uint nGlobalSequences;
+uint ofsGlobalSequences<format=hex>;
+uint nAnimations;
+uint ofsAnimations<format=hex>;
+uint nAnimationLookup;
+uint ofsAnimationLookup<format=hex>;
+uint nBones;
+uint ofsBones<format=hex>;
+uint nKeyBoneLookup;
+uint ofsKeyBoneLookup<format=hex>;
+uint nVertices;
+uint ofsVertices<format=hex>;
+uint nViews;
+uint nColors;
+uint ofsColors<format=hex>;
+uint nTextures;
+uint ofsTextures<format=hex>;
+uint nTransparency;
+uint ofsTransparency<format=hex>;
+uint nTextureanimations;
+uint ofsTextureanimations<format=hex>;
+uint nTexReplace;
+uint ofsTexReplace<format=hex>;
+uint nRenderFlags;
+uint ofsRenderFlags<format=hex>;
+uint nBoneLookupTable;
+uint ofsBoneLookupTable<format=hex>;
+uint nTexLookup;
+uint ofsTexLookup<format=hex>;
+uint nTexUnits;
+uint ofsTexUnits<format=hex>;
+uint nTransLookup;
+uint ofsTransLookup<format=hex>;
+uint nTexAnimLookup;
+uint ofsTexAnimLookup<format=hex>;
+TheFloats floats;
+uint nBoundingTriangles;
+uint ofsBoundingTriangles<format=hex>;
+uint nBoundingVertices;
+uint ofsBoundingVertices<format=hex>;
+uint nBoundingNormals;
+uint ofsBoundingNormals<format=hex>;
+uint nAttachments;
+uint ofsAttachments<format=hex>;
+uint nAttachLookup;
+uint ofsAttachLookup<format=hex>;
+uint nEvents;
+uint ofsEvents<format=hex>;
+uint nLights;
+uint ofsLights<format=hex>;
+uint nCameras;
+uint ofsCameras<format=hex>;
+uint nCameraLookup;
+uint ofsCameraLookup<format=hex>;
+uint nRibbonEmitters;
+uint ofsRibbonEmitters<format=hex>;
+uint nParticleEmitters;
+uint ofsParticleEmitters<format=hex>;
+
+if(type&8)
+struct{
+	uint nAltMapping;
+	uint ofsAltMapping;
+	FSeek(ofsAltMapping);
+	uint16 _AltMapping[nAltMapping];
+}new_mapping;
+
+FSeek(ofsGlobalSequences);
+uint32 _globaseq[nGlobalSequences];
+
+FSeek(ofsName);
+filename _ModelName;
+
+FSeek(ofsAnimations);
+sAnimations _Animations[nAnimations];
+FSeek(ofsAnimationLookup);
+int16 _AnimationLookup[nAnimationLookup];
+if(ofsBones!=0){
+FSeek(ofsBones);
+struct
+{
+	local int n=0;
+	while(n<nBones){
+	Bone _Bones;
+	n++;
+	}
+}Bones;
+}
+FSeek(ofsKeyBoneLookup);
+int16 _KeyBoneLookup[nKeyBoneLookup];
+FSeek(ofsBoneLookupTable);
+int16 _BoneLookupTable[nBoneLookupTable];
+
+
+FSeek(ofsVertices);
+Vertices _Vertices[nVertices];
+if(ofsColors!=0){
+FSeek(ofsColors);
+struct{
+local int n=0;
+while(n<nColors){
+Colors _Color;
+n++;
+}
+}Color;
+}
+if(ofsTextures!=0){
+FSeek(ofsTextures);
+struct{
+local int n=0;
+while(n<nTextures){
+Texture _Texture;
+n++;
+}
+}Textures;
+}
+if(ofsTransparency!=0){
+FSeek(ofsTransparency);
+struct{
+local int n=0;
+while(n<nTransparency){
+ABlock_s _Transparency;
+n++;
+}
+}Transparency;
+}
+if(ofsTextureanimations!=0){
+FSeek(ofsTextureanimations);
+struct{
+local int n=0;
+while(n<nTextureanimations){
+Texture_Animations _TexAnim;
+n++;
+}
+}TextureAnimation;
+}
+FSeek(ofsTexReplace);
+int16 _TexReplace[nTexReplace];
+FSeek(ofsRenderFlags);
+RenderFlags _RenderFlags[nRenderFlags];
+
+FSeek(ofsTexLookup);
+int16 _TexLookupTable[nTexLookup];
+FSeek(ofsTexUnits);
+int16 _TexUnitLookupTable[nTexUnits];
+FSeek(ofsTransLookup);
+int16 _TransLookupTable[nTransLookup];
+FSeek(ofsTexAnimLookup);
+int16 _TexAnimLookup[nTexAnimLookup];
+
+
+/*Missing BoundingVolumes!!!
+	*/
+
+if(ofsAttachments!=0){
+FSeek(ofsAttachments);
+struct{
+local int n=0;
+while(n<nAttachments){
+sAttachments _Attachment;
+n++;
+}
+}Attachments;
+}
+FSeek(ofsAttachLookup);
+int16 _AttachLookup[nAttachLookup];
+FSeek(ofsEvents);
+sEvents _Events[nEvents];
+
+FSeek(ofsBoundingTriangles);
+BoundingTriangle _BoundingTriangles[nBoundingTriangles];
+FSeek(ofsBoundingVertices);
+BoundingVertex _BoundingVertices[nBoundingVertices];
+FSeek(ofsBoundingNormals);
+BoundingNormal _BoundingNormals[nBoundingNormals];
+
+if(ofsLights!=0){
+FSeek(ofsLights);
+struct{
+local int n=0;
+while(n<nLights){
+Lights _Light;
+n++;
+}
+}Light;
+}
+
+if(ofsCameras!=0){
+FSeek(ofsCameras);
+struct{
+local int n=0;
+while(n<nCameras){
+Cameras _Camera;
+n++;
+}
+}Camera;
+}
+FSeek(ofsCameraLookup);
+int16 _CamLookupTable[nCameraLookup];
+
+if(ofsParticleEmitters!=0){
+FSeek(ofsParticleEmitters);
+struct{
+local int n=0;
+while(n<nParticleEmitters){
+Particles _Particle;
+n++;
+}
+}Particle;
+}
+if(ofsRibbonEmitters!=0){
+FSeek(ofsRibbonEmitters);
+struct{
+local int n=0;
+while(n<nRibbonEmitters){
+Ribbons _Ribbon;
+n++;
+}
+}Ribbon;
+}
+
+
+}M2_file;
+
+
+/*******************************************************
+ *  4. Helpers
+*******************************************************/
+    
+    // im soo lazy
+void SetStdColor() {
+    SetColor( cBlack, cWhite );
+}

@@ -1,0 +1,617 @@
+//-----------------------------------------------------
+//--- 010 Editor v3.0.2 Binary Template
+//
+// File:        WoWWMO.bt
+// Authors:     ganku      (ganku.caelestis@gmail.com)
+//              you         (your.e-m@ail.com)
+// Revision:    0.2        2008-Sep-21
+// Purpose:     Quick overfiew for WMO files
+//
+//  Tree:
+//          Global constands
+//      1.  Basic Types
+//      2.  Chunk Def.
+//      3.  WMO File
+//      4.  Global Functions
+//-----------------------------------------------------
+
+// colors for special puposes
+local int cOffset = cLtYellow;
+local int cFileName = cLtAqua;
+local int cVector = cLtPurple;
+
+/*******************************************************
+ *  1.  BASIC TYPES
+*******************************************************/
+
+typedef union {
+    UBYTE   byteValues[4];
+    UINT32  intValue;
+} unkown;
+
+
+// basic chunk structure
+//--------------------------------------------------
+typedef struct {
+    // always important to know!
+    local uint32 myOffset = FTell();
+    local uint32 myDataStart = myOffset + 8;
+
+    // color
+    SetColor( cWhite, cDkRed );
+
+    // magic value
+    char magic[4];
+
+    // color #2
+    SetColor( cBlack, 0x99CCFF );
+    
+    // data size
+    uint32 byte_size;
+
+    // normal color plz
+    SetStdColor();
+} _chunk <read=chunkGetMagic>;
+
+    // displays the magic and the size of this chunk
+    string chunkGetMagic(_chunk &c) {
+        string s;
+        SPrintf( s, 
+            "%c%c%c%c: %i Byte", 
+            c.magic[3], c.magic[2], c.magic[1], c.magic[0], c.byte_size
+        ); 
+        return s;
+    };
+
+
+// unknown chunk - yes! Whenever we dont know anything!
+//--------------------------------------------------
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        unkown value;
+        i++;
+    }
+} unk_chunk<read=uChunkGetMagic>;
+        string uChunkGetMagic(unk_chunk &c) {
+        string s;
+        SPrintf( s, 
+            "%c%c%c%c: %i Byte", 
+            c.hdr.magic[3], c.hdr.magic[2], c.hdr.magic[1], 
+            c.hdr.magic[0], c.hdr.byte_size
+        ); 
+        return s;
+    };
+
+
+// offset including features
+//--------------------------------------------------
+typedef struct {
+    local uint32 myOffset = FTell();
+
+    // we store this value for calculations
+    local uint32 upperChunkOffset = 0;
+
+    SetColor( cBlack, cOffset );
+    
+    UINT32 adress   <format=hex>;
+    
+    SetStdColor();
+
+    local int doString = 0;
+}offset <read=offsetGetADR>;
+
+    // displays where this pointer is pointing to
+    string offsetGetADR(offset &o) {
+        string s;
+        // just an offset ?
+        if(o.upperChunkOffset==0) {
+            char temp[4];
+            ReadBytes(temp, o.adress+o.myOffset,4 );
+            SPrintf( s, "+ %i Byte: %s", o.adress, temp);
+       //     SPrintf( s, "+ %i Byte", o.adress);
+        }
+        // global offset
+        else {
+            // zero?
+            if(o.adress==0 && o.doString == 0) return "- unused - ";
+
+            if(o.doString == 0)
+            {
+                char temp[4];
+                ReadBytes(temp, o.adress+o.upperChunkOffset,4 );
+                SPrintf( s, "-> 0x%02X: %s", o.adress, temp);
+            }
+            else
+            {
+                SPrintf( s, "-> 0x%02X: %s", o.adress, ReadString(o.adress+o.upperChunkOffset));
+            }
+   
+
+         //   SPrintf( s, "-> 0x%02X", o.adress+o.upperChunkOffset);
+        }
+        return s;
+    }
+
+
+// filename - ... because 010 want it so
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cFileName );
+   
+    string value;
+
+    SetStdColor();
+} filename <read=filenameRead>;
+    
+    string filenameRead(filename &f) {
+        return f.value;
+    };
+
+
+// paddedFilename - filename + padding like in wmo
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cFileName );
+   
+    string value;
+
+    SetColor( cWhite, cWhite );
+
+    // padding
+    while(nextChar()==0) {
+        byte padding;
+        while(FTell()%4) byte padding;
+    }
+
+    SetStdColor();
+} paddedFilename<read=paddedFilenameRead>;
+    string paddedFilenameRead(paddedFilename &f) {
+        return f.value;
+    };
+
+
+// Vector3D
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cVector );
+   
+    float x, y, z;
+
+    SetStdColor();
+} Vector3D<read=Vector3DRead>;
+    string Vector3DRead(Vector3D &f) {
+        local string s;
+        SPrintf( s, "(%f, %f, %f)", f.x, f.y, f.z);
+        return s;
+    };
+
+// RGB
+//--------------------------------------------------
+typedef struct {
+    SetBackColor( ReadInt(FTell())&0xFFFFFF );
+    ubyte   r;
+    ubyte   g;
+    ubyte   b;
+    ubyte   a;
+    SetStdColor();
+} rgb<read=rgbRead>;
+    // display the color a bit more nice
+    string rgbRead(rgb &f) {
+        local string s;
+        SPrintf( s, "#%02X%02X%02X (%i%%)", f.r, f.g, f.b, (f.a/255)*100);
+        return s;
+    };
+
+// fileList - Used for any kind of file lists
+// Its unordered with unknown number of items
+// MTEX, MMDF, MWMO
+//--------------------------------------------------
+typedef struct { 
+    _chunk hdr;
+    local int i=0;
+
+    if(hdr.byte_size!=0) {
+        // catch texture files
+        while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+            filename texture;
+            i++;
+        }
+    }
+} fileList<read=readFileList>;
+    
+    // how many?
+    string readFileList(fileList &o) {
+        string s;
+        SPrintf( s, "%i Files", o.i);
+        return s;
+    }
+
+
+// Its unordered with unknown number of items
+// MOTX
+//--------------------------------------------------
+typedef struct { 
+    _chunk hdr;
+    local int i=0;
+
+    if(hdr.byte_size!=0) {
+        // catch texture files
+        while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+            paddedFilename texture;
+            i++;
+        }
+    }
+} paddedFileList<read=paddedFileListRead>;
+    
+    // how many?
+    string paddedFileListRead(paddedFileList &o) {
+        string s;
+        SPrintf( s, "%i Files", o.i);
+        return s;
+    }
+
+
+// offsList - List of many Offsets
+// MMID, MWID
+//--------------------------------------------------
+typedef struct {
+    _chunk hdr;
+    
+    local int i;
+    for(i=0; (i*sizeof(uint32))<hdr.byte_size; i++)
+        offset offs;
+} offsList<read=readOffsList>;
+
+    // how many?
+    string readOffsList(offsList &o) {
+        string s;
+        SPrintf( s, "%i Offsets", o.i);
+        return s;
+    }    
+
+
+/*******************************************************
+ *  2.  Chunk Def.
+*******************************************************/
+
+// MVER - Versions Header
+//--------------------------------------------------
+typedef struct {
+    _chunk hdr;
+    unsigned byte version[4] <format=hex>;
+} MVER;
+
+
+// MOHD - Versions Header
+//--------------------------------------------------
+typedef struct {
+    _chunk hdr;
+    uint32  nTextures;  // number of textures (BLP Files)
+    uint32  nGroups;    // number of WMO groups
+    uint32  nPortals;   // number of portals
+    uint32  nLights;    // number of lights
+    uint32  nModels;    // number of M2 models imported
+    uint32  nDoodads;   // number of doodads (M2 instances)
+    uint32  nSets;      // number of doodad sets
+    rgb     ambientColor;	
+    uint32  WMO_ID;     // (column 2 in WMOAreaTable.dbc)
+    float   boundingBox1[3];
+    float   boundingBox2[3];
+    uint32  padding;
+} MOHD;
+
+
+// MOMT - Materials
+//--------------------------------------------------
+typedef struct {
+    UINT32 version;		
+    UINT32 flags<format=binary>;		
+    UINT32 blendMode;		
+    offset texture_1<format=hex>; 	
+        texture_1.upperChunkOffset = wmo_file.refTo;
+        texture_1.doString = 1;
+    rgb    color_1;	
+    uint32 flags_1;
+    offset texture_2<format=hex>; 	
+        texture_2.upperChunkOffset = wmo_file.refTo;
+        texture_2.doString = 1;	
+    rgb    color_2;	
+    UINT32 flags_2;		
+    float unk1;		
+    float unk2;		
+    float unk3;		
+    UINT32 unk4;		
+    UINT32 unk5;			
+    UINT32 Texture1_null;		
+    UINT32 Texture2_null;
+} MOMT_Entry<read=MOMT_EntryRead>;
+    string MOMT_EntryRead(MOMT_Entry &o) {
+        string s;
+        SPrintf( s, "");
+        if(o.flags!=0){
+            SPrintf( s, "%sflags ( ",s);
+            if(o.flags & 0x00001) SPrintf( s, "%s 0x1 ", s);
+            if(o.flags & 0x00002) SPrintf( s, "%s 0x2 ", s);
+            if(o.flags & 0x00004) SPrintf( s, "%s 0x4 ", s);
+            if(o.flags & 0x00008) SPrintf( s, "%s 0x8 ", s);
+            if(o.flags & 0x00010) SPrintf( s, "%s 0x10 ", s);
+            if(o.flags & 0x00020) SPrintf( s, "%s 0x20 ", s);
+            if(o.flags & 0x00040) SPrintf( s, "%s 0x40 ", s);
+            if(o.flags & 0x00080) SPrintf( s, "%s 0x80 ", s);
+            if(o.flags & 0x00100) SPrintf( s, "%s 0x100 ", s);
+            if(o.flags & 0x00200) SPrintf( s, "%s 0x200 ", s);
+            if(o.flags & 0x00400) SPrintf( s, "%s 0x400 ", s);
+            if(o.flags & 0x00800) SPrintf( s, "%s 0x800 ", s);
+            if(o.flags & 0x01000) SPrintf( s, "%s 0x1000 ", s);
+            if(o.flags & 0x02000) SPrintf( s, "%s 0x2000 ", s);
+            if(o.flags & 0x04000) SPrintf( s, "%s 0x4000 ", s);
+            if(o.flags & 0x08000) SPrintf( s, "%s 0x8000 ", s);
+            if(o.flags & 0x10000) SPrintf( s, "%s 0x10000 ", s);
+            if(o.flags & 0x20000) SPrintf( s, "%s 0x20000 ", s);
+            if(o.flags & 0x40000) SPrintf( s, "%s 0x40000 ", s);
+            if(o.flags & 0x80000) SPrintf( s, "%s 0x80000 ", s);
+            if(o.flags & 0xFFF00000) SPrintf( s, "%s bigflag ", s);
+            SPrintf( s, "%s ), ", s);
+        }
+
+        if(o.flags_1!=0){SPrintf( s, "%sflags_1 ( ", s);
+        if(o.flags_1 & 0x00001) SPrintf( s, "%s 0x1 ", s);
+        if(o.flags_1 & 0x00002) SPrintf( s, "%s 0x2 ", s);
+        if(o.flags_1 & 0x00004) SPrintf( s, "%s 0x4 ", s);
+        if(o.flags_1 & 0x00008) SPrintf( s, "%s 0x8 ", s);
+        if(o.flags_1 & 0x00010) SPrintf( s, "%s 0x10 ", s);
+        if(o.flags_1 & 0x00020) SPrintf( s, "%s 0x20 ", s);
+        if(o.flags_1 & 0x00040) SPrintf( s, "%s 0x40 ", s);
+        if(o.flags_1 & 0x00080) SPrintf( s, "%s 0x80 ", s);
+        if(o.flags_1 & 0x00100) SPrintf( s, "%s 0x100 ", s);
+        if(o.flags_1 & 0x00200) SPrintf( s, "%s 0x200 ", s);
+        if(o.flags_1 & 0x00400) SPrintf( s, "%s 0x400 ", s);
+        if(o.flags_1 & 0x00800) SPrintf( s, "%s 0x800 ", s);
+        if(o.flags_1 & 0x01000) SPrintf( s, "%s 0x1000 ", s);
+        if(o.flags_1 & 0x02000) SPrintf( s, "%s 0x2000 ", s);
+        if(o.flags_1 & 0x04000) SPrintf( s, "%s 0x4000 ", s);
+        if(o.flags_1 & 0x08000) SPrintf( s, "%s 0x8000 ", s);
+        if(o.flags_1 & 0x10000) SPrintf( s, "%s 0x10000 ", s);
+        if(o.flags_1 & 0x20000) SPrintf( s, "%s 0x20000 ", s);
+        if(o.flags_1 & 0x40000) SPrintf( s, "%s 0x40000 ", s);
+        if(o.flags_1 & 0x80000) SPrintf( s, "%s 0x80000 ", s);
+        if(o.flags_1 & 0xFFF00000) SPrintf( s, "%s bigflag ", s);
+        SPrintf( s, "%s ), ", s);}
+
+        if(o.flags_2!=0){SPrintf( s, "%sflags_2 ( ", s);
+        if(o.flags_2 & 0x00001) SPrintf( s, "%s 0x1 ", s);
+        if(o.flags_2 & 0x00002) SPrintf( s, "%s 0x2 ", s);
+        if(o.flags_2 & 0x00004) SPrintf( s, "%s 0x4 ", s);
+        if(o.flags_2 & 0x00008) SPrintf( s, "%s 0x8 ", s);
+        if(o.flags_2 & 0x00010) SPrintf( s, "%s 0x10 ", s);
+        if(o.flags_2 & 0x00020) SPrintf( s, "%s 0x20 ", s);
+        if(o.flags_2 & 0x00040) SPrintf( s, "%s 0x40 ", s);
+        if(o.flags_2 & 0x00080) SPrintf( s, "%s 0x80 ", s);
+        if(o.flags_2 & 0x00100) SPrintf( s, "%s 0x100 ", s);
+        if(o.flags_2 & 0x00200) SPrintf( s, "%s 0x200 ", s);
+        if(o.flags_2 & 0x00400) SPrintf( s, "%s 0x400 ", s);
+        if(o.flags_2 & 0x00800) SPrintf( s, "%s 0x800 ", s);
+        if(o.flags_2 & 0x01000) SPrintf( s, "%s 0x1000 ", s);
+        if(o.flags_2 & 0x02000) SPrintf( s, "%s 0x2000 ", s);
+        if(o.flags_2 & 0x04000) SPrintf( s, "%s 0x4000 ", s);
+        if(o.flags_2 & 0x08000) SPrintf( s, "%s 0x8000 ", s);
+        if(o.flags_2 & 0x10000) SPrintf( s, "%s 0x10000 ", s);
+        if(o.flags_2 & 0x20000) SPrintf( s, "%s 0x20000 ", s);
+        if(o.flags_2 & 0x40000) SPrintf( s, "%s 0x40000 ", s);
+        if(o.flags_2 & 0x80000) SPrintf( s, "%s 0x80000 ", s);
+        if(o.flags_2 & 0xFFF00000) SPrintf( s, "%s bigflag ", s);
+        SPrintf( s, "%s )", s);}
+
+        return s;
+    } 
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+    
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MOMT_Entry entry;
+        i++;
+    }    
+} MOMT<read=MOMTRead>;
+    string MOMTRead(MOMT &o) {
+        string s;
+        SPrintf( s, "%i Materials (prob. wrong structure)", o.i);
+        return s;
+    } 
+
+
+// MOGI - WMO Group infos
+typedef struct {
+    UINT32      flags<format=binary>;  		
+    Vector3D    bb1;
+    Vector3D    bb2;		
+    INT32 nameoffset; 
+} MOGI_Entry<read=MOGI_EntryRead>;
+    string MOGI_EntryRead(MOGI_Entry &o) {
+        string s;
+        SPrintf( s, "(%3.2f x %3.2f x %3.2f) ", o.bb2.x-o.bb1.x, o.bb2.y-o.bb1.y, o.bb2.z-o.bb1.z);
+
+        if(o.flags != 0)
+        {
+            SPrintf( s, "%s (", s);
+            if(o.flags & 0x00001) SPrintf( s, "%s 0x1 ", s);
+            if(o.flags & 0x00002) SPrintf( s, "%s 0x2 ", s);
+            if(o.flags & 0x00004) SPrintf( s, "%s 0x4 ", s);
+            if(o.flags & 0x00008) SPrintf( s, "%s outdoors ", s);
+            if(o.flags & 0x00010) SPrintf( s, "%s 0x10 ", s);
+            if(o.flags & 0x00020) SPrintf( s, "%s 0x20 ", s);
+            if(o.flags & 0x00040) SPrintf( s, "%s 0x40 ", s);
+            if(o.flags & 0x00080) SPrintf( s, "%s 0x80 ", s);
+            if(o.flags & 0x00100) SPrintf( s, "%s 0x100 ", s);
+            if(o.flags & 0x00200) SPrintf( s, "%s 0x200 ", s);
+            if(o.flags & 0x00400) SPrintf( s, "%s 0x400 ", s);
+            if(o.flags & 0x00800) SPrintf( s, "%s 0x800 ", s);
+            if(o.flags & 0x01000) SPrintf( s, "%s hasMLIQ ", s);
+            if(o.flags & 0x02000) SPrintf( s, "%s indoors ", s);
+            if(o.flags & 0x04000) SPrintf( s, "%s 0x4000 ", s);
+            if(o.flags & 0x08000) SPrintf( s, "%s 0x8000 ", s);
+            if(o.flags & 0x10000) SPrintf( s, "%s stormwind? ", s);
+            if(o.flags & 0x20000) SPrintf( s, "%s 0x20000 ", s);
+            if(o.flags & 0x40000) SPrintf( s, "%s skybox? ", s);
+            if(o.flags & 0x80000) SPrintf( s, "%s 0x80000 ", s);
+            if(o.flags & 0xFFF00000) SPrintf( s, "%s bigflag ", s);
+            SPrintf( s, "%s )", s);
+        }
+        else
+            SPrintf( s, "%s ( no flags )", s );
+        
+        return s;
+    } 
+/*Flag		Meaning
+0x8 		Outdoor (use global lights?)
+0x40		?
+0x80 		?
+0x2000		Indoor (use local lights?)
+0x8000		Unknown, but frequently used
+0x10000 	Used in Stormwind?
+0x40000		Show skybox if the player is "inside" the group*/
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MOGI_Entry entry;
+        i++;
+    }
+} MOGI<read=MOGIRead>; 
+    string MOGIRead(MOGI &o) {
+        string s;
+        SPrintf( s, "%i WMO Sets", o.i);
+        return s;
+    } 
+
+// MODS
+typedef struct {
+    char name[20];	
+    uint32 first;
+    uint32 num;
+    uint32 unk;
+} MODS_Entry;
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MODS_Entry entry;
+        i++;
+    }
+} MODS<read=MODSRead>; 
+    string MODSRead(MODS &o) {
+        string s;
+        SPrintf( s, "%i doodad sets", o.i);
+        return s;
+    } 
+// MODD
+typedef struct {
+    UINT32 file;
+    Vector3D pos;
+    float rotquat[4];
+    float scale;
+    rgb col;
+} MODD_Entry;
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MODD_Entry entry;
+        i++;
+    }
+} MODD<read=MODDRead>; 
+    string MODDRead(MODD &o) {
+        string s;
+        SPrintf( s, "%i doodad instance(s)", o.i);
+        return s;
+    } 
+
+// MFOG
+typedef struct {
+    UINT32 flags;		
+    Vector3D pos;		
+    float radius[2];		
+    float end;			
+    float startmult;		
+    rgb color;
+    float fogs[2];
+    rgb color2;
+} MFOG_Entry;
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MFOG_Entry entry;
+        i++;
+    }
+} MFOG<read=MFOGRead>; 
+    string MFOGRead(MFOG &o) {
+        string s;
+        SPrintf( s, "%i fog entries", o.i);
+        return s;
+    } 
+
+/*******************************************************
+ *  3.  WMO File
+*******************************************************/
+struct  {
+        MVER mver;  // version
+
+//        fileList mmdx;  // model files
+//        offsList mmid;  // str offsets
+
+        // dirty lookahead .. 
+        local int pos = FTell();
+
+        if(nextChar()=='D') 
+        {   // Root File
+            MOHD            mohd;
+            paddedFileList  motx;
+local int refTo = motx.hdr.myDataStart;
+            MOMT            momt;
+            fileList        mogn;   // its not a file list .. but im lazy
+            MOGI            mogi;
+            unk_chunk       mosb; 
+            unk_chunk       mopv; 
+            unk_chunk       mopt; 
+            unk_chunk       mopr;
+            unk_chunk       movv; 
+            unk_chunk       movb;
+            unk_chunk       molt; 
+            MODS            mods;
+            paddedFileList       modn; 
+            MODD       modd; 
+            MFOG       mfog; 
+        } else if(nextChar()=='P') 
+        {   // Group File
+            
+        }        
+
+} wmo_file;
+
+
+
+/*******************************************************
+ *  4. Helpers
+*******************************************************/
+    
+    // im soo lazy
+void SetStdColor() {
+    SetColor( cBlack, cWhite );
+}
+    
+    // whats comming next?
+char nextChar() {
+    return ReadByte(FTell());
+}

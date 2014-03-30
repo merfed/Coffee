@@ -1,0 +1,403 @@
+--- # WDB Fields Definitions
+
+#
+# NOTE: When adding new fields, make sure the new field name 
+#       is UNIQUE (expecially on string fields)! 
+#       Otherwise, the csv output will be undefined 
+#       and it will probably give you an error
+#
+
+# fieldtypes:
+#   - undefined (same as uint)
+#   - uint
+#   - int
+#   - float
+#   - double
+#   - str
+#   - ushort
+#   - short
+#   - byte
+#   - sbyte (signed byte)
+
+creaturecache:
+  signature: WMOB
+  fields: !!omap
+    - Name1: str
+    - Name2: str
+    - Name3: str
+    - Name4: str
+    - Description: str
+    - Unknown1: str
+    - Unknown2: undefined
+    - TypeID: uint
+    - FamilyID: uint
+    - FlagID: uint
+    - Unknown3: undefined
+    - SpellDataID: uint
+    - DisplayID: uint
+    - DisplayID2: uint
+    - DisplayID3: uint
+    - DisplayID4: uint
+    - Unknown4: float
+    - Unknown5: float
+    - Unknown6: sbyte
+    
+gameobjectcache:
+  signature: WGOB
+  fields: !!omap
+    - Type: undefined
+    - DisplayID: undefined
+    - Name1: str
+    - Name2: str
+    - Name3: str
+    - Name4: str
+    - Unknown3: str
+    - Unknown4: str
+    - Unknown5: str
+    - Unknown6: undefined
+    - Unknown7: undefined
+    - Unknown8: undefined
+    - Unknown9: undefined
+    - Unknown10: undefined
+    - Unknown11: undefined
+    - Unknown12: undefined
+    - Unknown13: undefined
+    - Unknown14: undefined
+    - Unknown15: undefined
+    - Unknown16: undefined
+    - Unknown17: undefined
+    - Unknown18: undefined
+    - Unknown19: undefined
+    - Unknown20: undefined
+    - Unknown21: undefined
+    - Unknown22: undefined
+    - Unknown23: undefined
+    - Unknown24: undefined
+    - Unknown25: undefined
+    - Unknown26: undefined
+    - Unknown27: undefined
+    - Unknown28: undefined
+    - Unknown29: undefined
+    - Unknown30: float
+
+questcache:
+  signature: WQST
+  fields: !!omap
+    - QuestID2: uint
+    - Type: uint
+    - Level: uint
+    - AreaID: uint
+    - InfoID: uint
+    - SuggestedPlayers: int
+    - FactionID: int
+    - FactionAmount: int
+    - Unknown5: undefined
+    - Unknown6: undefined
+    - NextQuestID: uint
+    - CoinReward: int
+    - CoinRewardOnExp: uint
+    - SpellReward: uint
+    - EffectOnPlayer: int
+    - Unknown7: undefined
+    - StartItemID: uint
+    - QuestFlags: uint
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - Unknown4: undefined
+    - ItemReward1: uint
+    - ItemAmount1: uint
+    - ItemReward2: uint
+    - ItemAmount2: uint
+    - ItemReward3: uint
+    - ItemAmount3: uint
+    - ItemReward4: uint
+    - ItemAmount4: uint
+    - ItemChoice1: uint
+    - ItemChoiceAmount1: uint
+    - ItemChoice2: uint
+    - ItemChoiceAmount2: uint
+    - ItemChoice3: uint
+    - ItemChoiceAmount3: uint
+    - ItemChoice4: uint
+    - ItemChoiceAmount4: uint
+    - ItemChoice5: uint
+    - ItemChoiceAmount5: uint
+    - ItemChoice6: uint
+    - ItemChoiceAmount6: uint
+    - Unknown8: undefined
+    - Unknown9: undefined
+    - Unknown10: undefined
+    - Unknown11: undefined
+    - Name: str
+    - Description: str
+    - Details: str
+    - Subdescription: str
+    - Target1: uint
+    - Target1Amount: uint
+    - CollectItem1: uint
+    - CollectItem1Amount: uint
+    - Target2: uint
+    - Target2Amount: uint
+    - CollectItem2: uint
+    - CollectItem2Amount: uint
+    - Target3: uint
+    - Target3Amount: uint
+    - CollectItem3: uint
+    - CollectItem3Amount: uint
+    - Target4: uint
+    - Target4Amount: uint
+    - CollectItem4: uint
+    - CollectItem4Amount: uint
+    - Objective1: str
+    - Objective2: str
+    - Objective3: str
+    - Objective4: str
+    
+itemnamecache:
+  signature: WNDB
+  fields: !!omap
+    - ItemName: str
+    - InvetorySlot: int
+    
+itemtextcache:
+  signature: WITX
+  fields: !!omap
+    - Text: str
+
+itemcache:
+  signature: WIDB
+  localization: enUS
+  version: 8278
+  fields: !!omap
+    - ItemClassID: uint
+    - ItemSubClassID: uint
+    - Unknown: int
+    - Name1: str
+    - Name2: str
+    - Name3: str
+    - Name4: str
+    - ItemDisplayID: uint
+    - Quality: uint
+    - TypeFlags: uint
+    - BuyPrice: uint
+    - SellPrice: uint
+    - Inventory Slot: uint
+    - ClassFlags: int
+    - RaceFlags: int
+    - ItemLevel: uint
+    - ReqLevel: uint
+    - ReqSkill: uint
+    - ReqSkill Level: uint
+    - ReqSpell: uint
+    - ReqRank: uint
+    - ReqRank2: uint
+    - ReqFaction: uint
+    - ReqFactionLvl: uint
+    - isUnique: uint
+    - StackAmount: uint
+    - ContainerSlots: uint
+    - Stat1: int
+    - Stat1Val: int
+    - Stat2: int
+    - Stat2Val: int
+    - Stat3: int
+    - Stat3Val: int
+    - Stat4: int
+    - Stat4Val: int
+    - Stat5: int
+    - Stat5Val: int
+    - Stat6: int
+    - Stat6Val: int
+    - Stat7: int
+    - Stat7Val: int
+    - Stat8: int
+    - Stat8Val: int
+    - Stat9: int
+    - Stat9Val: int
+    - Stat10: int
+    - Stat10Val: int
+    - Damage1Min: float
+    - Damage1Max: float
+    - Unknown: undefined
+    - Damage2Min: float
+    - Damage2Max: float
+    - Unknown: undefined
+    - Damage3Min: float
+    - Damage3Max: float
+    - Unknown: undefined
+    - Damage4Min: float
+    - Damage4Max: float
+    - Unknown: undefined
+    - Damage5Min: float
+    - Damage5Max: float
+    - Unknown: undefined
+    - Armor: uint
+    - HolyResist: uint
+    - FireResist: uint
+    - NatureResist: uint
+    - FrostResist: uint
+    - ShadowResist: uint
+    - ArcaneResist: uint
+    - WeaponDelay: uint
+    - AmmoType: uint
+    - RangeMod: float
+    - Spell1ID: uint
+    - Spell1Trigger: uint
+    - Spell1Charges: int
+    - Spell1Cooldown: int
+    - Spell1Category: uint
+    - Spell1Category Cooldown: int
+    - Spell2ID: uint
+    - Spell2Trigger: uint
+    - Spell2Charges: int
+    - Spell2Cooldown: int
+    - Spell2Category: uint
+    - Spell2Category Cooldown: int
+    - Spell3ID: uint
+    - Spell3Trigger: uint
+    - Spell3Charges: int
+    - Spell3Cooldown: int
+    - Spell3Category: uint
+    - Spell3Category Cooldown: int
+    - Spell4ID: uint
+    - Spell4Trigger: uint
+    - Spell4Charges: int
+    - Spell4Cooldown: int
+    - Spell4Category: uint
+    - Spell4Category Cooldown: int
+    - Spell5ID: uint
+    - Spell5Trigger: uint
+    - Spell5Charges: int
+    - Spell5Cooldown: int
+    - Spell5Category: uint
+    - Spell5Category Cooldown: int
+    - BondID: uint
+    - Description: str
+    - BookTextID: uint
+    - BookPages: uint
+    - BookStationaryID: uint
+    - BeginQuestID: uint
+    - reqLockPickSkill: uint
+    - Material: int
+    - SheathID: uint
+    - RandomPropertyID: uint
+    - RandomPropertyID2: uint
+    - BlockValue: uint
+    - ItemSetID: uint
+    - Durability: uint
+    - ItemAreaID: uint
+    - ItemMapID: uint
+    - BagFamily: uint
+    - TotemCategory: uint
+    - SocketColor 1: uint
+    - Unknown: uint
+    - Socket Color 2: uint
+    - Unknown: uint
+    - Socket Color 3: uint
+    - Unknown: uint
+   # - SocketBonus: uint
+    - GemProperties: uint
+    - HonorCost: uint
+    - DisenchantSkill: int
+    - ArmorDamageMod: float
+    - ExistingDuration: int
+
+    
+npccache:
+  signature: WNPC
+  fields: !!omap
+    - Unknown1: float
+    - Unknown2: str
+    - Unknown3: str
+    - Unknown4: uint
+    - Unknown5: uint
+    - Unknown6: uint
+    - Unknown7: uint
+    - Unknown8: uint
+    - Unknown9: uint
+    - Unknown10: uint
+    - Unknown11: float
+    - Unknown12: str
+    - Unknown13: str
+    - Unknown14: uint
+    - Unknown15: uint
+    - Unknown16: uint
+    - Unknown17: uint
+    - Unknown18: uint
+    - Unknown19: uint
+    - Unknown20: uint
+    - Unknown21: float
+    - Unknown22: str
+    - Unknown23: str
+    - Unknown24: uint
+    - Unknown25: uint
+    - Unknown26: uint
+    - Unknown27: uint
+    - Unknown28: uint
+    - Unknown29: uint
+    - Unknown30: uint
+    - Unknown31: float
+    - Unknown32: str
+    - Unknown33: str
+    - Unknown34: uint
+    - Unknown35: uint
+    - Unknown36: uint
+    - Unknown37: uint
+    - Unknown38: uint
+    - Unknown39: uint
+    - Unknown30: uint
+    - Unknown41: float
+    - Unknown42: str
+    - Unknown43: str
+    - Unknown44: uint
+    - Unknown45: uint
+    - Unknown46: uint
+    - Unknown47: uint
+    - Unknown48: uint
+    - Unknown49: uint
+    - Unknown50: uint
+    - Unknown51: float
+    - Unknown52: str
+    - Unknown53: str
+    - Unknown54: uint
+    - Unknown55: uint
+    - Unknown56: uint
+    - Unknown57: uint
+    - Unknown58: uint
+    - Unknown59: uint
+    - Unknown60: uint
+    - Unknown61: float
+    - Unknown62: str
+    - Unknown63: str
+    - Unknown64: uint
+    - Unknown65: uint
+    - Unknown66: uint
+    - Unknown67: uint
+    - Unknown68: uint
+    - Unknown69: uint
+    - Unknown70: uint
+    - Unknown71: float
+    - Unknown72: str
+    - Unknown73: str
+    - Unknown74: uint
+    - Unknown75: uint
+    - Unknown76: uint
+    - Unknown77: uint
+    - Unknown78: uint
+    - Unknown79: uint
+    - Unknown80: uint
+    
+pagetextcache:
+  signature: WPTX
+  fields: !!omap
+    - PageText: str
+    - NextPageID: int
+...

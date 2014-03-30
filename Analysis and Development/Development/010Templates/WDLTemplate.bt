@@ -1,0 +1,90 @@
+// colors for special puposes
+local int cOffset = cLtYellow;
+
+/*******************************************************
+ *  1.  BASIC TYPES
+*******************************************************/
+
+// basic chunk structure
+//--------------------------------------------------
+typedef struct {
+    // always important to know!
+    local uint32 myOffset = FTell();
+    local uint32 myDataStart = myOffset + 8;
+
+    // color
+    SetColor( cWhite, cDkRed );
+
+    // magic value
+    char magic[4];
+
+    // color #2
+    SetColor( cBlack, 0x99CCFF );
+    
+    // data size
+    uint32 byte_size;
+
+    // normal color plz
+    SetStdColor();
+} _chunk <read=chunkGetMagic>;
+
+    // displays the magic and the size of this chunk
+    string chunkGetMagic(_chunk &c) {
+        string s;
+        SPrintf( s, 
+            "%c%c%c%c: %i Byte", 
+            c.magic[3], c.magic[2], c.magic[1], c.magic[0], c.byte_size
+        ); 
+        return s;
+    };
+	
+	
+	/*******************************************************
+ *  2.  Chunk Def.
+*******************************************************/
+
+// MVER - Versions Header
+//--------------------------------------------------
+typedef struct {
+        _chunk hdr;
+        unsigned byte version[4] <format=hex>;
+} MVER;
+
+typedef struct{
+	_chunk hdr;
+	uint32 offsMARE[4096];
+}MAOF;
+
+typedef struct{
+	_chunk hdr;
+	short OuterHeight[17*17];
+	short InnerHeight[16*16];
+}MARE;
+
+typedef struct{
+	_chunk hdr;
+	short Bitmask[16];
+}MAHO;
+
+struct{
+	MVER mver;
+	MAOF maof;
+local int i;
+	for(i=0;i<4096;i++){
+		if(maof.offsMARE[i]!=0){
+			FSeek(maof.offsMARE[i]);
+			MARE mare;
+		}
+		
+	}
+}WDLFile;
+
+
+/*******************************************************
+ *  4. Helpers
+*******************************************************/
+    
+    // im soo lazy
+void SetStdColor() {
+    SetColor( cBlack, cWhite );
+}

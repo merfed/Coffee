@@ -1,0 +1,898 @@
+local int base;
+
+typedef struct 
+{
+    local int chunk = 0;
+	int ofd1;
+	int used;
+	int ofd2;
+} list<read=readlist>;
+
+typedef struct 
+{
+	local int chunk = -1;
+	local int n = -1;
+	short flags;
+	short type;
+	float height1;
+	float height2;
+	char xoff;
+	char yoff;
+	char w;
+	char h;
+	int of2a;
+	int of2b;
+} D1<read=readD1>;
+
+typedef struct 
+{
+	local int chunk = -1;
+	local int n = -1;
+	char a[8];
+	char b[8];
+} D2<read=readD2>;
+
+string readlist(list &o) {
+	string s;
+
+/*    o.ofd1 = 0xc00 + 0x79*o.chunk;
+    o.ofd2 = 0xc18 + 0x79*o.chunk;
+    o.used = 1;*/
+
+	SPrintf( s, "[%i] %i - x%x, x%x",o.chunk, o.used, o.ofd1, o.ofd2);
+	return s;
+}
+
+string readD1(D1 &o) {
+	string s;
+
+/*	o.flags = 2;
+	o.type = 2;
+	o.height1 = 0.0f;
+	o.height2 = 0.0f;
+	o.xoff = 0;
+	o.yoff = 0;
+	o.w = 8;
+	o.h = 8;
+	o.of2a = 0;
+	o.of2b = 0xc28 + o.chunk * 0x79;*/
+
+	SPrintf( s, "[%i, %i] %i (%i) - x%x, x%x", o.chunk, o.n,o.flags, o.type, o.of2a, o.of2b);
+	return s;
+}
+
+string readD2(D2 &o) {
+	string s;
+
+/*    o.a = "\xFF\xFF\xFF\xFF\xFF\xFF\xFF";
+    o.a[7] = 0xFF;
+    o.b[0] = 0;
+    o.b[1] = 0;
+    o.b[2] = 0;
+    o.b[3] = 0;
+    o.b[4] = 0;
+    o.b[5] = 0;
+    o.b[6] = 0;
+    o.b[7] = 0;*/
+	     
+	SPrintf( s, "[%i, %i] %s (%s)", o.chunk, o.n, o.a, o.b);
+	return s;
+}
+
+typedef struct
+{
+	local int i;
+    local int k;
+	local int j=0;
+	for(i=0; i<256; i++)
+	{
+		for(k=0; k<lis[i].used;k++)
+		{
+			FSeek( lis[i].ofd1 + base + k*0x18 );
+			D1 entries;
+			entries[j].chunk = i;
+			entries[j].n = k+1;
+			j++;
+		}
+	}
+} data1;
+
+typedef struct
+{
+local int temp = FTell();
+	local int i;
+    local int k;
+	local int j=0;
+	for(i=0; i<256; i++)
+	{
+		for(k=0; k<lis[i].used;k++)
+		{
+			FSeek( lis[i].ofd2 + base + k*0x10);
+			D2 entries;
+			entries[j].chunk = i;
+			entries[j].n = k+1;
+			j++;
+		}
+	}
+FSeek(temp);
+} data2;
+
+typedef struct
+{
+local int temp = FTell();
+	local int i;
+    local int k;
+	local int j = 0;
+	for(i=0; i<256; i++)
+	{
+		for(k=0; k<lis[i].used;k++)
+		{
+			if(D1_.entries[j].of2a != 0)
+			{
+				FSeek( D1_.entries[j].of2a + base );
+				typedef struct
+				{
+					local int chunk = i;
+					local int rows = D1_.entries[j].h;
+			        local int n = k+1;
+					char a[D1_.entries[j].h];
+				} bitmap<read=readBM>;
+				bitmap BM;
+			}
+            else
+			{
+				typedef struct
+				{
+					local int chunk = i;
+					local int rows = D1_.entries[j].h;
+			        local int n = k+1;
+				} bitmap_empty<read=readBM_empty>;
+				bitmap_empty BM;
+			}
+
+			j++;
+		}
+	}
+FSeek(temp);
+} data2a;
+
+typedef struct
+{
+local int temp = FTell();
+	local int i;
+    local int k;
+	local int j = 0;
+	for(i=0; i<256; i++)
+	{
+		for(k=0; k<lis[i].used;k++)
+		{
+			if(D1_.entries[j].of2b != 0)
+			{
+				FSeek( D1_.entries[j].of2b + base );
+				typedef struct
+				{
+					local int chunk = i;
+					local int rows = D1_.entries[j].h;
+					local int cols = D1_.entries[j].w;
+					local int n = k+1;
+					
+					if (D1_.entries[j].type != 2)
+					    float map[(cols+1)*(rows+1)];
+					char info[(cols+1)*(rows+1)];
+				} heights<read=readH>;
+				heights H1;
+			}
+			j++;
+		}
+	}
+FSeek(temp);
+} data2b;
+
+typedef struct
+{
+local int temp = FTell();
+local int i;
+    FSeek( base );
+for(i = 0; i<256;i++)
+{
+    list lis;
+    lis[i].chunk = i;
+}
+    data1 D1_;
+    data2 D2_;
+    
+    data2a D2a;
+    data2b D2b;
+FSeek( temp );
+} MH2O;
+
+string readH(heights &o) {
+	string s;
+    int i;
+
+/*    for(i = 0; i <(o.rows+1)*(o.cols+1);i++)
+    {
+        o.info[i] = i;
+    }*/
+
+	SPrintf( s, "[%i, %i] %i x %i", o.chunk, o.n, o.rows, o.cols);
+	return s;
+}
+
+string readBM(bitmap &o) {
+	string s;
+	SPrintf( s, "[%i, %i] %s", o.chunk, o.n, o.a);
+	return s;
+}
+string readBM_empty(bitmap_empty &o) {
+	string s;
+	SPrintf( s, "[%i, %i] full", o.chunk, o.n);
+	return s;
+}
+
+
+//-----------------------------------------------------
+//--- 010 Editor v3.0.2 Binary Template
+//
+// File:        WoWADT.bt
+// Authors:     ganku      (ganku.caelestis@gmail.com)
+//              you         (your.e-m@ail.com)
+// Revision:    0.2        2008-Sep-21
+// Purpose:     Quick overfiew for ADT files
+//
+//  Tree:
+//          Global constands
+//      1.  Basic Types
+//      2.  Chunk Def.
+//      3.  ADT File
+//      4.  Global Functions
+//-----------------------------------------------------
+
+// colors for special puposes
+local int cOffset = cLtYellow;
+local int cFileName = cLtAqua;
+local int cVector = cLtPurple;
+
+/*******************************************************
+ *  1.  BASIC TYPES
+*******************************************************/
+
+// basic chunk structure
+//--------------------------------------------------
+typedef struct {
+    // always important to know!
+    local uint32 myOffset = FTell();
+    local uint32 myDataStart = myOffset + 8;
+
+    // color
+    SetColor( cWhite, cDkRed );
+
+    // magic value
+    char magic[4];
+
+    // color #2
+    SetColor( cBlack, 0x99CCFF );
+    
+    // data size
+    uint32 byte_size;
+
+    // normal color plz
+    SetStdColor();
+} _chunk <read=chunkGetMagic>;
+
+    // displays the magic and the size of this chunk
+    string chunkGetMagic(_chunk &c) {
+        string s;
+        SPrintf( s, 
+            "%c%c%c%c: %i Byte", 
+            c.magic[3], c.magic[2], c.magic[1], c.magic[0], c.byte_size
+        ); 
+        return s;
+    };
+
+
+
+// offset including features
+//--------------------------------------------------
+typedef struct {
+    local uint32 myOffset = FTell();
+
+    // we store this value for calculations
+    local uint32 upperChunkOffset = 0;
+
+    SetColor( cBlack, cOffset );
+    
+    UINT32 adress   <format=hex>;
+    
+    SetStdColor();
+
+    local int doString = 0;
+}offset <read=offsetGetADR>;
+
+    // displays where this pointer is pointing to
+    string offsetGetADR(offset &o) {
+        string s;
+        // just an offset ?
+        if(o.upperChunkOffset==0) {
+            char temp[4];
+            ReadBytes(temp, o.adress+o.myOffset,4 );
+            SPrintf( s, "+ %i Byte: %s", o.adress, temp);
+       //     SPrintf( s, "+ %i Byte", o.adress);
+        }
+        // global offset
+        else {
+            // zero?
+            if(o.adress==0 && o.doString == 0) return "- unused - ";
+
+            if(o.doString == 0)
+            {
+                char temp[4];
+                ReadBytes(temp, o.adress+o.upperChunkOffset,4 );
+                SPrintf( s, "-> 0x%02X: %s", o.adress, temp);
+            }
+            else
+            {
+                SPrintf( s, "-> 0x%02X: %s", o.adress, ReadString(o.adress+o.upperChunkOffset));
+            }
+   
+
+         //   SPrintf( s, "-> 0x%02X", o.adress+o.upperChunkOffset);
+        }
+        return s;
+    }
+
+
+// filename - ... because 010 want it so
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cFileName );
+   
+    string value;
+
+    SetStdColor();
+} filename <read=filenameRead>;
+    
+    string filenameRead(filename &f) {
+        return f.value;
+    };
+
+
+// Vector3D
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cVector );
+   
+    float x, y, z;
+
+    SetStdColor();
+} Vector3D <read=Vector3DRead>;
+    
+    string Vector3DRead(Vector3D &f) {
+        string s;
+SPrintf(s,"(%f %f %f)", f.x, f.y, f.z);
+return s;
+    };
+
+
+
+/*******************************************************
+ *  2.  Chunk Def.
+*******************************************************/
+
+// CHNK - unknown chunk
+//--------------------------------------------------
+typedef struct {
+        _chunk hdr;
+        unsigned byte data[hdr.byte_size] <format=hex>;
+} CHNK;
+
+// MCNR - unknown chunk
+//--------------------------------------------------
+typedef struct {
+        _chunk hdr;
+        unsigned byte data[hdr.byte_size] <format=hex>;
+        unsigned byte unkshit[13];
+} MCNR;
+
+// MVER - Versions Header
+//--------------------------------------------------
+typedef struct {
+        _chunk hdr;
+        unsigned byte version[4] <format=hex>;
+} MVER;
+
+
+// MHDR - ADT Offset Collection
+//--------------------------------------------------
+typedef struct {
+        _chunk hdr;
+          int flags;
+          offset ofsMCIN;
+            ofsMCIN.upperChunkOffset = hdr.myDataStart;
+          offset ofsMTEX;
+            ofsMTEX.upperChunkOffset = hdr.myDataStart;		
+          offset ofsMMDX;		
+            ofsMMDX.upperChunkOffset = hdr.myDataStart;
+          offset ofsMMID;
+		    ofsMMID.upperChunkOffset = hdr.myDataStart;
+          offset ofsMWMO;
+		    ofsMWMO.upperChunkOffset = hdr.myDataStart;
+          offset ofsMWID;
+		    ofsMWID.upperChunkOffset = hdr.myDataStart;
+          offset ofsMDDF;
+		    ofsMDDF.upperChunkOffset = hdr.myDataStart;
+          offset ofsMODF;	
+            ofsMODF.upperChunkOffset = hdr.myDataStart;
+          offset ofsMFBO; // tbc, wotlk	
+            ofsMFBO.upperChunkOffset = hdr.myDataStart;
+          offset ofsMH2O; // new in WotLK
+            ofsMH2O.upperChunkOffset = hdr.myDataStart;
+          offset ofsMTFX; // new in WotLK
+            ofsMTFX.upperChunkOffset = hdr.myDataStart;
+          offset pad4;
+            pad4.upperChunkOffset = hdr.myDataStart;		
+          offset pad5;
+            pad5.upperChunkOffset = hdr.myDataStart;		
+          offset pad6;
+            pad6.upperChunkOffset = hdr.myDataStart;		
+          offset pad7;
+            pad7.upperChunkOffset = hdr.myDataStart;
+} MHDR<read=readMHDR>;
+
+    string readMHDR(MHDR &o) {
+        string s;
+        SPrintf(s, "flags: %x", o.flags);
+        if(o.pad4.adress == 0 && o.pad5.adress == 0 && o.pad6.adress == 0 && o.pad7.adress == 0)
+            return s;
+
+        SPrintf( s, "%s !!!! HAS NEW CHUNKS !!!!", s);
+        return s;
+    }
+
+// MCIN - MCNK Offsets
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cOffset );
+    uint32 adress;
+    SetStdColor();
+
+    uint32 size;
+    uint32 flags;
+    uint32 asyncID;
+} MCIN_Entry<read=mchinEntryRead>;
+    
+    // shows where we point, too.
+    string mchinEntryRead(MCIN_Entry &o) {
+        string s;
+        if(o.adress==0) return "ERROR!!";
+        
+            char temp[4];
+            int64 pos = o.adress;
+            ReadBytes(temp, pos,4 );
+            SPrintf( s, "-> 0x%02X: %s", o.adress, temp);
+if(o.flags == 0 && o.asyncID == 0)
+    return s;
+
+            SPrintf( s, "%s !!!! HAS DATA IN OTHER FIELDS !!!!", s);
+        return s;
+    }
+
+
+typedef struct {
+    _chunk hdr;
+    MCIN_Entry entries[256];
+} MCIN;
+
+
+// fileList - Used for any kind of file lists
+// Its unordered with unknown number of items
+// MTEX, MMDF, MWMO
+//--------------------------------------------------
+typedef struct { 
+    _chunk hdr;
+    local int i=0;
+
+    if(hdr.byte_size!=0) {
+        // catch texture files
+        while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+            filename texture;
+            i++;
+        }
+    }
+} fileList<read=readFileList>;
+    
+    // how many?
+    string readFileList(fileList &o) {
+        string s;
+        SPrintf( s, "%i Files", o.i);
+        return s;
+    }
+
+
+// offsList - List of many Offsets
+// MMID, MWID
+//--------------------------------------------------
+typedef struct {
+    _chunk hdr;
+
+    local int refTo = 0;
+    
+    local int i;
+    for(i=0; (i*sizeof(uint32))<hdr.byte_size; i++)
+    {
+        offset offs;
+        offs.upperChunkOffset = refTo;
+        offs.doString = 1;
+    }
+} offsList<read=readOffsList>;
+
+    // how many?
+    string readOffsList(offsList &o) {
+        string s;
+        SPrintf( s, "%i Offsets", o.i);
+        return s;
+    }    
+
+
+// MDDF - Doodad placement infomations 
+//--------------------------------------------------
+typedef struct {
+    uint32 nameID;
+    uint32 uniqueID;
+    Vector3D pos;
+    Vector3D rotation;
+    uint16 scale;
+    uint16 flags;
+} MDDF_Entry<read=readaloha>;
+
+string readaloha(MDDF_Entry &o)
+{
+string s;
+SPrintf(s, "%i: %i (%f%%)", o.uniqueID, o.nameID,(((float)o.scale)/10.24f));
+if(o.flags!=0)
+    SPrintf(s,"%s with flags: %x",s,o.flags);
+return s;
+}
+typedef struct {
+    uint32 nameID;
+    uint32 uniqueID;
+    Vector3D pos;
+    Vector3D rotation;
+    Vector3D lower;
+    Vector3D upper;
+    uint32 set;
+    uint16 unknown;
+    uint16 unknown2;
+} MODF_Entry<read=readaloha2>;
+
+string readaloha2(MODF_Entry &o)
+{
+string s;
+/*o.lower.x = o.pos.x - 1;
+o.lower.y = o.pos.y - 1;
+o.lower.z = o.pos.z - 1;
+o.upper.x = o.pos.x + 1;
+o.upper.y = o.pos.y + 1;
+o.upper.z = o.pos.z + 1;*/
+SPrintf(s, "%i: %i (%i)",o.uniqueID, o.nameID, o.unknown);
+return s;
+}
+
+typedef struct {
+    _chunk hdr;
+
+    local int i;
+    for(i=0; (i*36)<hdr.byte_size; i++)
+        MDDF_Entry entry;
+} MDDF<read=readMDDFList>;
+ 
+    // how many?
+    string readMDDFList(MDDF &o) {
+        string s;
+        SPrintf( s, "%i Models appear", o.i);
+        return s;
+    }
+
+typedef struct {
+    _chunk hdr;
+
+    local int i;
+    for(i=0; (i*64)<hdr.byte_size; i++)
+        MODF_Entry entry;
+} MODF<read=readMODFList>;
+ 
+    // how many?
+    string readMODFList(MODF &o) {
+        string s;
+        SPrintf( s, "%i WMOs appear", o.i);
+        return s;
+    }
+
+typedef struct {
+    _chunk hdr;
+
+    struct {
+        short height[3];
+    } maximum[3];
+    struct {
+        short height[3];
+    } minimum[3];
+} MFBO;
+
+typedef struct {
+    _chunk hdr;
+
+    int mode[hdr.byte_size/4];
+} MTFX;
+
+typedef struct {
+    _chunk hdr;
+
+    int doodad[hdr.byte_size/4];
+} MCRF<read=MCRF_read>;
+
+typedef struct {
+        _chunk hdr;
+        float heightmap[145];
+} MCVT;
+
+string MCRF_read (MCRF &o)
+{
+int dd = 26;
+    string s;
+    int i;
+    for(i=0;i<o.hdr.byte_size/4;i++)
+{
+if(o.doodad[i] == dd)
+SPrintf(s,"Found doodad %i", dd);
+}
+return s;
+}
+
+typedef struct {
+    uint32 textid;
+    uint32 flags;
+    uint32 ofsalphamap;
+    uint32 detailtextureid;
+} MCLY_Entry<read=shine>;
+
+string shine(MCLY_Entry &o)
+{
+string s; SPrintf(s,"text: %i (dt: %i)", o.textid, o.detailtextureid);
+
+
+if(o.flags&0x100)
+SPrintf(s, "%s has alpha map",s);
+if(o.flags&0x200)
+SPrintf(s, "%s (compressed)",s);
+if(o.flags&0x400)
+SPrintf(s, "%s is shiny",s);
+return s;
+}
+
+
+typedef struct {
+    _chunk hdr;
+
+    local int i;
+    for(i=0; (i*16)<hdr.byte_size; i++)
+        MCLY_Entry entry;
+} MCLY;
+
+
+typedef struct {
+    uint32 dbcidd;
+    Vector3D position;
+    Vector3D radius;
+} MCSE_Entry;
+
+typedef struct {
+    _chunk hdr;
+
+    local int i;
+    for(i=0; (i*0x1C)<hdr.byte_size; i++)
+        MCSE_Entry entry;
+} MCSE;
+
+// MCNK
+
+typedef struct  // 03-29-2005 By ObscuR
+{
+    _chunk hdr;
+
+struct {
+/*000h*/  UINT32 flags;
+/*004h*/  UINT32 IndexX;
+/*008h*/  UINT32 IndexY;
+/*00Ch*/  UINT32 nLayers;
+/*010h*/  UINT32 nDoodadRefs;
+/*014h*/  offset ofsMCVT;
+    ofsMCVT.upperChunkOffset = hdr.myOffset;
+/*018h*/  offset ofsMCNR;
+    ofsMCNR.upperChunkOffset = hdr.myOffset;
+/*01Ch*/  offset ofsMCLY;
+    ofsMCLY.upperChunkOffset = hdr.myOffset;
+/*020h*/  offset ofsMCRF;
+    ofsMCRF.upperChunkOffset = hdr.myOffset;
+/*024h*/  offset ofsMCAL;
+    ofsMCAL.upperChunkOffset = hdr.myOffset;
+/*028h*/  UINT32 sizeAlpha;
+/*02Ch*/  offset ofsMCSH;
+    ofsMCSH.upperChunkOffset = hdr.myOffset;
+/*030h*/  UINT32 sizeShadow;
+/*034h*/  UINT32 areaid;
+/*038h*/  UINT32 nMapObjRefs;
+/*03Ch*/  UINT32 holes;
+/*044h*/  UINT32 unk[4]<format=binary>;
+/*050h*/  UINT32 predTex;
+/*054h*/  UINT32 noEffectDoodad;
+/*058h*/  offset ofsMCSE;
+    ofsMCSE.upperChunkOffset = hdr.myOffset;
+/*05Ch*/  UINT32 nSndEmitters;
+/*060h*/  offset ofsMCLQ;
+    ofsMCLQ.upperChunkOffset = hdr.myOffset;
+/*064h*/  UINT32 sizeLiquid;
+/*068h*/  float  pos[3];
+/*06Ch*/  
+/*070h*/ 
+/*074h*/  offset ofsMCCV;
+    ofsMCCV.upperChunkOffset = hdr.myOffset;
+/*078h*/  UINT32 props;
+/*07Ch*/  UINT32 effectId;
+/*080h*/
+} header;
+if(header.ofsMCVT.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCVT.adress);
+    MCVT mcvt;
+}
+if(header.ofsMCNR.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCNR.adress);
+    MCNR MCNR_;
+}
+if(header.ofsMCLY.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCLY.adress);
+    MCLY MCLY_;
+}
+if(header.ofsMCRF.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCRF.adress);
+    MCRF mcrf;
+}
+if(header.flags&1)
+if(header.ofsMCSH.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCSH.adress);
+    CHNK MCSH;
+}
+if(header.flags&0x40)
+if(header.ofsMCCV.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCCV.adress);
+    CHNK MCCV;
+}
+if(header.ofsMCAL.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCAL.adress);
+    CHNK MCAL;
+}
+if(header.ofsMCLQ.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCLQ.adress);
+    CHNK MCLQ;
+}
+if(header.ofsMCSE.adress != 0)
+{
+    FSeek(hdr.myOffset + header.ofsMCSE.adress);
+    MCSE mcse;
+}
+
+
+} SMChunk<read=readSMChunk>;
+
+    // how many?
+    string readSMChunk(SMChunk &o) {
+        string s;
+        SPrintf( s, "[%i_%i] (%i): %x",o.header.IndexY,o.header.IndexX,o.header.IndexX+o.header.IndexY*16, o.header.flags);
+/*        if(o.MCVT.hdr.myOffset-o.hdr.myOffset - o.offsHeight.adress != 0)
+            SPrintf( s, "%s, MCVT fucked", s);
+        if(o.MCNR_.hdr.myOffset-o.hdr.myOffset - o.offsNormal.adress != 0)
+            SPrintf( s, "%s, MCNR fucked", s);
+        if(o.MCLY.hdr.myOffset-o.hdr.myOffset - o.offsLayer.adress != 0)
+            SPrintf( s, "%s, MCLY fucked", s);
+       // if(o.MCRF.hdr.myOffset-o.hdr.myOffset - o.offsRefs.adress != 0)
+      //      SPrintf( s, "%s, MCRF fucked", s);
+        if(o.MCAL.hdr.myOffset-o.hdr.myOffset - o.offsAlpha.adress != 0)
+            SPrintf( s, "%s, MCAL fucked", s);
+        if(o.flags&1)
+        if(o.MCSH.hdr.myOffset-o.hdr.myOffset - o.offsShadow.adress != 0)
+            SPrintf( s, "%s, MCSH fucked", s);
+        if(o.MCLQ.hdr.myOffset-o.hdr.myOffset - o.offsLiquid.adress != 0)
+            SPrintf( s, "%s, MCLQ fucked", s);*/
+        return s;
+    };
+
+
+/*******************************************************
+ *  3.  ADT File
+*******************************************************/
+
+        MVER mver;  // version
+
+        MHDR mhdr;  // header - all offsets
+
+FSeek(mhdr.ofsMCIN.adress + 0x14);
+        MCIN mcin;  // field offsets
+
+FSeek(mhdr.ofsMTEX.adress + 0x14);
+        fileList mtex;  // texture files
+
+
+FSeek(mhdr.ofsMMDX.adress + 0x14);
+        fileList mmdx;  // model files
+    local int refTo = mmdx.hdr.myDataStart;
+FSeek(mhdr.ofsMMID.adress + 0x14);
+        offsList mmid;  // str offsets
+
+
+FSeek(mhdr.ofsMWMO.adress + 0x14);
+        fileList mwmo;  // obj files
+    refTo = mwmo.hdr.myDataStart;
+FSeek(mhdr.ofsMWID.adress + 0x14);
+        offsList mwid;  // str offsets
+
+
+FSeek(mhdr.ofsMDDF.adress + 0x14);
+        MDDF mddf;      // model placements
+FSeek(mhdr.ofsMODF.adress + 0x14);
+        MODF modf;      // object placements
+
+
+if(mhdr.ofsMH2O.adress != 0)
+{
+FSeek(mhdr.ofsMH2O.adress + 0x14);
+base = mhdr.ofsMH2O.adress+mhdr.ofsMH2O.upperChunkOffset+8;
+MH2O water;
+}
+if(mhdr.ofsMFBO.adress != 0 && mhdr.flags&1)
+{
+FSeek(mhdr.ofsMFBO.adress + 0x14);
+MFBO mfbo;
+}
+if(mhdr.ofsMTFX.adress != 0)
+{
+FSeek(mhdr.ofsMTFX.adress + 0x14);
+MTFX mtfx;
+}
+
+
+local int i;
+local int j;
+struct {
+    for(i=0; i<16; i++)
+    {
+struct {
+local int s = FTell();
+        for(j=0; j<16; j++)
+        {
+            FSeek( mcin.entries[i*16+j].adress );
+            SMChunk mcnk;
+        }
+FSeek(s);
+} row;
+    }
+}MCNKs;
+
+
+
+
+/*******************************************************
+ *  4. Helpers
+*******************************************************/
+    
+    // im soo lazy
+void SetStdColor() {
+    SetColor( cBlack, cWhite );
+}

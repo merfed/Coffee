@@ -1,0 +1,13 @@
+<?xml version="1.0" standalone="yes"?>
+<extension name="WoW-Translator" version="2.5">
+  <author>Tigurius</author>
+  <date>2008</date>
+  <description>
+This Plugin allows to import and inject Models from WoW
+  </description>
+  <comments>
+  </comments>
+  <plugin class="artofillusion.translators.M2Translator"/>
+   <plugin class="artofillusion.translators.WMOTranslator"/>
+ </extension>
+
