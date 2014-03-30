@@ -1,0 +1,44 @@
+9
+
+dir
+0
+https://87.118.108.82:6443/svn/Modcraft/Tools/Textures/UVtoPNG
+https://87.118.108.82:6443/svn/Modcraft
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+src
+dir
+
+
+
+add
+
+Readme.txt
+file
+
+
+
+add
+
+UVtoPNG.jar
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+

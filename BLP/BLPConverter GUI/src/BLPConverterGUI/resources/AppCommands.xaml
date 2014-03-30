@@ -1,0 +1,160 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary">
+
+    <r:RibbonCommand x:Key="cmdMipsOn"
+        LabelTitle="Create Mips"
+        ToolTipTitle="Create Mip Test Image"
+        ToolTipDescription="Outputs an image that contains all of the generated mip levels."
+        SmallImageSource="../icons/milky/130.png"
+        LargeImageSource="../icons/milky/130.png" />
+
+    <r:RibbonCommand x:Key="cmdMipsOff"
+        LabelTitle="No Mips"
+        ToolTipTitle="No Mips"
+        ToolTipDescription="Disables creation of mip levels when saving BLPs."
+        SmallImageSource="../icons/milky/126.png"
+        LargeImageSource="../icons/milky/126.png" />
+
+    <r:RibbonCommand x:Key="cmdCharTex"
+        LabelTitle="Character Texture"
+        ToolTipTitle="Force Character Texture"
+        ToolTipDescription="Forces WoW character texture format (palletized, no alpha) when making BLPs."
+        SmallImageSource="../icons/milky/47.png"
+        LargeImageSource="../icons/milky/47.png" />
+
+    <r:RibbonCommand x:Key="cmdClothTex"
+        LabelTitle="Clothing Texture"
+        ToolTipTitle="Force Clothing Texture"
+        ToolTipDescription="Forces WoW clothing texture formats.  All creates BLPs are palletized and all PNGs are RGB/RGBA."
+        SmallImageSource="../icons/financial/15_64x64.png"
+        LargeImageSource="../icons/financial/15_64x64.png" />
+
+    <r:RibbonCommand x:Key="cmdVerbose"
+        LabelTitle="Verbose"
+        ToolTipTitle="Verbose Mode"
+        ToolTipDescription="Outputs additional information."
+        SmallImageSource="../icons/milky/123.png"
+        LargeImageSource="../icons/milky/123.png" />
+
+    <r:RibbonCommand x:Key="cmdInfo"
+        LabelTitle="Info Only"
+        ToolTipTitle="Information Only"
+        ToolTipDescription="Only outputs file information.  Automatically sets verbose mode."
+        SmallImageSource="../icons/milky/65.png"
+        LargeImageSource="../icons/milky/65.png" />
+
+    <r:RibbonCommand x:Key="cmdForceFormat"
+        LabelTitle="Force Format"
+        ToolTipTitle="Force Conversion Format"
+        ToolTipDescription="Forces target conversion format.  Overrides all other settings."
+        SmallImageSource="../icons/milky/37.png"
+        LargeImageSource="../icons/milky/37.png" />
+
+    <r:RibbonCommand x:Key="cmdAlpha"
+        LabelTitle="Set Alpha Threshold"
+        ToolTipTitle="Set Alpha Threshold Level"
+        ToolTipDescription="Sets the alpha threshold when converting from palletized, 8-bit BLPs to palletized PNGs.  Setting is a number between 0 and 255.  Source alpha values below the threshold are fully transparent, above are fully opaque.  Default is 128."
+        SmallImageSource="../icons/milky/6.png"
+        LargeImageSource="../icons/milky/6.png" />
+
+    <r:RibbonCommand x:Key="cmdListFormats"
+        LabelTitle="Conversion Rules"
+        ToolTipTitle="Conversion Rules"
+        ToolTipDescription="Shows all the available formats for conversion and the default conversion rule."
+        SmallImageSource="../icons/milky/32.png"
+        LargeImageSource="../icons/milky/32.png" />
+
+    <r:RibbonCommand x:Key="cmdCustomConvert"
+        LabelTitle="Custom Conversion"
+        ToolTipTitle="Create Custom Conversion"
+        ToolTipDescription="Creates a custom conversion rule to override the default conversions."
+        SmallImageSource="../icons/milky/62.png"
+        LargeImageSource="../icons/milky/62.png" />
+
+    <r:RibbonCommand x:Key="cmdExitApp"
+        LabelTitle="Exit BLiPster"
+        SmallImageSource="../icons/milky/118.png"
+        LargeImageSource="../icons/milky/118.png" />
+    <!--
+        SmallImageSource="../icons/vista/305_Close_48x48_72.png"
+        LargeImageSource="../icons/vista/305_Close_48x48_72.png" />
+    -->
+
+    <r:RibbonCommand x:Key="cmdOptions"
+        LabelTitle="BLiPster Options"
+        SmallImageSource="../icons/milky/111.png"
+        LargeImageSource="../icons/milky/111.png" />
+
+    <r:RibbonCommand x:Key="cmdHomeExitApp"
+        LabelTitle="Exit BLiPster"
+        SmallImageSource="../icons/milky/27_16x16.png"
+        LargeImageSource="../icons/milky/27_16x16.png" />
+    <!--
+        SmallImageSource="../icons/48_16x16.png"
+        LargeImageSource="../icons/48_32x32.png" />
+    -->
+
+    <r:RibbonCommand x:Key="cmdOpenFiles"
+        LabelTitle="Add Files"
+        ToolTipTitle="Add Files to Convert"
+        ToolTipDescription="Adds additional files to this conversion order."
+        SmallImageSource="../icons/milky/119.png"
+        LargeImageSource="../icons/milky/119.png" />
+
+    <r:RibbonCommand x:Key="cmdOpenConversion"
+        LabelTitle="Open"
+        ToolTipTitle="Open Files"
+        ToolTipDescription="Opens a previously saved conversion order."
+        SmallImageSource="../icons/milky/119.png"
+        LargeImageSource="../icons/milky/119.png" />
+
+    <r:RibbonCommand x:Key="cmdConvertFiles"
+        LabelTitle="Convert"
+        ToolTipTitle="Convert Files"
+        ToolTipDescription="Converts files between BLP and PNG."
+        SmallImageSource="../icons/milky/48.png"
+        LargeImageSource="../icons/milky/48.png" />
+
+    <r:RibbonCommand x:Key="cmdSaveOutput"
+        LabelTitle="Save Results"
+        ToolTipTitle="Save Conversion Results"
+        ToolTipDescription="Saves the results of the conversion to a Rich Text File."
+        SmallImageSource="../icons/milky/7.png"
+        LargeImageSource="../icons/milky/7.png" />
+
+    <r:RibbonCommand x:Key="cmdSaveStuff"
+        LabelTitle="Save..."
+        SmallImageSource="../icons/milky/7.png"
+        LargeImageSource="../icons/milky/7.png" />
+
+    <r:RibbonCommand x:Key="cmdSaveConversion"
+        LabelTitle="Save Conversion"
+        ToolTipTitle="Save Conversion Order"
+        ToolTipDescription="Saves the list of files and settings used for this conversion."
+        SmallImageSource="../icons/milky/7.png"
+        LargeImageSource="../icons/milky/7.png" />
+
+    <r:RibbonCommand x:Key="cmdNew"
+        LabelTitle="Clear Screen"
+        ToolTipTitle="Clear Screen"
+        ToolTipDescription="Clears the file list and output window."
+        SmallImageSource="../icons/milky/1.png"
+        LargeImageSource="../icons/milky/1.png" />
+
+    <r:RibbonCommand x:Key="cmdClearOutput"
+        LabelTitle="Clear Output"
+        ToolTipTitle="Clears the output window."
+        ToolTipDescription="Clears the output window of data."
+        SmallImageSource="../icons/milky/2.png"
+        LargeImageSource="../icons/milky/2.png" />
+
+    <r:RibbonCommand x:Key="cmdManage"
+        LabelTitle="Manage"
+        ToolTipTitle="Manage Files"
+        ToolTipDescription="Manage the list of files known to this application."
+        SmallImageSource="../icons/milky/36.png"
+        LargeImageSource="../icons/milky/36.png" />
+
+</ResourceDictionary>

@@ -1,0 +1,201 @@
+﻿<Window x:Class="MDS.cBlp2.test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:MDS.cBlp2.test.UIConverters"
+        Title="Blpc" Name="Main" Height="500" Width="800" WindowStartupLocation="CenterScreen" Background="Black"
+        SnapsToDevicePixels="True" Icon="/Blpc;component/Resources/blpc.ico" Closing="Window_Closing" PreviewKeyDown="Main_PreviewKeyDown">
+
+    <Window.Resources>
+        <!-- DataBinding converters -->
+        <converters:FormatConverter x:Key="FormatConverter" />
+        <converters:ResizeConverter x:Key="ResizeConverter" />
+        <converters:DxtQualConverter x:Key="DxtQualConverter" />
+        <converters:Raw1QualConverter x:Key="Raw1QualConverter" />
+        <converters:MouseToolConverter x:Key="MouseToolConverter" />
+        <converters:ZoomConverter x:Key="ZoomConverter" />
+        <converters:ZoomQualityConverter x:Key="ZoomQualityConverter" />
+
+        <!-- Custom toggle button -->
+        <ControlTemplate x:Key="ToggleButton" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Border x:Name="border" BorderThickness="2" Padding="2" CornerRadius="3" Background="Transparent">
+                    <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#96696969"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF696969"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                        <Condition Property="IsChecked" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" TargetName="border" Value="#96696969"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#96696969"/>
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+
+    <!-- Menu CommandBindings -->
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="CommandBinding_Executed" />
+        <CommandBinding Command="Open" Executed="CommandBinding_Executed" />
+        <CommandBinding Command="Save" Executed="CommandBinding_Executed" />
+        <CommandBinding Command="Help" Executed="CommandBinding_Executed" />
+    </Window.CommandBindings>
+    
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="W" Modifiers="Ctrl" />
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="125" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Menu -->
+        <Menu HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2" Grid.RowSpan="1" Foreground="{StaticResource TextColor}" FontFamily="Verdana" FontSize="12" Background="{StaticResource Gradient3}">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open..." Foreground="Black" Command="Open">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/open.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Save as..." Foreground="Black" Command="Save">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/save.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Name="menuBatch" Header="_Batch conversion..." Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/batch.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="_Exit" Foreground="Black" Command="Close" InputGestureText="Ctrl+W" >
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/exit.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem Name="menuFormat" Header="Blp Format" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/format.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="Dxt1" IsCheckable="True" IsChecked="{Binding Path=Format, Converter={StaticResource FormatConverter}, ConverterParameter=2}" />
+                    <MenuItem Header="Dxt3" IsCheckable="True" IsChecked="{Binding Path=Format, Converter={StaticResource FormatConverter}, ConverterParameter=3}" />
+                    <MenuItem Header="Dxt5" IsCheckable="True" IsChecked="{Binding Path=Format, Converter={StaticResource FormatConverter}, ConverterParameter=4}" />
+                    <MenuItem Header="256 Colors Bitmap (Raw1)" IsCheckable="True" IsChecked="{Binding Path=Format, Converter={StaticResource FormatConverter}, ConverterParameter=0}" />
+                    <MenuItem Header="32bpp Bitmap (Raw3)" IsCheckable="True" IsChecked="{Binding Path=Format, Converter={StaticResource FormatConverter}, ConverterParameter=1}" />
+                    <MenuItem Header="Jpeg (NYI)" IsCheckable="True" IsChecked="{Binding Path=Format, Converter={StaticResource FormatConverter}, ConverterParameter=5}" IsEnabled="False" />
+                </MenuItem>
+                <MenuItem Name="menuResize" Header="Resize Method" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/resize.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="Crop" IsCheckable="True" IsChecked="{Binding Path=ResizeMethod, Converter={StaticResource ResizeConverter}, ConverterParameter=0}" />
+                    <MenuItem Header="Extend" IsCheckable="True" IsChecked="{Binding Path=ResizeMethod, Converter={StaticResource ResizeConverter}, ConverterParameter=1}" />
+                    <MenuItem Header="Shrink" IsCheckable="True" IsChecked="{Binding Path=ResizeMethod, Converter={StaticResource ResizeConverter}, ConverterParameter=2}" />
+                    <MenuItem Header="Stretch" IsCheckable="True" IsChecked="{Binding Path=ResizeMethod, Converter={StaticResource ResizeConverter}, ConverterParameter=3}" />
+                </MenuItem>
+                <MenuItem Name="menuDxtQuality" Header="Dxt Quality" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/setting.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="Best (Slower Conversion)" IsCheckable="True" IsChecked="{Binding Path=DxtQuality, Converter={StaticResource DxtQualConverter}, ConverterParameter=256}" />
+                    <MenuItem Header="Normal" IsCheckable="True" IsChecked="{Binding Path=DxtQuality, Converter={StaticResource DxtQualConverter}, ConverterParameter=8}" />
+                    <MenuItem Header="Low (Faster Conversion)" IsCheckable="True" IsChecked="{Binding Path=DxtQuality, Converter={StaticResource DxtQualConverter}, ConverterParameter=16}" />
+                </MenuItem>
+                <MenuItem Name="menuRaw1Quality" Header="Raw1 Quality" Foreground="Black">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/setting.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="Dither" IsCheckable="True" IsChecked="{Binding Path=Dither}" />
+                    <Separator />
+                    <MenuItem Header="Best (Slower Conversion)" IsCheckable="True" IsChecked="{Binding Path=Raw1Quality, Converter={StaticResource Raw1QualConverter}, ConverterParameter=1}" />
+                    <MenuItem Header="Better" IsCheckable="True" IsChecked="{Binding Path=Raw1Quality, Converter={StaticResource Raw1QualConverter}, ConverterParameter=5}" />
+                    <MenuItem Header="Normal" IsCheckable="True" IsChecked="{Binding Path=Raw1Quality, Converter={StaticResource Raw1QualConverter}, ConverterParameter=10}" />
+                    <MenuItem Header="Lower" IsCheckable="True" IsChecked="{Binding Path=Raw1Quality, Converter={StaticResource Raw1QualConverter}, ConverterParameter=20}" />
+                    <MenuItem Header="Lowest (Faster Conversion)" IsCheckable="True" IsChecked="{Binding Path=Raw1Quality, Converter={StaticResource Raw1QualConverter}, ConverterParameter=30}" />
+                </MenuItem>
+                <MenuItem Name="menuMips" Header="Mipmaps" IsCheckable="True" IsChecked="{Binding Path=Mipmaps}" Foreground="Black" />
+                <Separator />
+                <MenuItem Name="menuExtension" Header="Associate .blp Files" IsCheckable="True" Foreground="Black" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="View Help" Foreground="Black" Command="Help">
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/help.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Name="menuAbout" Header="About" Foreground="Black" Command="NavigateJournal" >
+                    <MenuItem.Icon>
+                        <Image Source="/Blpc;component/MenuIcons/about.png" Width="24" Height="24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        
+        <!-- Left column -->
+        <Border Grid.Column="0" Grid.Row="1" Margin="5" CornerRadius="5,5,0,0" BorderThickness="1,1,0,1" VerticalAlignment="Top" Height="20" Background="{StaticResource Gradient1}" BorderBrush="{StaticResource Gradient2}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Name="lblFilename" FontFamily="Verdana" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextColor}" Margin="5,0,0,0" Effect="{StaticResource TextShadow}" />
+                <TextBlock Name="lblZoom" FontFamily="Verdana" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=ZoomFactor, Converter={StaticResource ZoomConverter}, ConverterParameter=PercentText}" Visibility="Hidden" />
+            </StackPanel>
+        </Border>
+        <ScrollViewer Name="scrollViewer" Margin="5,25,5,5" Grid.Row="1" Panel.ZIndex="1" Background="{StaticResource Checkerboard}" AllowDrop="True" PreviewDragOver="previewDragEnter" Drop="DropFile" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" PreviewMouseDown="scrollViewer_PreviewMouseDown" PreviewMouseMove="scrollViewer_PreviewMouseMove" PreviewMouseUp="scrollViewer_PreviewMouseUp" ScrollChanged="scrollViewer_ScrollChanged">
+            <Image Name="img1" Stretch="None" RenderOptions.BitmapScalingMode="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=ZoomFactor, Converter={StaticResource ZoomQualityConverter}}">
+                <Image.LayoutTransform>
+                    <ScaleTransform ScaleX="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=ZoomFactor, Converter={StaticResource ZoomConverter}}" ScaleY="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=ZoomFactor, Converter={StaticResource ZoomConverter}}" />
+                </Image.LayoutTransform>
+            </Image>
+        </ScrollViewer>
+        <Rectangle Fill="White" Grid.Row="1" Margin="5,25,5,5" />
+
+        <!-- Right column -->
+        <Border Grid.Column="1" Grid.Row="1" Margin="5,5,0,5" CornerRadius="5,0,0,5" BorderThickness="1,1,0,1" Background="{StaticResource Gradient1}" BorderBrush="{StaticResource Gradient2}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="34" />
+                </Grid.RowDefinitions>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Dimensions" FontFamily="Verdana" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" />
+                    <TextBlock Name="lblInfo1" Text="--" FontFamily="Verdana" FontSize="10" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" Margin="0,2,0,10" />
+                    <TextBlock Text="Mipmaps" FontFamily="Verdana" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" />
+                    <TextBlock Name="lblInfo2" Text="--" FontFamily="Verdana" FontSize="10" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" Margin="0,2,0,10" />
+                    <TextBlock Text="Format" FontFamily="Verdana" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" />
+                    <TextBlock Name="lblInfo3" Text="--" FontFamily="Verdana" FontSize="10" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" Margin="0,2,0,10" />
+                    <TextBlock Text="Alpha depth" FontFamily="Verdana" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" />
+                    <TextBlock Name="lblInfo4" Text="--" FontFamily="Verdana" FontSize="10" Foreground="{StaticResource TextColor}" Effect="{StaticResource TextShadow}" Margin="0,2,0,10" />
+
+                </StackPanel>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ToggleButton Grid.Column="2" Template="{StaticResource ToggleButton}" Height="28" Width="28" ToolTip="-" IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=MouseAction, Converter={StaticResource MouseToolConverter}, ConverterParameter=3}">
+                        <Image Source="/Blpc;component/Resources/btnZoomOut.png" />
+                    </ToggleButton>
+                    <ToggleButton Grid.Column="1" Template="{StaticResource ToggleButton}" Height="28" Width="28" ToolTip="+" IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=MouseAction, Converter={StaticResource MouseToolConverter}, ConverterParameter=2}">
+                        <Image Source="/Blpc;component/Resources/btnZoomIn.png" />
+                    </ToggleButton>
+                    <ToggleButton Template="{StaticResource ToggleButton}" Height="28" Width="28" ToolTip="H" IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=MouseAction, Converter={StaticResource MouseToolConverter}, ConverterParameter=1}">
+                        <Image Source="/Blpc;component/Resources/btnHand.png" />
+                    </ToggleButton>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,30 @@
+9
+
+dir
+0
+https://87.118.108.82:6443/svn/Modcraft/Tools/Textures/UVtoPNG/src/tig/uv
+https://87.118.108.82:6443/svn/Modcraft
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+main.java
+file
+
+
+
+add
+
+UVTextureCreator.java
+file
+
+
+
+add
+

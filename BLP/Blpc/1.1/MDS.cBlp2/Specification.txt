@@ -1,0 +1,53 @@
+﻿struct BLP2Header
+{
+    FourCC      ID; // Always 'BLP2'
+    UInt32      Type;
+    UInt8       Encoding;
+    UInt8       AlphaDepth;
+    UInt8       AlphaEncoding;
+    UInt8       HasMips;
+    UInt32      Width;
+    UInt32      Height;+7
+    UInt32      Offsets[16];
+    UInt32      Lengths[16];
+    ARGBColor8  Palette[256];
+};
+    
+Type
+    0: JPEG compression
+    1: Uncompressed or DirectX compression
+    
+Encoding
+    1: Uncompressed
+    2: DirectX compression
+    
+AlphaDepth
+    0: No alpha channel
+    1: 1 bit alpha
+    4: 4 bit alpha (DXT3 only)
+    8: 8 bit alpha
+    
+AlphaEncoding
+    0: DXT1 alpha (0 or 1 bit alpha)
+    1: DXT2/3 alpha (4 bit alpha)
+    7: DXT4/5 alpha (interpolated alpha)
+    
+HasMips
+    0: No mip levels
+    1: Mip levels present (the number of levels is determined by the image size)
+    Width, Height: Dimensions of the image in pixels (always a power of two)
+    
+Offsets[0]: Offset from the start of the file to the image data
+Lengths[0]: Length in bytes of the image data
+Palette: 4-byte BGRA color values for paletted textures (this field is present regardless of whether the texture actually uses palettes)
+
+
+Compressions:
+
+Compr.	ColorDepth	NoAlpha		1bitAlpha	4bitAlpha	8bitAlpha
+-------------------------------------------------------------------
+RAW1	256			Y			Y			N			Y
+RAW3	24bpp		-			-			-			-
+DXT1	16bpp		Y			Y			N			N
+DXT3	16bpp		N			N			Y			Y
+DXT5	16bpp		N			N			N			Y

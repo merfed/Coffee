@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>BlpConverter Help</title>
+    <style type="text/css">
+      <!--
+      body {
+	      background-color: #505950;
+	      color: #fafffa;
+	      font-family: Verdana;
+      }
+
+      h1 {
+        padding-top: 20px;
+	      font-size: 14px;
+	      font-weight: bold;
+      }
+
+      h2 {
+	      font-size: 11px;
+	      font-weight: bold;
+      }
+
+      p {
+	      color: #fafffa;
+	      font-size: 10px;
+      }
+
+      i {
+        font-style: normal;
+        color: #c7cd91;
+      }
+
+      table {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        border: solid 1px #c7cd91;
+      }
+
+      .rowa {
+	      background: #495249;
+      }
+
+      .rowb {
+	      background: #576157;
+      }
+
+      th {
+	      font-size: 9px;
+        font-weight: bold;
+      }
+
+      td {
+	      font-size: 9px;
+        text-align: center;
+      }
+      -->
+    </style>
+  </head>
+  <body>
+    <h1 style="padding-top: 0px;">Blp2 Format Guideline</h1>
+    <p>
+      Blp2 is a proprietary texture format used by several games including Blizzard's World of Warcraft and Warcraft III. It is the
+      succesor to Blp1 and Blp0 used in older games. The format serves as a container for several texture compressions.
+    </p>
+
+    <p>
+      The structure of the file consists of a header containing meta data with information like image dimensions and compression
+      types, followed by a color palette and the actual image data. Most texture compressions don't make use of the palette. Regardless
+      of that fact it is always present.
+    </p>
+
+    <p>To make the optimal decision for which settings to use for conversion of your original image you should read the following:</p>
+
+    <h1>Texture data</h1>
+    <p>The texture data can be stored in a variety of formats of which the following are used within World of Warcraft:</p>
+
+    <h2>Dxt</h2>
+    <p>
+      S3 texture compression (DxtN) is a set of <i>lossy, but fast</i> compression algorithms used in many games that is built
+      into Microsoft's DirectX. Most World of Warcraft textures use one of these formats. The basic principle behind the compression
+      is to choose 2 optimal colors out of 4 input pixels and store a lookup table determining which color is used for each of the 4
+      pixels when decompressed.
+    </p>
+
+    <p>
+      One reason for potential quality loss is the color storage itself. 16bpp RGB565 values (meaning 5 bits red, 6 bits green, 5 bits blue)
+      are stored with Dxt compression resulting in 65.536 possible colors whereas s typical TrueColor image with 24bpp (8 red, 8 green,
+      8 blue) allows up to 16.7 million colors. This could be noticed if your image contains, say mostly shades of red as <i>there are not
+      as much nuances of red, green and blue</i> as in a TrueColor file.
+    </p>
+
+    <p>
+      The compression ratio is either 4:1 or 8:1 depending on the Dxt version. The variations of Dxt compressions differ primarily
+      in the handling of alpha data. Therefore the choice of a Dxt variation <i>should be made depending on your image's transparency</i>.
+      Below is comparison table with recommendations based on your original alpha data characteristics:
+    </p>
+
+    <table cellspacing="0" cellpadding="5">
+      <tr>
+        <th></th>
+        <th>
+          Color<br/>Depth
+        </th>
+        <th>
+          No<br/>Alpha
+        </th>
+        <th>
+          1bit<br/>Alpha
+        </th>
+        <th>
+          4bit<br/>Alpha
+        </th>
+        <th>
+          8bit<br/>Alpha
+        </th>
+        <th>Good for</th>
+      </tr>
+      <tr class="rowa">
+        <td>DXT1</td>
+        <td>16bpp</td>
+        <td>Y</td>
+        <td>Y</td>
+        <td>N</td>
+        <td>N</td>
+        <td>
+          No or 1bit transparency<br />(Either fully transparent or opaque)
+        </td>
+      </tr>
+      <tr class="rowb">
+        <td>DXT3</td>
+        <td>16bpp</td>
+        <td>N</td>
+        <td>N</td>
+        <td>Y</td>
+        <td>Explicit</td>
+        <td>Sharp transparency</td>
+      </tr>
+      <tr class="rowa">
+        <td>DXT5</td>
+        <td>16bpp</td>
+        <td>N</td>
+        <td>N</td>
+        <td>N</td>
+        <td>Interpolated</td>
+        <td>Gradient transparency</td>
+      </tr>
+    </table>
+
+    <h2>Uncompressed</h2>
+    <p>
+      Uncompressed textures have an <i>excellent quality but result in big files</i>, which require more memory. There are two supported
+      uncompressed texture types in World of Warcraft: Raw1 and Raw3.
+    </p>
+
+    <p>
+      Raw3 stores full RGBA informations for each pixel. This kind of textures <i>easily exceeds many Megabytes</i> for large images
+      but has <i>no quality loss at all</i>.
+    </p>
+
+    <p>
+      Raw1 textures have a fixed table of 256 colors similar to a Gif image. While this program uses high quality NeuQuant color
+      quantization Raw1 images tend to look better for images with lesser unique colors. Again this type is <i> not optimal
+      storage wise</i> yet only half as big as Raw3 (32bpp RGBA vs 16bpp Index + A). You can further improve the quality of
+      Raw1 output with the <i>dithering option</i>. Dithering is is a technique where pixels with colors not available in the color
+      table are approximated by diffusing nearby pixels. The human eye perceives those pixel patterns as a mixture of colors so
+      that hard edges are avoided.
+    </p>
+
+    <h1>Mipmaps</h1>
+    <p>
+      Mipmapping is the process of attaching several smaller versions of a texture to the file. Because interpolation in games,
+      especially in 3d engines, needs to be a fast process the algorithms used therefor suffer from bad quality. To counter
+      this problem pre-rendered mipmaps are created so that costly and high quality interpolation is done during the process of
+      texture conversion. The application using the texture picks the mipmap based on the projected size. <i>Textures that are
+      never scaled (like in user interfaces) don't need mipmaps per se</i> so you can decrase the filesize for that purpose.
+    </p>
+
+    <h1>Texture dimensions</h1>
+    <p>
+      <i>Texture sizes of Blps must be powers of 2</i> (1, 2, 4, 8, 16 etc.). Otherwise they won't be displayed. The program offers
+      4 resize methods to ensure that the source image has the right size: Crop, Extend, Shrink and Stretch.
+    </p>
+
+  </body>
+</html>

@@ -1,0 +1,1 @@
+This is a program to convert PNG to BLP and back again. Drag the file onto the exe.
