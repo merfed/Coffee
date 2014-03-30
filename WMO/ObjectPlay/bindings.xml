@@ -1,0 +1,58 @@
+﻿<Bindings>
+  <Binding name="BIND1" description="Left" header="MYHEADER">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMLeft();
+    end
+  </Binding>
+  <Binding name="BIND2" description="Right" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMRight();
+    end
+  </Binding>
+  <Binding name="BIND3" description="Front" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMFront();
+    end
+  </Binding>
+  <Binding name="BIND4" description="Back" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMBack();
+    end
+  </Binding>
+  <Binding name="BIND5" description="Up" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMUP();
+    end
+  </Binding>
+  <Binding name="BIND6" description="Down" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMDown();
+    end
+  </Binding>
+  <Binding name="BIND9" description="SingleSpawn" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMSS();
+    end
+  </Binding>
+    <Binding name="BIND10" description="SingleSpawn" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:DMSS2();
+    end
+  </Binding>
+  <Binding name="BIND11" description="CustomMove" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:CustomMove();
+    end
+  </Binding>
+  <Binding name="BIND7" description="SpawnToggle" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:CheckToggle();
+    end
+  </Binding>
+  <Binding name="BIND8" description="GetObjectID" runOnUp="true">
+    if ( keystate == "down" ) then
+      ObjectPlay:GetOID();
+    end
+  </Binding>
+  
+</Bindings>

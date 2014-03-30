@@ -1,0 +1,15 @@
+## Interface: 30000
+## Title: .ObjectPlayground
+## Author: Glitchy
+## Version: Beta2.0
+## Notes: Tool for wow private server to mess with game objects
+## eMail: vblifeline@hotmail.com
+## DefaultState: Enabled
+## LoadOnDemand: 0
+ObjectPlayForm1.xml
+ObjectPlayForm2.xml
+ObjectPlayForm3.xml
+bindings.xml
+Models.lua
+embeds.xml
+Core.lua
