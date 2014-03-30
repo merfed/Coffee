@@ -1,0 +1,124 @@
+#header {
+	height: 1px;
+}
+
+#toptabs dt {
+	width: 2px;
+}
+
+a.moneyitem, a.moneysocketmeta, a.moneysocketred, a.moneysocketyellow, a.moneysocketblue {
+	border: 0;
+	padding-bottom: 1px;
+}
+
+a.moneyitem:hover, a.moneysocketmeta:hover, a.moneysocketred:hover, a.moneysocketyellow:hover, a.moneysocketblue:hover {
+	padding-bottom: 0;
+};
+
+#layers iframe {
+	position: absolute;
+	visibility: hidden;
+	z-index: 10000000;
+	border: 0;
+	filter:	progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+#noscript-bg {
+	position: absolute;
+	height: 2000px;
+}
+
+#layout {
+	width: auto;
+}
+
+#layout.fullwidth {
+	width: auto;
+}
+
+#ie6layout {
+	width: 100%;
+	border-collapse: collapse;
+	border: 0;
+}
+
+#ie6layout-td, .ie6layout-th {
+	padding: 0;
+	margin: 0;
+}
+
+.ie6layout-th {
+	width: 13%;
+}
+
+#ie6layout.fullwidth .ie6layout-th {
+	width: 10px;
+}
+
+#ie6layout-div {
+	width: 998px;
+	font-size: 1px;
+	height: 0;
+}
+
+#main {
+	height: 520px;
+}
+
+#wrapper.noads #main {
+	height: auto;
+}
+
+#main-contents.main-contents {
+	height: 498px;
+}
+
+#wrapper.noads #main-contents {
+	height: auto;
+}
+
+.infobox-spacer {
+	font-size: 1px;
+}
+
+.tabs b {
+	visibility: visible;
+	font-weight: normal;
+	line-height: 29px;
+	background: url(http://www.wowhead.com/images/tab_tl.gif) top left no-repeat;
+}
+
+.tabs a.selected b {
+	font-weight: bold;
+}
+
+.iconsmall  .tile  { background-image: url(http://www.wowhead.com/images/icon_border_small.gif) }
+.iconmedium .tile  { background-image: url(http://www.wowhead.com/images/icon_border_medium.gif) }
+.iconlarge  .tile  { background-image: url(http://www.wowhead.com/images/icon_border_large.gif) }
+
+.iconsmall a { background-image: url(http://www.wowhead.com/images/icon_hilite_small.gif) }
+.iconmedium a { background-image: url(http://www.wowhead.com/images/icon_hilite_medium.gif) }
+
+.tooltip td, .tooltip th { background-image: url(http://www.wowhead.com/images/tooltip.gif) }
+
+.tooltip p div { background-image: url(http://www.wowhead.com/images/icon_border_medium.gif) }
+
+div.live-search-icon div {
+	background-image: url(http://www.wowhead.com/images/icon_border_small.gif);
+}
+
+.live-search a, .live-search div div {
+	width: 100%;
+}
+
+.live-search i {
+	right: -1px;
+}
+
+a.expand-site {
+	left: -9px;
+}
+
+div.lightbox-outer {
+	position: absolute;	
+}

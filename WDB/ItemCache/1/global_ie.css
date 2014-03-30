@@ -1,0 +1,39 @@
+#noscript-bg {
+	filter: alpha(opacity=70);
+}
+
+#topbar-right input {
+	vertical-align: middle;
+}
+
+.menu a {
+	min-width: 90%;
+}
+
+.listview th a {
+	width: 100%;
+}
+
+.tabs-container {
+	width: 100%;
+}
+
+.reputation {
+	width: 99%;
+}
+
+.tooltip th {
+	height: 8px;
+}
+
+#topbar-right a {
+	top: 1px;
+}
+
+.comment-edit-body textarea {
+	width: 98%;
+}
+
+div.lightbox-overlay {
+	filter: alpha(opacity=80);
+}
