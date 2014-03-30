@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="/svnindex.xsl"?>
+<!DOCTYPE svn [
+  <!ELEMENT svn   (index)>
+  <!ATTLIST svn   version CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT index (updir?, (file | dir)*)>
+  <!ATTLIST index name    CDATA #IMPLIED
+                  path    CDATA #IMPLIED
+                  rev     CDATA #IMPLIED
+                  base    CDATA #IMPLIED>
+  <!ELEMENT updir EMPTY>
+  <!ELEMENT file  EMPTY>
+  <!ATTLIST file  name    CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+  <!ELEMENT dir   EMPTY>
+  <!ATTLIST dir   name    CDATA #REQUIRED
+                  href    CDATA #REQUIRED>
+]>
+<svn version="1.6.4 (r38063)"
+     href="http://subversion.tigris.org/">
+  <index rev="276" path="/Tools/World/AddADTs/AddADTs_Source/Debug" base="Modcraft">
+    <updir />
+  </index>
+</svn>
