@@ -1,0 +1,62 @@
+ÊCedits:
+	SomeWhiteGuy
+
+Special Thanks:
+	The makers of WoWMapViewer
+	The people of WoWDev (for documentation on .adt files)
+	ObscuR
+	Maul05
+	And all others who helped out on the site-mini-fourm
+ÿ+ABC (Rotation) Help
+	
+	All numbers are in degrees, and they start facing south.
+	So if ABC = {0,0,0 } then the object is untilted lookin south.
+
+	Also, I THINK the pivot point is either at the botom of each object, or maybe off it
+	I say this based on test where I blew up the doodad size and change a rotation...
+	...amd then is dissappeared o_O.
+
+
+	The following refers to if your character is south of the object and looking north to it:
+
+	A = Tilt fowards/backwards. +90 = fall down on face
+	B = Turn left/right
+	C = Sideways, lie down
+ÿ-XYZ Help
+
+	NOTICE: YOU DON'T HAVE TO EDIT XY NUMBERS MANUALLY!
+	It is esier to goto the map, right-click a selection, and go "move to where I click"
+
+	X = Decrease to go west.  Increase to go east.
+	Y = Decrease to go north.  Increase to go south.
+	Z = Decrease to go down? Increase to go up?
+ÿHThe map you have selected for editing appears to be on the black-list.
+Please understand that if people were able to manipulate maps such as these Blizzard would 
+nerf map editing hard.  And then NO ONE, not even nice fair-play map edits can't be done.
+The purpose of this software is to let people make cities that dont normally exist and to aid in 
+exploration.  Not exploit.
+
+If you think this is an error, please note the file path in the .MPQ and say so on the website 
+here: http://www.somewhiteguy.homelinux.org:178/wowedit/ 
+
+Thanks for understanding
+-SomeWhiteGuy
+ÿ²Hello, this is a World of Warcraft Map Editor
+
+While this program can be used for exploration among many other fun 
+things, it unfortunately can also be used for exploitation.  Recognizing this, I 
+have limited this program from editing Battle Ground maps.  These maps 
+alone however are obviously not the only ones that can be edited to give a 
+user an unfair advantage in the game...
+
+I ask that you please refrain from taking advantage, keep in mind you are 
+NOT the only one with this program.  And should you among many other 
+start using this application to cheat Blizzard will obviously nerf map editing.  
+Yes, they can do it, and they haven't done it yet because it's not higher in 
+priority as taking care of other exploits, SO LETS KEEP IT THAT WAY!!!!
+
+If you think additional maps should be black-listed please say so on the 
+message forum here: 
+http://www.somewhiteguy.homelinux.org:178/wowedit/
+
+-SomeWhiteGuy 

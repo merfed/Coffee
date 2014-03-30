@@ -1,0 +1,121 @@
+
+0.1.2 May 31
+	Fixed a bug that stoped .WMOs from gettign renderd on the map after viewing the map mroe than once
+	Fixed a bug that made .WMOs rotate the wrong direction (B-rotation) on the map preview
+	Put in triangle manip abilities
+
+0.1.1 May 30
+	Fixed bug that stopped the real About box text from showing
+	Made ability to inject NEW .wmo files and edit the id-to-path table
+	Made ability to create a new .wmo instance
+
+
+	What does extend do in MODF (.wmo placement)?
+
+
+
+
+
+127.0.0.1       us.logon.worldofwarcraft.com
+
+XRoads = Kalimdor_36_32.adt
+
+KNCM flags
+5 = river
+9 = ocean
+
+
+
+Doodads Rotation
+	A tilt fowards/backwards. +90 = fall down on face
+	B turn left/right
+	C sideways, lie down
+
+Flags for MOPY in .WMO files
+	100 = can walk through?
+	7? = floor usually?
+	36 = walls usually?
+
+
+
+
+World\wmo\Kalimdor\CollidableDoodads\ThousandNeedles\Bridge\1000NeedlesBridge.wmo
+
+WSG
+	world\generic\pvp\collisionwall\collisionwallpvp01.mdx
+	world\wmo\kalimdor\pvp\collidabledoodads\netents\nightelftent02_pvp.wmo
+	world\wmo\kalimdor\pvp\collidabledoodads\netents\nightelftent01_pvp.wmo
+
+
+
+.wmo
+	Bounding box corner
+		Messing with it lets you go through it :D  I set it to all max value for 32bytes
+
+.adt files
+	Intro notes
+		IMPORTANT! .adt files overlap near edges and can override eachother. Keep this in mind when you try to change a .wmo location and it dosnt seem to work out).
+			UnVerified: The relationship of who overrides whom is hard to say, but I speculate whatever .adt maps a .wmo outside it's own space gets overridden IF there is another .adt NEXT DOOR to override.
+		.adt files can differ in size from one another, they are NOT fixed in length
+		Whoa... does the .adt heads even get read by WoW? The program I made messed up on the 1st one (.adt headder), it put MVER instead of REVM, and it loaded fine w/out crashing  o.o
+KNCM
+	Section 1
+		Headder:DIWM / MWID
+			WMO count = count of 32-bit offsets +1.  It seems the 1st .wmo isnt indexed (unles that's what the 2nd 32bit-int which is always 0  refers to, but the 1st .wmo listed usually is NOT 0 bytes away from the header)
+			The 1st two 32 ints seem to be wrong AND the 2nd one also sems to be 0
+				Verified - 1st 8 bytes should be ignored
+			Offsets refers to bytes after the header +4.  Targetting the 1st byte after the header header; Shift target by + offset + 4 bytes, and you will be targetting the 1st bytes of the string
+		Header:008h
+			1st int32
+				30_77_01_00
+				This value does NOTHING!  Seriously, wtf is it for?
+			2nd int32
+				to ED_98_84_46 orig
+				to ED_C0_84_46 about 7 human paces? (to the east)
+				to ED_98_85_46 gone
+			3rd int32
+				changes some axis: TODO: find out which one
+				22->FF
+			4th int/float 32
+				66_3D_CF_46 to tilts left ABOUT -1:00
+			5th int/float
+				does nothing!?
+			next int/float
+				?
+					00 00 B7 42 --to-- 00 20 B7 42: nothing
+			7th int/float
+					0 to  01 dd 01 00
+			8th ~
+					changed to 01 01 01 01
+			9th ~
+					8C_C0_56_42 to EE_EE_EE_EE  nothing...
+			10th ~
+					from   56_42_BA_0D
+					when 2nd byte there goes 44+, the thing goes invisable?
+			11th ~
+					orig  CF_46_7A_BB
+
+		Header:FDOM / MODF
+			004h	(2nd int32 inward from the start of each 64 byte chunk in the FDOM/MODF section)
+				HalfUnVerified: If there are MORE 64-byte strings in FDOM than there are .wmo files called in THIS .adt, then this area (2nd int32) may be an ID in reference to the .wmos declaired.  Id starts as 0, so an ID of 1 might be the 2nd .wmo declaired?
+			03Eh
+				UnVerified: Do .wmos that over lap into more than one .adt file make a value in the in the last 32-int "name set"?
+
+	Section 2
+		014h offsHeight		Toying with totally messes up render
+		024h offsAlpha		Messing with changes nothing?
+		03Ch holes		Messing with changes nothing?
+		068h float pos[3];	VICTORY!!!
+			1st int32
+				Note: As 1st number goes higher, it seems to shift AND tilt
+				From AA_AA to AA_BB very slight Z movement, about the height of a char's foot
+				From AA_AA to AA_C3 On up-tilted side, is about jumpt height (to feet)
+				From AA_AA to AA_CC pulling back twards X now o_O.
+			2nd int32
+				Conclusion: No REAL chnage reguardless?
+				From 00_56 to 00_6F to small of a difference to tell what REALLY chnaged
+				From 00_56 to 01_00 NO CHANGE?  Maybe as it goes higher there is no change?  Maybe bc my test examplem is on the border of the entire .adt?
+			3rd int 32
+				From CE_2C to CE_3C again, way to small a change to really notice anything
+				From CE_2C to EE_3C "
+
