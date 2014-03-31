@@ -12,6 +12,8 @@ Somethings you'll need:
 
 So lets get started. Make sure your model is finished, go into vertex mode, and select all your vertices. Go into edit vertices and select break. Click objectDetacher. This should detach every face from the current model. Doing this keeps our model texture from glitching in game.
 
+![ScreenShot](/screenshots/latest.png)
+
 **Note:** if the model has about 10k+ verts when you break them, detach a few at a time, otherwise 3DSMax might crash. This is a pretty intensive process and might take some time. Now your model is detached, put them all into a group and name it whatever you like. Now export to OBJ and put it into the same folder as your texture. Make sure your export options are:
 
 **Geometry:**
