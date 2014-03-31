@@ -4,7 +4,7 @@ World of Warcraft is an online game. This means that you need 2 pieces of softwa
 
 Below you see an image where I show abstracted all the different parts of this 2 software systems that you can change to modify the game. But don´t panic if you now don´t understand all of this. We will explain the parts if we handle them.
 
-![ScreenShot](/screenshots/latest.png)
+![ScreenShot](images/wowdata.jpg)
 
 # The MPQ files #
 All WoW client data is stored in MPQ files. You can find them in the folder
