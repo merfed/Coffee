@@ -1,7 +1,6 @@
 **No Source**
 * AddStaticCamera
 * AnimationManager
-* AnimationPorter
 * AttachmentAdder 2.0
 * 3dsToM2 - 1.2
 * ConvertMDX
