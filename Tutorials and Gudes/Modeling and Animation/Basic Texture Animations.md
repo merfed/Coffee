@@ -11,22 +11,20 @@ This will teach you how to create texture animations, how to setup additional ma
 4. Change the textures of the body of your model to your texture. Note: X- and Y-Wrap give sometimes a better effect. 
 
 5. Add a GlobalSequence for your TextureAnimation 
-![1](images/bta-1.png)
+![1](images/bta-1.PNG)
 
 6. Add an UV(==TextureMapping)-Animation 
-![2](images/bta-2.png)
+![2](images/bta-2.PNG)
 
-7. There create a Translation-Block like 
-![3](images/bta-3.png)
-
-and a Scaling-Block like 
-![4](images/bta-4.png)
+7. There create a Translation-Block like, and a Scaling-Block like:
+![3](images/bta-3.PNG)
+![4](images/bta-4.PNG)
 
 8. Add/Change a Renderflag to Modulate 2x (to remove the black parts of the texture) 
-![5](images/bta-5.png)
+![5](images/bta-5.PNG)
 
 9. Add a new Material for each geoset and give them the animation parameter. 
-![6](images/bta-6.png)
+![6](images/bta-6.PNG)
 
 10. Fine you are done. Grats to your flaming creature. 
 ![7](images/bta-7.jpg)
