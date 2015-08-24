@@ -5,7 +5,7 @@ This will teach you how to create texture animations, how to setup additional ma
 1. Get your model
 2. Search for a texture which is like what you want the flames (or ice, poison, etc) to look like. Example:
 
-	WORLD\EXPANSION02\DOODADS\HOWLINGFJORD\FIREFX\T_VFX_FIRE_ANIM02_128_FULL_DESAT.BLP
+	`WORLD\EXPANSION02\DOODADS\HOWLINGFJORD\FIREFX\T_VFX_FIRE_ANIM02_128_FULL_DESAT.BLP`
 
 3. Open your model in PyModelEditor 
 4. Change the textures of the body of your model to your texture. Note: X- and Y-Wrap give sometimes a better effect. 
