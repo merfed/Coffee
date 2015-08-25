@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "M2Lib", "M2Lib\M2Lib.vcxproj", "{881DD3B6-0C01-44BA-86A4-09C9ADC86ECB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "M2ModRedux", "M2ModRedux\M2ModRedux.vcxproj", "{E0F7E43B-73C9-4537-8B78-2BC30DD50038}"
+	ProjectSection(ProjectDependencies) = postProject
+		{881DD3B6-0C01-44BA-86A4-09C9ADC86ECB} = {881DD3B6-0C01-44BA-86A4-09C9ADC86ECB}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{881DD3B6-0C01-44BA-86A4-09C9ADC86ECB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{881DD3B6-0C01-44BA-86A4-09C9ADC86ECB}.Debug|Win32.Build.0 = Debug|Win32
+		{881DD3B6-0C01-44BA-86A4-09C9ADC86ECB}.Release|Win32.ActiveCfg = Release|Win32
+		{881DD3B6-0C01-44BA-86A4-09C9ADC86ECB}.Release|Win32.Build.0 = Release|Win32
+		{E0F7E43B-73C9-4537-8B78-2BC30DD50038}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E0F7E43B-73C9-4537-8B78-2BC30DD50038}.Debug|Win32.Build.0 = Debug|Win32
+		{E0F7E43B-73C9-4537-8B78-2BC30DD50038}.Release|Win32.ActiveCfg = Release|Win32
+		{E0F7E43B-73C9-4537-8B78-2BC30DD50038}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
