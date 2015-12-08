@@ -1,0 +1,3 @@
+[submodule "Blipper/BLPCore"]
+	path = Blipper/BLPCore
+	url = git://github.com/norgannon/BLPCore.git

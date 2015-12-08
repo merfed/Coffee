@@ -1,0 +1,390 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		31C01ABC0F646534000CAEA3 /* libjpeg */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 31C01AD20F64656F000CAEA3 /* Build configuration list for PBXAggregateTarget "libjpeg" */;
+			buildPhases = (
+				31C01ABB0F646534000CAEA3 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = libjpeg;
+			productName = libjpeg;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		313E6DDB069DCB0500757BBB /* ijg.c in Sources */ = {isa = PBXBuildFile; fileRef = 3158202804CC844200A80102 /* ijg.c */; };
+		313E6DDC069DCB0900757BBB /* ijg.h in Headers */ = {isa = PBXBuildFile; fileRef = 3158202B04CC845000A80102 /* ijg.h */; };
+		313E6DE3069DCB1800757BBB /* libblp_byteorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 313E6DE2069DCB1800757BBB /* libblp_byteorder.h */; };
+		315A30BB0960AB7E00B9D2AF /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315A30BA0960AB7E00B9D2AF /* CoreFoundation.framework */; };
+		319AFE53050B774000A80102 /* blp.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* blp.c */; };
+		31AC890B0961AFB70018239A /* libblp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 319AFE5A050B774000A80102 /* libblp.a */; };
+		31AC89100961AFCD0018239A /* blpconvert.c in Sources */ = {isa = PBXBuildFile; fileRef = 31AC890F0961AFCD0018239A /* blpconvert.c */; };
+		31C79DC8056C07CA00E3F9D5 /* blp.h in Headers */ = {isa = PBXBuildFile; fileRef = 31C79DC7056C07CA00E3F9D5 /* blp.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		31AC89070961AFAB0018239A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 319AFE4F050B774000A80102;
+			remoteInfo = libblp;
+		};
+		31C01ABF0F646550000CAEA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 31C01ABC0F646534000CAEA3 /* libjpeg */;
+			remoteInfo = libjpeg;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		08FB7796FE84155DC02AAC07 /* blp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blp.c; sourceTree = "<group>"; };
+		313E6DE2069DCB1800757BBB /* libblp_byteorder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = libblp_byteorder.h; sourceTree = "<group>"; };
+		3158202804CC844200A80102 /* ijg.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ijg.c; sourceTree = "<group>"; };
+		3158202B04CC845000A80102 /* ijg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ijg.h; sourceTree = "<group>"; };
+		315A30BA0960AB7E00B9D2AF /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		319AFE5A050B774000A80102 /* libblp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		31AC88F90961AE830018239A /* blpconvert */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = blpconvert; sourceTree = BUILT_PRODUCTS_DIR; };
+		31AC890F0961AFCD0018239A /* blpconvert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = blpconvert.c; sourceTree = "<group>"; };
+		31C79DC7056C07CA00E3F9D5 /* blp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blp.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		319AFE54050B774000A80102 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				315A30BB0960AB7E00B9D2AF /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		31AC88F70961AE830018239A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31AC890B0961AFB70018239A /* libblp.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0249A662FF388D9811CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				315A30BA0960AB7E00B9D2AF /* CoreFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		08FB7794FE84155DC02AAC07 /* blptool */ = {
+			isa = PBXGroup;
+			children = (
+				313E6DE2069DCB1800757BBB /* libblp_byteorder.h */,
+				3158203804CC849500A80102 /* libMyJPEG */,
+				08FB7795FE84155DC02AAC07 /* libblp */,
+				31AC890F0961AFCD0018239A /* blpconvert.c */,
+				0249A662FF388D9811CA2CEA /* Frameworks */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = blptool;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* libblp */ = {
+			isa = PBXGroup;
+			children = (
+				31C79DC7056C07CA00E3F9D5 /* blp.h */,
+				08FB7796FE84155DC02AAC07 /* blp.c */,
+			);
+			name = libblp;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				319AFE5A050B774000A80102 /* libblp.a */,
+				31AC88F90961AE830018239A /* blpconvert */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3158203804CC849500A80102 /* libMyJPEG */ = {
+			isa = PBXGroup;
+			children = (
+				3158202B04CC845000A80102 /* ijg.h */,
+				3158202804CC844200A80102 /* ijg.c */,
+			);
+			name = libMyJPEG;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		319AFE51050B774000A80102 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				313E6DDC069DCB0900757BBB /* ijg.h in Headers */,
+				31C79DC8056C07CA00E3F9D5 /* blp.h in Headers */,
+				313E6DE3069DCB1800757BBB /* libblp_byteorder.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		319AFE4F050B774000A80102 /* libblp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 315A30A70960AAD900B9D2AF /* Build configuration list for PBXNativeTarget "libblp" */;
+			buildPhases = (
+				319AFE51050B774000A80102 /* Headers */,
+				319AFE52050B774000A80102 /* Sources */,
+				319AFE54050B774000A80102 /* Frameworks */,
+				319AFE58050B774000A80102 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				31C01AC00F646550000CAEA3 /* PBXTargetDependency */,
+			);
+			name = libblp;
+			productInstallPath = /usr/local/lib;
+			productName = libblp.a;
+			productReference = 319AFE5A050B774000A80102 /* libblp.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		31AC88F80961AE830018239A /* blpconvert */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 31AC88FD0961AEC50018239A /* Build configuration list for PBXNativeTarget "blpconvert" */;
+			buildPhases = (
+				31AC88F60961AE830018239A /* Sources */,
+				31AC88F70961AE830018239A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				31AC89080961AFAB0018239A /* PBXTargetDependency */,
+			);
+			name = blpconvert;
+			productName = blpconvert;
+			productReference = 31AC88F90961AE830018239A /* blpconvert */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 315A30AB0960AAD900B9D2AF /* Build configuration list for PBXProject "libblp" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* blptool */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				31C01ABC0F646534000CAEA3 /* libjpeg */,
+				319AFE4F050B774000A80102 /* libblp */,
+				31AC88F80961AE830018239A /* blpconvert */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXRezBuildPhase section */
+		319AFE58050B774000A80102 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		31C01ABB0F646534000CAEA3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"$SRCROOT/jpeg-6b\"\n./configure && make\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		319AFE52050B774000A80102 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				313E6DDB069DCB0500757BBB /* ijg.c in Sources */,
+				319AFE53050B774000A80102 /* blp.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		31AC88F60961AE830018239A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31AC89100961AFCD0018239A /* blpconvert.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		31AC89080961AFAB0018239A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 319AFE4F050B774000A80102 /* libblp */;
+			targetProxy = 31AC89070961AFAB0018239A /* PBXContainerItemProxy */;
+		};
+		31C01AC00F646550000CAEA3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 31C01ABC0F646534000CAEA3 /* libjpeg */;
+			targetProxy = 31C01ABF0F646550000CAEA3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		315A30A80960AAD900B9D2AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/jpeg-6b";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_LDFLAGS = "$(SRCROOT)/jpeg-6b/libjpeg.a";
+				PREBINDING = YES;
+				PRODUCT_NAME = blp;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Debug;
+		};
+		315A30A90960AAD900B9D2AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 1;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/jpeg-6b";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_LDFLAGS = "$(SRCROOT)/jpeg-6b/libjpeg.a";
+				PRODUCT_NAME = blp;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Release;
+		};
+		315A30AC0960AAD900B9D2AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		315A30AD0960AAD900B9D2AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		31AC88FE0961AEC50018239A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				PRODUCT_NAME = blpconvert;
+			};
+			name = Debug;
+		};
+		31AC88FF0961AEC50018239A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				INSTALL_PATH = "$(HOME)/bin";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				PRODUCT_NAME = blpconvert;
+			};
+			name = Release;
+		};
+		31C01ABD0F646534000CAEA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libjpeg;
+			};
+			name = Debug;
+		};
+		31C01ABE0F646534000CAEA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libjpeg;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		315A30A70960AAD900B9D2AF /* Build configuration list for PBXNativeTarget "libblp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				315A30A80960AAD900B9D2AF /* Debug */,
+				315A30A90960AAD900B9D2AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		315A30AB0960AAD900B9D2AF /* Build configuration list for PBXProject "libblp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				315A30AC0960AAD900B9D2AF /* Debug */,
+				315A30AD0960AAD900B9D2AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		31AC88FD0961AEC50018239A /* Build configuration list for PBXNativeTarget "blpconvert" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31AC88FE0961AEC50018239A /* Debug */,
+				31AC88FF0961AEC50018239A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		31C01AD20F64656F000CAEA3 /* Build configuration list for PBXAggregateTarget "libjpeg" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31C01ABD0F646534000CAEA3 /* Debug */,
+				31C01ABE0F646534000CAEA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

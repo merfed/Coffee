@@ -1,0 +1,3 @@
+@ECHO OFF
+RecursiveBLPConverter BLPConverter BlizzardInterfaceArt
+pause
