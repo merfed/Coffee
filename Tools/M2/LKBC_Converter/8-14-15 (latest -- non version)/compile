@@ -1,0 +1,17 @@
+#!/bin/bash
+# Script to compile for Linux & Windows
+rm CMakeCache.txt
+rm -rf CMakeFiles/
+wait
+cmake -DCMAKE_TOOLCHAIN_FILE=~/Toolchain-mingw32.cmake -DCMAKE_INSTALL_PREFIX=/home/julien/mingw-install .
+wait
+make
+
+wait
+
+rm CMakeCache.txt
+rm -rf CMakeFiles/
+wait
+cmake .
+wait
+make
