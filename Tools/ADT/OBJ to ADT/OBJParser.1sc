@@ -1,0 +1,33 @@
+//--------------------------------------
+//--- 010 Editor v6.0.2 Script File
+//
+// File: OBJParser.1sc
+// Author: Koward
+// Revision: 1
+// Purpose: Read OBJ z coordinate in vertices "v"
+//--------------------------------------
+int maxLineSize = 1024;
+int heightNumber = 145;
+int fileSize = FileSize();
+
+int pos = 0;
+float heights[heightNumber];
+int index = 0;
+
+char line[maxLineSize];
+string x, y, z;
+float height;
+string token;
+
+while(pos < fileSize) {
+    line = ReadLine(pos);
+    SScanf(line, "%s *", token);
+    Printf("Found %s token\n", token);
+    if(token == "v") {
+        SScanf(line, "v %s %s %s", x, y, z);
+        height = Atof(z);
+        heights[index] = height;
+        index++;
+    }
+    pos = pos + Strlen(line);
+}
