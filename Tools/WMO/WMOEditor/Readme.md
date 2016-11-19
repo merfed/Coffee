@@ -18,7 +18,6 @@ Viewing works from 1.0 to 5.2, editing is tested for 3.3.5 but should work from 
 ![2][2.jpg]
 
 
-
 ## Versions
 * V1 - WMOEditor_Debug_4_24_13
 * V2 - WMOEditor_Debug_4_24_13_2
@@ -27,3 +26,6 @@ Viewing works from 1.0 to 5.2, editing is tested for 3.3.5 but should work from 
 
 ## Credits
 * Cromon
+
+## Links
+* [Source on Bitbucket](https://bitbucket.org/mugadr_m/wmo-editor)
