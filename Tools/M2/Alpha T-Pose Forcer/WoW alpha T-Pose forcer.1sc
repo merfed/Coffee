@@ -1,0 +1,37 @@
+//------------------------------------------------
+//--- 010 Editor v7.0.2 Script File
+//
+//   Author: Inico
+//   Purpose: Force WoW alpha MDX models into T-Pose
+//------------------------------------------------
+if(ReadString(0x00,8) == "MDLXVERS" && ReadString(0x14,1) == "u"){
+
+int animcount = ReadByte(FindFirst("SEQS")+8);
+
+//Delete all animations except for the first one
+SetCursorPos(0x00);
+SetCursorPos(FindFirst("SEQS")+12);
+DeleteBytes(GetCursorPos()+140,(140*animcount)-140);
+
+//Change animation bytes to 140
+SetCursorPos(0x00);
+SetCursorPos(FindFirst("SEQS")+8);
+DeleteBytes(GetCursorPos()-4,4);
+InsertBytes(GetCursorPos()-4,4);
+WriteByte(GetCursorPos()-4,144);
+
+//Remove animation intervals
+DeleteBytes(GetCursorPos(),1);
+InsertBytes(GetCursorPos(),1);
+WriteByte(GetCursorPos(),01);
+DeleteBytes(GetCursorPos()+84,8);
+InsertBytes(GetCursorPos()+84,8);
+
+FileSave();
+
+Printf("Model is now in T-pose.");
+}
+else
+{
+Printf("This is not a WoW alpha MDX file.");
+};

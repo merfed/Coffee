@@ -1,6 +1,7 @@
 # Custom WMO Survival Kit
 
 ## Tools Used
+
 * Blender
 * Notepad++
 * 010 editor
@@ -12,6 +13,7 @@
 * WMO editor
 
 ## Summary
+
 1. Build the model before conversion.
 2. Conversion of *.obj to *.wmo.S
 3. Add some doodads with WMOeditor.
@@ -19,6 +21,7 @@
 5. Additional information: transparent textures, collisions, lights.
 
 ## Build the model before conversion
+
 To begin, you should know what you want to do. Do some research to find references that will help you give more "credibility" to your building. If you work in a particular architectural style, do not hesitate to find your inspiration from photography, if you are not in a specific style look anyway how Blizzard constructed houses, castles, and other buildings, so your model fits well and is coherent with its environment. The style of Blizzard is particular with its distortions and its side a little "used".
 
 I will not teach you how to make 3D models (I'm not a professional) but I will give you some tips to make it a little bit "optimized" for WoW.
@@ -58,6 +61,7 @@ To have a better render with light and shadows, remember to apply the smooth sha
 ![9](images/wsk-9.jpg)
 
 ## Conversion of *.obj to *.wmo
+
 We will go to the conversion of the model. First, save it in .obj with the correct options as below.
 
 ![10](images/wsk-10.jpg)
@@ -85,6 +89,7 @@ Here is the result with a basic human house next for comparison.
 ![15](images/wsk-15.jpg)
 
 ## Add some doodads with WMOeditor
+
 A house that's fine, but without furniture it's a little empty. We are going to fill it with WMOeditor and 010 editor.
 
 This time, open the group file in which you want to add doodads. Do CTRL+F to open the search window. In Type you must have "ASCII String (a)" and write "NBOM" in Value, then click on Find All.
@@ -140,6 +145,7 @@ Congratulations, you are with a furnished house!
 ## Add a doodadset
 
 > Supora wrote: So this time is about "how to add a doodadset"
+
 When you got your model just after convertion you need to open your root_wmo and all of the group_wmo files in 010 Editor.
 
 Root_wmo edition:
@@ -157,6 +163,7 @@ Root_wmo edition:
 > Met@ wrote:3]Add some doodads with WMOeditor
 
 A house that's fine, but without furniture it's a little empty.
+
 We are going to fill it with WMOeditor and 010 editor.
 
 This time, open the group file in which you want to add doodads. Do CTRL+F to open the search window. In Type you must have "ASCII String (a)" and write "NBOM" in Value, then click on Find All.
@@ -172,6 +179,7 @@ Time to get serious and open WMO editor . At first it can be a little confusing 
 So once your wmo is opened, go to Root File to find the geosets that compose it. Click Edit to see their options, check "Has Doodads". Close the window and repeat on the other remaining.
 
 We can finally start placing those famous doodads. Now go to Doodad, in the bottom box is the doodadset that indicates how many m2 it has in total. Most houses have several doodadsets, but I have not figured out how to add a second, I'm working on it.
+
 Click on the [...] to open a window with a list of m2 similar to WoW Model Viewer. Once your selected an object, double-click on it, the window will then leave and you can place it in your wmo. Please note that the window does not close so far, it just comes up behind the first one.
 
 To navigate through the window of your building, the controls are the same as Noggit. Once you have decided where you want to place your object, place your cursor there and made CTRL + V to paste it.
@@ -197,6 +205,7 @@ That's it. You can save the file. Pack to mpq and load in WMOEditor.
 ## Additional Information
 
 ### Use textures with transparency
+
 In your buildings, you may be asked to use textures with transparency as a grid for example. On blender, you can see the transparency with the rendered mode or other stuff like that, and the material clearly indicates that there is transparency.
 
 ![32](images/wsk-32.jpg)
@@ -210,6 +219,7 @@ To set the transparency, we have to open the wmo in 010 editor and look in the M
 ![35](images/wsk-35.jpg)
 
 ### Collisions
+
 Normally Mirror Machine manages well enough collisions each surface must have. If some places are little bullshit on collisions or you want to make collisions as Blizzard putting invisible walls to avoid falling into a ditch, or just block passages, well I'll tell you how.
 
 Here is an example of collisions that Blizzard has done in Gnomeregan, most of the time there are "boxes" goshawks some pipes or rounded elements such as barrels and also invisible walls to avoid falling in some holes.
@@ -223,7 +233,11 @@ Collisions are in fact a double of the model but with the same number or sometim
 > Skarn wrote:If you have collision bugs likr falling under the textures, try to increase the polycount on the buggy place and reconvert the model. If you can't pass trough the door even if the geometry allows that, decrease the collision leaves size in the conveter.
 
 ### Adding Lights
+
 Manually with hex editor. You can look at the video made by PhilipTNG, it's pretty well explained.
 
+[Video](https://www.youtube.com/watch?v=_Hp2WSQlvQM)
+
 ## Credits
+
 Met@, stan84, Supora, Waveworms
