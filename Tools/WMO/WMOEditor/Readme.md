@@ -13,10 +13,9 @@ Viewing works from 1.0 to 5.2, editing is tested for 3.3.5 but should work from 
 8. Press the left mouse button to place the model or the middle mouse button to discard the current model
 9. File -> Save and you are good to go
 
-![1][1.jpg]
+![1](1.jpg)
 
-![2][2.jpg]
-
+![2](2.jpg)
 
 ## Versions
 * V1 - WMOEditor_Debug_4_24_13
