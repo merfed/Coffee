@@ -1,0 +1,42 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File:ADTOffsetRemover.1sc
+// Author:Skarn
+// Revision:1.0
+// Purpose:Removes vertical offsets from ADTs. !!! Sets them to zero, does not add values to actual heightmap coordinates !!!
+//--------------------------------------
+char sFile[];
+int sIndex;
+int k;
+ 
+TOpenFileNames z = InputOpenFileNames(  "Select .adt files", "(*.adt)" );
+ 
+     for( k = 0; k < z.count; k++ )
+         {
+            sFile = z.file[k].filename;
+            sIndex = FileOpen(sFile);
+              if(sIndex < 0)
+              return;
+            RemoveOffsets();
+            FileSave();
+            FileClose();
+         }
+
+void RemoveOffsets() 
+    {
+      int z, y, a;     
+      RunTemplate( "WoWADT.bt" );
+        
+        for( z = 0; z < 16; z++ )
+             {
+                for( y = 0; y < 16; y++ )
+                    {
+                       for( a = 0; a < 4; a++)
+                            {
+                                ADT_file.MCNKs.row[z].mcnk[y].header.pos[2] = 0; 
+                            }                           
+                    }
+             }
+     
+    }

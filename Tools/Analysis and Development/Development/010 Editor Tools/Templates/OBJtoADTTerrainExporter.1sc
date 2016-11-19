@@ -1,0 +1,100 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File: OBJtoADT Terrain Exporter
+// Author: Koward and Skarn
+// Revision: 1.0.0
+// Purpose: Extracts height data from a specially prerpared OBJ file and inserts it into ADT.
+//--------------------------------------
+
+char sFile[], tFile[];
+int sIndex, tIndex;
+ 
+sFile = InputOpenFileName("Select an OBJ file", ".obj");
+
+    sIndex = FileOpen(sFile);
+    if(sIndex < 0)
+        return;
+
+    OBJParsing();
+    FileClose();
+
+tFile = InputOpenFileName("Select an ADT file", ".adt");
+
+    tIndex = FileOpen(tFile);
+    if(tIndex < 0)
+        return;
+
+    Insertion();
+    FileSave();
+    FileClose();
+
+
+// Functions
+
+void OBJParsing() 
+    {   
+        RunTemplate("OBJ.bt");
+        int maxLineSize = 1024;
+        int heightNumberPerChunk = 145;
+        int fileSize = FileSize();
+        
+        int pos = 0;
+	
+        int index = 0;
+        int row = 0;
+        int mcnk = 0;
+        
+        char line[maxLineSize];
+        string x, y, z, a, b;
+        float height;
+        string token;
+        
+        while(pos < fileSize) 
+           {
+                line = ReadLine(pos);
+                SScanf(line, "%s *", token);
+                Printf("Found %s token\n", token);
+                if(token == "o")
+                    {
+                      SScanf(line, "o %s %s", a, b);
+                      row = Atoi(a);
+                      mcnk = Atoi(b);
+                      pos = pos + Strlen(line);
+                      line = ReadLine(pos);
+                      SScanf(line, "%s *", token);
+                        while(token == "v") 
+                            {
+                                SScanf(line, "v %s %s %s", x, y, z);
+                                height = Atof(z);
+				chunks[index].rows[row].heights[mcnk] = height;
+                                index++;
+                                pos = pos + Strlen(line);
+                                line = ReadLine(pos);
+                                SScanf(line, "%s *", token);
+                            }
+                     }
+              else 
+                   {
+                       pos = pos + Strlen(line);  
+                   }          
+            }
+    }
+
+void Insertion()
+    {
+      int a, y, z;     
+      RunTemplate( "WoWADT.bt" );
+        
+        for( z = 0; z < 16; z++ )
+             {
+                for( y = 0; y < 16; y++ )
+                    {
+                       for( a = 0; a < 145; a++)
+                            {
+                                ADT_file.MCNKs.row[z].mcnk[y].mcvt.heightmap[a] = chunks[z].rows[y].heights[a];
+                            }                           
+                    }
+             }
+    }
+

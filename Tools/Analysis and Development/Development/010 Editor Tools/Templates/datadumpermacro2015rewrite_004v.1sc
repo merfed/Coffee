@@ -1,0 +1,251 @@
+//--------------------------------------
+//--- 010 Editor v6.0.2 Script File
+// Twitter: @PhillyTNGee
+// Revision: 0.004v
+// v - after ta , trying to re-write blp grabs from m2 again.
+// ta - debug blp pulls from m2's grabbing garbage.
+// 0.004 - WMO rewrite
+// 0.003 - ADT TEX rewrite
+// 0.002 - ADT OBJ rewrite
+// 0.001 - M2 rewrite
+// Purpose: Rewriting my data dumper to be more specific and optimizing it so it'll run faster in 010Editor 6.
+//--------------------------------------
+//close out tex1 files instantly.
+if(ReadUInt(0x00) == 1297499474 && ReadUInt(0x0c) == 1296125264 && ReadUByte(0x14) == 1){FileClose();return 7;};
+//close out SKIN files instantly.
+if(ReadUInt(0x00) == 1313426259){FileClose();return 8;};
+
+string wmolistfile = "C:\\wmolistfile.txt";
+string wmostringfile = "C:\\pull-wmo.txt";
+string m2stringfile = "C:\\pull-m2.txt";
+string m2pstringfile = "C:\\pull-m2two.txt";
+string blpstringfile = "C:\\pull-blp.txt";
+int a,b,c,d,e,f,g,h,i,j,k,l,n,o; // lol.... boredom.
+//--------------------------------------------------------------//
+//--------------------------------------------------------------//
+
+if(ReadUInt(0x00) == 1297499474 && ReadUInt(0x0c) == 1297041476){ //determine if file is a WMO Root.
+OutputPaneClear();
+int mogiloc = FindFirst("49474F4D??0000,h",TRUE,FALSE,TRUE);
+    if (mogiloc > 0 && ReadUInt(mogiloc+4) > 0){
+        SetCursorPos(mogiloc+4); //Used to generate the Listfile for WMO groups.
+        c = ReadUInt(GetCursorPos())/32; //figure out how many groups this wmo uses.
+            Printf("%s.wmo\n",GetFileName());
+            for(i = 0; i < c; i++){
+                //Write WMO groups.
+                if(i >= 0 && i <= 9){Printf("%s_00%i.wmo\n",GetFileName(),i);};
+                if(i >= 10 && i <= 99){Printf("%s_0%i.wmo\n",GetFileName(),i);};                
+                if(i >= 100 && i <= 999){Printf("%s_%i.wmo\n",GetFileName(),i);};   
+    
+                OutputPaneCopy();
+                FileOpen(wmolistfile);
+                SetFileInterface("Hex");
+                SetCursorPos(0xffffff);
+                PasteFromClipboard();
+                SetCursorPos(0xffffff);
+                FileSave();
+                FileClose();
+                OutputPaneClear();  
+
+                FileSelect(0xFFFFF);           
+            };
+
+    }; // End for making the wmo listfile.
+
+    int motxcheck = FindFirst("58544F4D???00,h",TRUE,FALSE,TRUE);
+        if(motxcheck > 0 && ReadUInt(motxcheck+4) > 0){
+        SetSelection(motxcheck+8,ReadUInt(motxcheck+4)); //For Getting BLPs from WMO Root Files.
+        CopyToClipboard();
+        SetSelection(GetCursorPos(),0);
+
+        FileOpen(blpstringfile);
+        SetFileInterface("Hex");
+        SetCursorPos(0xffffff);
+        PasteFromClipboard();
+        SetCursorPos(0xffffff);
+        InsertBytes( GetCursorPos(), 1 );
+        WriteString(GetCursorPos(), "\n");
+        FileSave();
+        FileClose();
+
+        FileSelect(0xFFFFF);
+        };
+
+    int modncheck = FindFirst("4E444F4D???00,h",TRUE,FALSE,TRUE);
+        if(modncheck > 0 && ReadUInt(modncheck+4) > 0){
+        SetSelection(modncheck+8,ReadUInt(modncheck+4)); //For Getting BLPs from WMO Root Files.
+        CopyToClipboard();
+        SetSelection(GetCursorPos(),0);
+
+        FileOpen(m2stringfile);
+        SetFileInterface("Hex");
+        SetCursorPos(0xffffff);
+        PasteFromClipboard();
+        SetCursorPos(0xffffff);
+        InsertBytes( GetCursorPos(), 1 );
+        WriteString(GetCursorPos(), "\n");
+        FileSave();
+        FileClose();
+
+        FileSelect(0xFFFFF);
+        };
+FileClose();
+return 0;
+};
+//--------------------------------------------------------------//
+//--------------------------------------------------------------//
+
+if(ReadUInt(0x00) == 1297499474 && ReadUInt(0x0c) == 1296909400){ //Checks if file is obj ADT
+    int mmdxcheck = FindFirst("58444D4D???00,h",TRUE,FALSE,TRUE);
+        if(mmdxcheck > 0 && ReadUInt(mmdxcheck+4) > 0){
+        SetSelection(mmdxcheck+8,ReadUInt(mmdxcheck+4)); //For Getting M2s from OBJ ADT Files.
+        CopyToClipboard();
+        SetSelection(GetCursorPos(),0);
+
+        FileOpen(m2stringfile);
+        SetFileInterface("Hex");
+        SetCursorPos(0xffffff);
+        PasteFromClipboard();
+        SetCursorPos(0xffffff);
+        InsertBytes( GetCursorPos(), 1 );
+        WriteString(GetCursorPos(), "\n");
+        FileSave();
+        FileClose();
+
+        FileSelect(0xFFFFF);
+        };
+    int mwmocheck = FindFirst("4F4D574D???00,h",TRUE,FALSE,TRUE);
+        if(mwmocheck > 0 && ReadUInt(mwmocheck+4) > 0){
+        SetSelection(mwmocheck+8,ReadUInt(mwmocheck+4)); //For Getting WMOs from OBJ ADT Files.
+        CopyToClipboard();
+        SetSelection(GetCursorPos(),0);
+
+        FileOpen(wmostringfile);
+        SetFileInterface("Hex");
+        SetCursorPos(0xffffff);
+        PasteFromClipboard();
+        SetCursorPos(0xffffff);
+        InsertBytes( GetCursorPos(), 1 );
+        WriteString(GetCursorPos(), "\n");
+        FileSave();
+        FileClose();
+
+        FileSelect(0xFFFFF);
+        };
+FileClose();
+return 0;
+};
+//--------------------------------------------------------------//
+//--------------------------------------------------------------//
+
+if(ReadUInt(0x00) == 1297499474 && ReadUInt(0x0c) == 1296125264){ //Checks if file is tex ADT
+    int mtexcheck = FindFirst("5845544D???00,h",TRUE,FALSE,TRUE);
+        if(mtexcheck > 0 && ReadUInt(mtexcheck+4) > 0){
+        SetSelection(mtexcheck+8,ReadUInt(mtexcheck+4)); //For Getting BLPs from TEX ADT Files.
+        CopyToClipboard();
+        SetSelection(GetCursorPos(),0);
+
+        FileOpen(blpstringfile);
+        SetFileInterface("Hex");
+        SetCursorPos(0xffffff);
+        PasteFromClipboard();
+        SetCursorPos(0xffffff);
+        InsertBytes( GetCursorPos(), 1 );
+        WriteString(GetCursorPos(), "\n");
+        FileSave();
+        FileClose();
+
+        FileSelect(0xFFFFF);
+        };
+FileClose();
+return 0;
+};
+//--------------------------------------------------------------//
+//--------------------------------------------------------------//
+
+if(ReadUInt64(0x00) == 1169039705165 && ReadUInt(0x0c) == 304){ //checks if file is an Cata+ M2 or not.
+
+    int ztexcount = ReadUInt(0x50);
+    int ztexloc = ReadUInt(0x54);
+    int endselection = ReadUInt(0x5c);
+    int zparticlecount = ReadUInt(0x128);
+    int zparticleloc = ReadUInt(0x12c);
+
+    // 0.004v Edit , ghetto end selection finder.
+    for(g = 0; g < 9; g++){
+    //Ghetto as hell lol. don't even ask what this is if you can't tell by looking at it XD.
+    if(endselection > 0){break;}; //stop loop and continue once value has been obtained.
+    endselection = ReadUInt(0x5c+(g*8));
+    };
+    
+    if(ReadUInt(0x50) > 1){
+    // 0.004v Edit
+    SetCursorPos(ztexloc);
+    
+    SetSelection(ReadUInt(GetCursorPos()+0xc),endselection-ReadUInt(GetCursorPos()+0xc)); //For getting Texture Data.
+    CopyToClipboard();
+    SetSelection(GetCursorPos(),0);
+
+    FileOpen(blpstringfile);
+    SetFileInterface("Hex");
+    SetCursorPos(0xffffff);
+    PasteFromClipboard();
+    SetCursorPos(0xffffff);
+    InsertBytes( GetCursorPos(), 1 );
+    WriteString(GetCursorPos(), "\n");
+    FileSave();
+    FileClose();
+
+    FileSelect(0xFFFFF);
+    };
+
+        if(zparticlecount > 0){ 
+            //Sometimes Particles will use other M2's for their particles, this is to check and extract that.
+            for(i = 0; i < zparticlecount; i++){
+                SetCursorPos(zparticleloc+(492*i)+24);
+                    if(ReadUInt(GetCursorPos()) > 1){
+                        a = ReadUInt(GetCursorPos()); //amount of bytes to select for the m2 that's stored on here.
+                        SetCursorPos(ReadUInt(GetCursorPos()+4));
+                        SetSelection(GetCursorPos(),a);
+                        CopyToClipboard();
+                        SetSelection(GetCursorPos(),0);
+                        
+                        FileOpen(m2pstringfile);
+                        SetFileInterface("Hex");
+                        SetCursorPos(0xffffff);
+                        PasteFromClipboard();
+                        SetCursorPos(0xffffff);
+                        InsertBytes( GetCursorPos(), 1 );
+                        WriteString(GetCursorPos(), "\n");
+                        FileSave();
+                        FileClose();
+                        
+                        FileSelect(0xFFFFF);
+                    };
+                SetCursorPos(zparticleloc+(492*i)+32);
+                    if(ReadUInt(GetCursorPos()) > 1){
+                        a = ReadUInt(GetCursorPos()); //amount of bytes to select for the m2 that's stored on here.
+                        SetCursorPos(ReadUInt(GetCursorPos()+4));
+                        SetSelection(GetCursorPos(),a);
+                        CopyToClipboard();
+                        SetSelection(GetCursorPos(),0);
+                        
+                        FileOpen(m2pstringfile);
+                        SetFileInterface("Hex");
+                        SetCursorPos(0xffffff);
+                        PasteFromClipboard();
+                        SetCursorPos(0xffffff);
+                        InsertBytes( GetCursorPos(), 1 );
+                        WriteString(GetCursorPos(), "\n");
+                        FileSave();
+                        FileClose();
+                        
+                        FileSelect(0xFFFFF);
+                    };                
+            };
+            
+        };
+FileClose();
+return 0;
+};
+

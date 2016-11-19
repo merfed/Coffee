@@ -1,0 +1,75 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File: ADTModelUIDRecalc
+// Author: Skarn (http://model-changing.net)
+// Revision: 1.0
+// Purpose: Recalculates model UIDs for the given range of ADT files.
+//--------------------------------------
+char sFile[];
+int sIndex;
+int k, m, w;
+SetClipboardIndex( 0 );
+
+char dir[] = InputDirectory("Select directory...");
+
+uint32 UID  = InputNumber("ADTModelUIDRecalc","Input initial UID","0") + 1;
+    
+    if( UID == -534276582 )
+        {
+            MessageBox( idOk, "ADTModelUIDRecalc", "Operation canceled or invalid value has been entered.\nShutting down..." );
+            return;
+        }
+
+
+TFindInFilesResults r = FindInFiles( "NICM", dir, "*.adt", true, false, true, 0);
+ 
+     for( k = 0; k < r.count; k++ )
+     {
+        sFile = r.file[k].filename;
+        sIndex = FileOpen(sFile);
+          if(sIndex < 0)
+          return;
+        
+        DisableUndo();
+        //Printf( "\nResulted UID: %i\n", UID_r);
+        UID = RecalculateUID(UID);
+        FileSave();
+        FileClose();
+     }
+
+
+
+uint32 RecalculateUID(uint32 UID)
+    {
+        
+        RunTemplate("WoWADT.bt");
+        
+        int16 nMDDF;
+        int16 nMODF;
+        
+        int16 size_MDDF = ADT_file.mddf.hdr.byte_size;
+        int16 size_MODF = ADT_file.modf.hdr.byte_size;
+        nMDDF = size_MDDF / 36;
+        nMODF = size_MODF / 64;
+            
+            for( m = 0; m < nMDDF; m++)
+                {
+                    ADT_file.mddf.entry[m].uniqueID = UID;
+                    UID++;
+                }
+
+            for( w = 0; m < nMODF; w++)
+                {
+                    ADT_file.modf.entry[w].uniqueID = UID;
+                    UID++;
+                }
+        
+         return UID;
+    }
+
+//Printf( "\nLast UID: %i\n", UID_r);
+char UID_f[50];
+SPrintf(UID_f, "%d", UID);
+CopyStringToClipboard( UID_f, CHARSET_ANSI ); 
+MessageBox( idOk, "ADTModelUIDRecalc", "Model UIDs have been successfully recalculated.\nLast UID (" + UID_f + ") was copied to your clipboard.\nhttp://model-changing.net/" );

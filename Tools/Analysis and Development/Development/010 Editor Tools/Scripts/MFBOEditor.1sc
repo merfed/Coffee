@@ -1,0 +1,49 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File:MFBO editor
+// Author:Skarn
+// Revision:1.0
+// Purpose:Edits the MFBO chunk values in ADT.
+//--------------------------------------
+ 
+char sFile[];
+int sIndex;
+int k;
+ 
+TOpenFileNames z = InputOpenFileNames(  "Select .adt files", "(*.adt)" );
+ 
+     for( k = 0; k < z.count; k++ )
+     {
+        sFile = z.file[k].filename;
+        sIndex = FileOpen(sFile);
+          if(sIndex < 0)
+          return;
+        EditMFBO();
+        FileSave();
+        FileClose();
+     }
+ 
+void EditMFBO()
+    {
+      int z, y, a, p;
+      RunTemplate( "WoWADT.bt" );
+       
+        for( z = 0; z < 3; z++ )
+             {
+                for( y = 0; y < 3; y++ )
+                    {
+                       ADT_file.mfbo.maximum[z].height[y] = 600;
+                    }
+             }
+        for( z = 0; z < 3; z++ )
+                   {
+                      for( y = 0; y < 3; y++ )
+                          {
+                             ADT_file.mfbo.minimum[z].height[y] = -150;
+                          }
+                   }      
+     
+       
+       
+    }

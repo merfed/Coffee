@@ -1,0 +1,63 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File: ADTMaxModelUIDCalculator
+// Author: Skarn (http://model-changing.net)
+// Revision: 1.0
+// Purpose: Calculates the heighest model UID from the given ADTs.
+//--------------------------------------
+char sFile[];
+int sIndex;
+int w, x, y, z;
+uint32 UID = 0;
+char dir[] = InputDirectory("Select directory...");
+
+int i;
+    
+    TFindInFilesResults r = FindInFiles( "NICM", dir, "*.adt", true, false, true, 0);   
+    Printf( "\n Found ADTs:%d\n", r.count );
+    for( i = 0; i < r.count; i++ )
+    {
+        sFile = r.file[i].filename;
+        sIndex = FileOpen(sFile);
+        DisableUndo();
+        UID = CalculateUID(UID);
+    }
+
+uint32 CalculateUID( uint32 UID )
+{
+    RunTemplate("WoWADT.bt");
+    
+    int16 nMDDF;
+    int16 nMODF;
+            
+    int16 size_MDDF = ADT_file.mddf.hdr.byte_size;
+    int16 size_MODF = ADT_file.modf.hdr.byte_size;
+    nMDDF = size_MDDF / 36;
+    nMODF = size_MODF / 64;
+    
+    for( w = 0; w < nMDDF; w++)
+        {
+               if( ADT_file.mddf.entry[w].uniqueID > UID )
+                    {
+                        UID = ADT_file.mddf.entry[w].uniqueID;
+                    }
+        }
+    
+    for( x = 0; x < nMODF; x++)
+        {
+               if( ADT_file.modf.entry[x].uniqueID > UID )
+                    {
+                        UID = ADT_file.modf.entry[x].uniqueID;
+                    }
+        }
+    
+    FileClose();
+    return UID;
+} 
+
+char UID_r[50];
+SPrintf(UID_r, "%d", UID);
+SetClipboardIndex ( 0 );
+CopyStringToClipboard( UID_r, CHARSET_ANSI );
+MessageBox( idOk, "ADTMaxModelUIDCalculator", "Max model UIDs has been successfully calculated.\nMax UID (" + UID_r + ") was copied to your clipboard.\nhttp://model-changing.net/" );

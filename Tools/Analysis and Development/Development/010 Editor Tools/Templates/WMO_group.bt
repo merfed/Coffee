@@ -1,0 +1,294 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+
+struct CHUNK_HEADER
+{
+    char fourcc[4];
+    uint32 size;
+};
+
+struct PLACEHOLDER_CHUNK
+{
+    CHUNK_HEADER hdr;
+    uchar bytes[ hdr.size ];
+};
+
+struct MVER
+{
+    CHUNK_HEADER top;
+    uint32 version;
+};
+
+struct MOGP_FLAGS
+{
+    ubyte MOGP_FLAGS_HAS_MOBN_AND_MOBR : 1; // 0x01
+    ubyte MOGP_FLAGS_UNK_0x02 : 1; // 0x02
+    ubyte MOGP_FLAGS_HAS_MOCV : 1; // 0x04
+    ubyte MOGP_FLAGS_OUTDOOR : 1; // 0x08
+    ubyte MOGP_FLAGS_UNK_0x10 : 1; // 0x10
+    ubyte MOGP_FLAGS_UNK_0x20 : 1; // 0x20
+    ubyte MOGP_FLAGS_UNK_0x40 : 1; // 0x40
+    ubyte MOGP_FLAGS_UNK_0x80 : 1; // 0x80
+    ubyte MOGP_FLAGS_UNK_0x100 : 1; // 0x100
+    ubyte MOGP_FLAGS_HAS_LIGHTS : 1; // 0x200
+    ubyte MOGP_FLAGS_HAS_MPBV_MPBP_MPBI_MPBG : 1; // 0x400
+    ubyte MOGP_FLAGS_HAS_DOODADS : 1; // 0x800
+    ubyte MOGP_FLAGS_HAS_WATER : 1; // 0x1000
+    ubyte MOGP_FLAGS_INDOOR : 1; // 0x2000
+    ubyte MOGP_FLAGS_UNK_0x4000 : 1; // 0x4000
+    ubyte MOGP_FLAGS_UNK_0x8000 : 1; // 0x8000
+    ubyte MOGP_FLAGS_UNK_0x10000 : 1; // 0x10000
+    ubyte MOGP_FLAGS_HAS_MORI_AND_MORB : 1; // 0x20000
+    ubyte MOGP_FLAGS_SHOW_SKYBOX : 1; // 0x40000
+    ubyte MOGP_FLAGS_IS_NOT_OCEAN : 1; // 0x80000
+    ubyte MOGP_FLAGS_UNK_0x100000 : 1; // 0x100000
+    ubyte MOGP_FLAGS_UNK_0x200000 : 1; // 0x200000
+    ubyte MOGP_FLAGS_UNK_0x400000 : 1; // 0x400000
+    ubyte MOGP_FLAGS_UNK_0x800000 : 1; // 0x800000
+    ubyte MOGP_FLAGS_HAS_TWO_MOCV : 1; // 0x1000000
+    ubyte MOGP_FLAGS_HAS_TWO_MOTV : 1; // 0x2000000
+};
+
+
+struct MOGP // group header
+{
+    CHUNK_HEADER top;
+	/*0x00*/ 	uint32	nameOffset;		//  Group name (offset into MOGN chunk)
+	/*0x04*/ 	uint32 	descNameOffset;	//  Descriptive group name (offset into MOGN chunk)
+	/*0x08*/ 	MOGP_FLAGS 	flags;			//  Flags
+	/*0x0C*/ 	float				bb1[3];			//  Bounding box corner 1 (same as in MOGI)
+	/*0x18*/ 	float				bb2[3]; 		//  Bounding box corner 2
+	/*0x24*/ 	uint16 	moprIndex;		//  Index into the MOPR chunk
+	/*0x26*/ 	uint16 	numMOPRs;		//  Number of items used from the MOPR chunk
+	/*0x28*/ 	uint16 	numBatchesA;	// 	Number of batches A
+	/*0x2A */	uint16 	numBatchesB;	//  Number of batches B
+	/*0x2C*/ 	uint32 	numBatchesC;	//	Number of batches C
+	/*0x30*/ 	ubyte		fogIndices[4];	//  Up to four indices into the WMO fog list
+	/*0x34*/ 	uint32 	liquidType;		//	LiquidType related, see below in the MLIQ chunk.
+	/*0x38*/ 	uint32 	wmoGroupID;		//	WMO group ID (column 4 in WMOAreaTable.dbc)
+	/*0x3C*/ 	uint32 	unk1;			//	Always 0?
+	/*0x40*/ 	uint32	unk2;			//	Always 0?
+};
+
+struct MOPY_FLAGS
+{
+    ubyte MOPY_FLAG_UNK_0x01 : 1;
+    ubyte MOPY_FLAG_UNK_0x02 : 1;
+    ubyte MOPY_FLAG_NO_CAM_COLLIDE : 1;
+    ubyte MOPY_FLAG_NO_COLLISION : 1;
+    ubyte MOPY_FLAG_UNK_0x10 : 1;
+    ubyte MOPY_FLAG_UNK_0x20 : 1;
+    ubyte MOPY_FLAG_UNK_0x40 : 1;
+    ubyte MOPY_FLAG_UNK_0x80 : 1;
+};
+    
+struct MOPY
+{
+    MOPY_FLAGS flags;
+    ubyte materialId;
+};
+
+struct MOPYs
+{
+    CHUNK_HEADER hdr;
+    MOPY materialInfoForTriangles[ hdr.size / sizeof(MOPY) ];
+};
+
+struct MOVI
+{
+    uint16 indices[3];
+};
+
+struct MOVIs
+{
+    CHUNK_HEADER hdr;
+    MOVI triangles[ hdr.size / sizeof(MOVI) ];
+};
+
+struct MOVT
+{
+    float vertex_coords[3];
+};
+
+struct MOVTs
+{
+    CHUNK_HEADER hdr;
+    MOVT vertices[ hdr.size / sizeof(MOVT) ];
+};
+
+struct MONR
+{
+    float normal[3];
+};
+
+struct MONRs
+{
+    CHUNK_HEADER hdr;
+    MONR normals[ hdr.size / sizeof(MONR) ];
+};
+
+struct MOTV
+{
+    float uv[2];
+};
+
+struct MOTVs
+{
+    CHUNK_HEADER hdr;
+    MOTV uvs[ hdr.size / sizeof(MOTV) ];
+};
+
+struct MOBA
+{
+    uint16 box[6]; // ?
+    uint32 firstFace;
+    uint16 nFaces;
+    uint16 firstVertex;
+    uint16 lastVertex;
+    ubyte unused;
+    ubyte materialId; // index in MOMT
+};
+
+struct MOBAs
+{
+    CHUNK_HEADER hdr;
+    MOBA render_batches[ hdr.size / sizeof(MOBA) ];
+};
+
+struct MOLR
+{
+    uint16 lightRef;
+};
+
+struct MOLRs
+{
+    CHUNK_HEADER hdr;
+    MOLR lightRefs[ hdr.size / sizeof(MOLR) ];
+};
+
+struct MODR
+{
+    uint16 dooadRef;
+};
+
+struct MODRs
+{
+    CHUNK_HEADER hdr;
+    MODR doodadRefs[ hdr.size / sizeof(MODR) ];
+};
+
+struct MOBN
+{
+    int16 planeType;
+    int16 children[2];
+    uint16 numFaces;
+    uint32 firstFace;
+    float fDist;
+};
+
+struct MOBNs
+{
+    CHUNK_HEADER hdr;
+    MOBN bspNodes[ hdr.size / sizeof(MOBN) ];    
+};
+
+struct MOBR
+{
+    uint16 faceIndex;
+};
+
+struct MOBRs
+{
+    CHUNK_HEADER hdr;
+    MOBR faceIndices[ hdr.size / sizeof(MOBR) ];
+};
+
+struct MOCV
+{
+    ubyte color[4];
+};
+
+
+struct MOCVs
+{
+    CHUNK_HEADER hdr;
+    MOCV vertex_colors[ hdr.size / sizeof(MOCV) ];
+};
+
+struct MLIQ 
+{
+    CHUNK_HEADER hdr;
+    uint32 numXVerts;
+    uint32 numYVerts;
+    uint32 numXTiles;
+    uint32 numYTiles;
+    float position[3];
+    uint16 materialId;
+    float height_map[ numXVerts * numYVerts * 2 ];
+    ubyte types[ numXTiles * numYTiles ];
+};
+
+struct MORI
+{
+    PLACEHOLDER_CHUNK mori;
+};
+
+struct MORB
+{
+    PLACEHOLDER_CHUNK morb;
+};
+
+struct MOTA
+{
+    PLACEHOLDER_CHUNK mota;
+};
+
+struct MOBS
+{
+    PLACEHOLDER_CHUNK mobs;
+};
+
+
+struct WMO_GROUP
+{
+    while( ! FEof() )
+    {
+        if     ( match( "MVER" ) ) MVER  version;
+        else if( match( "MOGP" ) ) MOGP  group_info;
+        else if( match( "MOPY" ) ) MOPYs triangle_material_info;
+        else if( match( "MOVI" ) ) MOVIs triangle_indices;
+        else if( match( "MOVT" ) ) MOVTs triangle_vertices;
+        else if( match( "MONR" ) ) MONRs triangle_normals;
+        else if( match( "MOTV" ) ) MOTVs triangle_uvs;
+        else if( match( "MOBA" ) ) MOBAs render_batches;
+        else if( match( "MODR" ) ) MODRs doodad_references;
+        else if( match( "MOBN" ) ) MOBNs bsp_nodes;
+        else if( match( "MOBR" ) ) MOBRs bsp_faces;
+        else if( match( "MOCV" ) ) MOCVs vertex_colors;
+        else if( match( "MOLR" ) ) MOLRs light_references;
+        else if( match( "MLIQ" ) ) MLIQ  liquid;
+        else if( match( "MORI" ) ) MORI  mori;
+        else if( match( "MORB" ) ) MORB  morb;
+        else if( match( "MOTA" ) ) MOTA  mota;
+        else if( match( "MOBS" ) ) MOBS  mobs;
+        else
+        {
+            PLACEHOLDER_CHUNK unk;
+        }
+    }
+};
+
+WMO_GROUP wmo_group;
+
+int match( char m[] )
+{
+    local char s[] = ReadString( FTell());
+    if( m[0] == s[3] && m[1] == s[2] && m[2] == s[1] && m[3] == s[0] ) return 1;
+    return 0;
+}

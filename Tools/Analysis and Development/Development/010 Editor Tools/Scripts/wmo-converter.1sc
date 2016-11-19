@@ -1,0 +1,61 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+int i;
+int z;
+int MOBS_start;
+int end;
+int zz;
+int finalval;
+    TFindResults r = FindAll( "SBOM" );
+    for( i = 0; i < r.count; i++ )
+        {                
+            MOBS_start=r.start[i];
+        }
+
+TFindResults rz = FindAll( "RDOM" );
+TFindResults rz1q = FindAll( "RLOM" );
+TFindResults rz1 = FindAll( "NBOM" );
+
+if (rz1q.count !=0)
+     {
+        for( zz = 0; zz < rz1q.count; zz++ )
+            {
+            
+                    end=rz1q.start[zz];
+            
+            }
+    }
+else if (rz.count !=0) 
+    {
+        for( z = 0; z < rz.count; z++ )
+            {
+            
+                    end=rz.start[z];
+            }
+    }
+
+else if (rz1.count !=0) 
+    {
+            for( z = 0; z < rz1.count; z++ )
+                {
+                
+                     end=rz1.start[z];
+                
+                }
+    }
+
+
+if (end && MOBS_start)
+    {
+        finalval = end - MOBS_start;
+        DeleteBytes( MOBS_start, finalval);
+    }
+
+FileSave();
+FileClose();

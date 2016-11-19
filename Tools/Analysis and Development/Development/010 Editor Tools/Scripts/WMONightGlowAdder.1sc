@@ -1,0 +1,58 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File:WMONightGlowAdder.1sc
+// Author:Skarn
+// Revision:1.0
+// Purpose:Modifies specified materials to glow at night.
+//--------------------------------------
+char sFile[];
+int sIndex;
+int k;
+
+TOpenFileNames z = InputOpenFileNames(  "Select root .wmo files", "(*.wmo)" );
+ 
+     for( k = 0; k < z.count; k++ )
+     {
+        sFile = z.file[k].filename;
+        sIndex = FileOpen(sFile);
+          if(sIndex < 0)
+          return;
+        DisableUndo();
+        LightenMahWindows();
+        FileSave();
+        FileClose();
+     }
+
+void LightenMahWindows()
+    {
+        int i, check;        
+        RunTemplate("WoWWMO.bt");
+        int16 MOMT_size = wmo_file.momt.hdr.byte_size;
+        int16 material_count = MOMT_size / 64;
+        int64 texture_pos;
+        char texture_title[];
+            
+            for( i = 0; i < material_count; i++)
+                {      
+                        texture_pos = startof(wmo_file.motx) + 8 + wmo_file.momt.entry[i].texture_1.adress;
+                        texture_title = ReadString( texture_pos, -1);   
+                        check = MessageBox( idYes | idNo | idCancel, "WMO Night Glow Adder", "Do you want to lighten up this material?\n" + texture_title);
+                        if( check == idYes)
+                            {
+                                 wmo_file.momt.entry[i].flags = 0x10;
+                                 wmo_file.momt.entry[i].shader = 1;
+                                 wmo_file.momt.entry[i].color_1.r = 255;
+                                 wmo_file.momt.entry[i].color_1.g = 255;
+                                 wmo_file.momt.entry[i].color_1.b = 255;
+                                 wmo_file.momt.entry[i].color_1.a = 255;
+                                 wmo_file.momt.entry[i].flags_2 = 10;         
+                            }
+
+                        if (check == idCancel)
+                            {
+                                MessageBox( idYes, "WoW Night Glow Adder", "Operation stopped. Saving file...");
+                                return;
+                            }
+                }       
+    }

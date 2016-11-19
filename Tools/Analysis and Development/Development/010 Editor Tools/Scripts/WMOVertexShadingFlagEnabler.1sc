@@ -1,0 +1,30 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File:WMOVertexShadingFlagEnabler.1sc
+// Author:Skarn
+// Revision:1.0
+// Purpose: Enables vertex shading (MOCV) in WoW .wmo model by setting an appropraite flag.
+//--------------------------------------
+char sFile[];
+int sIndex;
+int k;
+
+TOpenFileNames z = InputOpenFileNames(  "Select group .wmo files", "(*.wmo)" );
+ 
+     for( k = 0; k < z.count; k++ )
+     {
+        sFile = z.file[k].filename;
+        sIndex = FileOpen(sFile);
+          if(sIndex < 0)
+          return;
+        SetFlag();
+        FileSave();
+        FileClose();
+     }
+
+void SetFlag()
+    {
+        RunTemplate("wmo_group.bt");
+        wmo_group.group_info.flags.MOGP_FLAGS_HAS_MOCV = 1;
+    }
