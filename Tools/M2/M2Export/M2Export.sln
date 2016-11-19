@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2Export", "M2Export\M2Export.csproj", "{15EDBCE3-48D4-4EE6-A94F-58180CB93CD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M2Lib", "..\M2Lib\M2Lib\M2Lib.csproj", "{6508665A-54DE-41D7-919C-D1DAFBAB9D54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15EDBCE3-48D4-4EE6-A94F-58180CB93CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15EDBCE3-48D4-4EE6-A94F-58180CB93CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15EDBCE3-48D4-4EE6-A94F-58180CB93CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15EDBCE3-48D4-4EE6-A94F-58180CB93CD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6508665A-54DE-41D7-919C-D1DAFBAB9D54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6508665A-54DE-41D7-919C-D1DAFBAB9D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6508665A-54DE-41D7-919C-D1DAFBAB9D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6508665A-54DE-41D7-919C-D1DAFBAB9D54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

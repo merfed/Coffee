@@ -1,0 +1,82 @@
+// $parent - the parent UI layout
+// $action - "post" or "query"
+// $settings - the initial exporter settings
+// $callback - the function to call
+//
+global proc int M2ShowUIOptionsExport(string $parent, string $action,
+string $settings,
+string $callback )
+{
+  	// if we need to create the user interface...
+	if ($action == "post") {
+		
+		// attachs the GUI to the correct parent layout
+		setParent $parent;
+
+		// create a simple layout for the controls
+		columnLayout -adj true;
+
+			text -label "M2 Export Plugin\n" -align "center";
+			text -label "[Warning] Older versions export less features.\n" -align "left";
+			optionMenu -label "WoW Expansion" expansion;
+				menuItem -label "Classic (256)";
+				menuItem -label "Burning Crusade (260)";
+				menuItem -label "Wrath of the Lich King (264)";
+				menuItem -label "Cataclysm - Warlords of Draenor (272)";
+			optionMenu -e -sl 3 expansion;
+		
+		// split the previous set of options
+		string $options[];
+		int $ntokens=`tokenize $settings " " $options`;
+
+		// loop through each option
+		for( $i=0; $i < $ntokens; ++$i ) {
+			// get this option
+			$option = $options[$i];
+
+			if($option == "-expansion") {
+				++$i;
+				switch($options[$i]){
+					case "0"://CL
+						optionMenu -e -sl 1 expansion;
+						break;
+					case "1"://BC
+						optionMenu -e -sl 2 expansion;
+						break;
+					case "2"://LK
+						optionMenu -e -sl 3 expansion;
+						break;
+					case "3"://CT
+						optionMenu -e -sl 4 expansion;
+						break;
+					default: //Default LK
+						optionMenu -e -sl 3 expansion;
+						break;
+				}
+			}
+		}
+	}
+	else if ($action == "query") {
+		string $option="-expansion ";
+		int $query = `optionMenu -q -sl expansion`;
+		switch($query) {
+			case 1://CL
+				$option += "0 ";
+				break;
+			case 2://BC
+				$option += "1 ";
+				break;
+			case 3://LK
+				$option += "2 ";
+				break;
+			case 4://CT
+				$option += "3 ";
+				break;
+			default: //Default LK
+				$option += "2 ";
+				break;
+		}
+		eval( $callback + "\"" + $option + "\"" );
+	}
+	return 1;
+}

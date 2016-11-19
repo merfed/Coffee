@@ -1,0 +1,12 @@
+global proc AEMesh_M2Template(string $nodeName){
+	editorTemplate -beginScrollLayout;
+		editorTemplate -beginLayout "MyAttributeMenu" -collapse 0;
+			editorTemplate -label "This is customAttribute" -addControl "customAttribute";
+		editorTemplate -endLayout;
+		
+		// Add attributes of the original Maya template
+		AEmeshTemplate $nodeName;
+		
+		editorTemplate -addExtraControls;
+	editorTemplate -endScrollLayout;
+}

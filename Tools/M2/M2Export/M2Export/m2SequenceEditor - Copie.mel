@@ -1,0 +1,585 @@
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// This procedure creates and initializes the Sequence Editor window.
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SequenceEditor() {
+	//Find or create the m2Editor node so the m2 sequence editor can work on it.
+	global string $gM2EditorCurrentNode;
+	string $nodes[] = `ls -type "m2Editor"`;
+	if(size($nodes) == 0)
+	{
+		// Create a new m2Editor node.
+		string $m2EditorNodeName = "m2EditorNode1";
+		createNode m2Editor -skipSelect -name $m2EditorNodeName;
+		$gM2EditorCurrentNode = $m2EditorNodeName;
+	}
+	else 
+	{
+		$gM2EditorCurrentNode = $nodes[0];
+	}
+	
+	if(`window -ex sequenceEditorUI`) deleteUI sequenceEditorUI;
+	window 	-widthHeight 100 250
+			-title "Sequences" 
+			-sizeable 1 -resizeToFitChildren 1
+			sequenceEditorUI;
+	
+		// Name is legacy from old gameFbxExporter. It's just the main form layout.
+		string $m2SeqEditorExportTypeFormLayout = "m2SeqEditorExportTypeFormLayout";
+		if (`layout -exists $m2SeqEditorExportTypeFormLayout`)
+		{           
+			deleteUI -layout $m2SeqEditorExportTypeFormLayout;
+		} 
+		
+		formLayout $m2SeqEditorExportTypeFormLayout;
+		m2SeqEdit_AnimationLayoutOrder($m2SeqEditorExportTypeFormLayout);
+		//string $m2SeqEditorExportTypeFormLayout = m2SeqEdit_CreateAnimationClipUIComponents();
+		
+	showWindow;
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Attach in a specific order the animation clips sub form layout
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+global proc m2SeqEdit_AnimationLayoutOrder(string $formLayout)
+{ 
+    string $animForm = m2SeqEdit_CreateAnimationClipUIComponents();   
+
+    formLayout -edit 
+        -attachForm      $animForm   "top"     0 
+        -attachForm      $animForm   "left"    0
+        -attachForm      $animForm   "right"   0
+		-attachForm      $animForm   "bottom"   0
+    $formLayout;
+    
+    setParent ..;    
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Create the Animation Clips UI Components
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc string m2SeqEdit_CreateAnimationClipUIComponents()
+{    
+    global string $gM2EditorCurrentNode;
+          
+    string $form = `formLayout`;
+    
+    // Control names
+    $m2SeqEditorAnimClipFormLayout =  "m2SeqEditorAnimClipFormLayout";
+    $m2SeqEditorClipNameLabel =  "m2SeqEditorClipNameLabel";
+    $m2SeqEditorStartFrameLabel =  "m2SeqEditorStartFrameLabel";
+    $m2SeqEditorEndFrameLabel =  "m2SeqEditorEndFrameLabel";
+    $m2SeqEditorToggleSelectionClips =  "m2SeqEditorToggleSelectionClips";
+	
+	formLayout -width 100 $m2SeqEditorAnimClipFormLayout;
+	//Titles at the top : creation
+		text -label "" emptyLabel;
+		text -label "Clip Name" $m2SeqEditorClipNameLabel;
+		text -label "Start" $m2SeqEditorStartFrameLabel;
+		text -label "End" $m2SeqEditorEndFrameLabel;
+		checkBox -label "" 
+				 -value 1
+				 -annotation "Toggle clips export of all clips"
+				 -changeCommand ("m2SeqEdit_ToggleSelectionClips #1")
+				 $m2SeqEditorToggleSelectionClips;
+	setParent ..;
+    
+     // Create Scroll Layout for the animation clips
+    m2SeqEdit_CreateScrollAnimationClipLayout();
+  
+		formLayout -edit    
+		//Titles at the top : attaching
+			-attachForm      emptyLabel  "top"    5  
+			-attachForm      emptyLabel  "left"   0  
+
+			-attachForm      $m2SeqEditorClipNameLabel  "top"    5  
+			-attachControl   $m2SeqEditorClipNameLabel  "left"   25   emptyLabel  
+			-attachControl   $m2SeqEditorClipNameLabel  "right"  10   $m2SeqEditorStartFrameLabel                      
+
+			-attachForm      $m2SeqEditorStartFrameLabel  "top"    5  
+			-attachControl   $m2SeqEditorStartFrameLabel  "right"  15 $m2SeqEditorEndFrameLabel
+
+			-attachForm      $m2SeqEditorEndFrameLabel  "top"    5  
+			-attachControl   $m2SeqEditorEndFrameLabel  "right"  60 $m2SeqEditorToggleSelectionClips
+			
+			-attachForm      $m2SeqEditorToggleSelectionClips  "top"    5  
+			-attachForm      $m2SeqEditorToggleSelectionClips  "right"  19
+				
+		$m2SeqEditorAnimClipFormLayout;
+		
+		setParent ..;
+    setParent ..;
+    
+	formLayout -edit       
+       -attachForm      $m2SeqEditorAnimClipFormLayout   "top"       0
+       -attachForm      $m2SeqEditorAnimClipFormLayout   "left"      0
+       -attachForm      $m2SeqEditorAnimClipFormLayout   "right"     0
+       -attachForm      $m2SeqEditorAnimClipFormLayout   "bottom"    0
+    $form;
+    
+    setParent ..;
+           
+    return $form;
+   
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Create the list of animation clips
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_CreateScrollAnimationClipLayout()
+{
+    global string $gM2EditorCurrentNode;
+    global int $gM2SeqEditorCurrentClipPlaying;
+
+    // In case we were playing an animation, turn it off.
+    $gM2SeqEditorCurrentClipPlaying = -1;
+    play -state off;
+    
+    // Get control names created by m2SeqEdit_CreateAnimationClipUIComponents()
+    $m2SeqEditorAnimClipFormLayout = "m2SeqEditorAnimClipFormLayout";
+    $m2SeqEditorEndFrameLabel = "m2SeqEditorEndFrameLabel";
+  
+    // Control names
+    $m2SeqEditorScrollLayout = "m2SeqEditorScrollLayout";
+    
+    setParent $m2SeqEditorAnimClipFormLayout;    
+            
+    if (`layout -exists $m2SeqEditorScrollLayout`)
+    {
+        deleteUI -layout $m2SeqEditorScrollLayout;
+    }
+    
+    scrollLayout -childResizable true $m2SeqEditorScrollLayout;
+   
+    int $nbAnimClips = size($gM2EditorCurrentNode) ? `getAttr -size ($gM2EditorCurrentNode + ".animClips")` : 0;
+
+	// Each line is its own formLayout
+    for( $i=0; $i < $nbAnimClips; $i++)
+    {
+        string $formLayoutClip = `formLayout -width 100`;
+        
+        // Right click "Insert Clip" menu
+        popupMenu -button 3;
+        menuItem -label "Insert Clip" 
+                 -command ("m2SeqEdit_InsertNewAnimationClip " + $i);
+      
+        symbolButton -image "deleteClip.png" 
+                     -annotation "Delete clip"
+                     -command ("m2SeqEdit_DeleteAnimationClipLayout " + $i) 
+                     deleteAnimClip;
+                     
+        string $clipNameField = `textField -width 50 -placeholderText "Clip Name"`;               
+        textField -e -text `getAttr ($gM2EditorCurrentNode + ".animClips[" + $i + "].animClipName")` 
+                     -changeCommand ("m2SeqEdit_SetUniqueAnimationClipName " + $i + "\"#1\"" + $clipNameField) 
+                     -editable true
+                     $clipNameField;
+        floatField -width 35 
+                   -precision 0 
+                   -value `getAttr ($gM2EditorCurrentNode + ".animClips[" + $i + "].animClipStart")`
+                   -annotation "Clip start frame"
+                   -changeCommand ("setAttr(\"" + $gM2EditorCurrentNode + ".animClips[" + $i + "].animClipStart\") #1") 
+                   -editable true
+                   startTime;
+        floatField -width 35
+                   -precision 0 
+                   -value `getAttr ($gM2EditorCurrentNode + ".animClips[" + $i + "].animClipEnd")` 
+                   -annotation "Clip end frame"
+                   -changeCommand ("setAttr(\"" + $gM2EditorCurrentNode + ".animClips[" + $i + "].animClipEnd\") #1") 
+                   -editable true
+                   endTime;
+               
+        symbolButton -image "adjustTimeline.png" 
+                     -annotation "Set playback range to clip"
+                     -command ("m2SeqEdit_AdjustTimeline " + $i) 
+                     adjustTimeline;  
+                     
+        string $animClipPlayBtn = ("playButtonAnimClip_" + $i);
+        symbolButton -image "playClip.png" 
+                     -annotation "Play"
+                     -command ("m2SeqEdit_PlayAnimationClip " + $i) 
+                     $animClipPlayBtn;   
+
+        checkBox -label "" 
+                 -value `getAttr ($gM2EditorCurrentNode + ".animClips[" + $i + "].exportAnimClip")`
+                 -annotation "Toggle export of this clip"
+                 -changeCommand("setAttr(\"" + $gM2EditorCurrentNode + ".animClips[" + $i + "].exportAnimClip\") #1")                 
+                 exportClip;
+        int $top = ($i ? 5 : 2);
+        formLayout -edit
+            -attachForm      deleteAnimClip  "top"   $top 
+            -attachForm      deleteAnimClip  "left"  0
+            
+            -attachForm      $clipNameField  "top"   $top 
+            -attachControl   $clipNameField  "left"  0   deleteAnimClip
+            -attachControl   $clipNameField  "right" 2   startTime
+            
+            -attachForm      startTime  "top"   $top 
+            -attachControl   startTime  "right" 2  endTime
+            
+            -attachForm      endTime  "top"    $top 
+            -attachControl   endTime  "right"  2  adjustTimeline    
+                
+            -attachForm      adjustTimeline  "top"    $top 
+            -attachControl   adjustTimeline  "right"  0  $animClipPlayBtn 
+
+            -attachForm      $animClipPlayBtn  "top"   $top 
+            -attachControl   $animClipPlayBtn  "right" 0 exportClip 
+
+            -attachForm      exportClip  "top"    ($top + 5) 
+            -attachForm      exportClip  "right"  5 
+            
+        $formLayoutClip;
+        setParent ..;        
+    }   
+
+	
+    string $form = `formLayout -width 100`;
+    //Bottom grey line : creation
+    text -label "" emptyLabel;
+    textField -width 50 -enable false textFieldTemplate;
+    floatField -width 35 -precision 0 -enable false startFieldTemplate;
+    floatField -width 35 -precision 0 -enable false endFieldTemplate;
+    symbolButton -image "addClip.png" 
+                 -annotation "Add new clip"
+                 -command ("m2SeqEdit_AddNewAnimationClip " + 1)
+                 addAnimBtn;
+         
+    int $top = ($nbAnimClips ? 6 : 2);
+    formLayout -edit 
+	//Bottom grey line : attaching
+            -attachForm      emptyLabel  "top"    0 
+            -attachForm      emptyLabel  "left"   0            
+               
+            -attachForm      textFieldTemplate  "top"    $top 
+            -attachControl   textFieldTemplate  "left"   22  emptyLabel
+            -attachControl   textFieldTemplate  "right"  2   startFieldTemplate
+            
+            -attachForm      startFieldTemplate  "top"    $top 
+            -attachControl   startFieldTemplate  "right"  2 endFieldTemplate
+            
+            -attachForm      endFieldTemplate  "top"    $top 
+            -attachControl   endFieldTemplate  "right"  15  addAnimBtn
+            
+            -attachForm      addAnimBtn  "top"    $top             
+            -attachForm      addAnimBtn  "right"  28                          
+    $form;
+    
+    setParent ..;
+        
+    formLayout -edit          
+            -attachControl   $m2SeqEditorScrollLayout  "top"     5   $m2SeqEditorEndFrameLabel
+            -attachForm      $m2SeqEditorScrollLayout  "left"    0 
+            -attachForm      $m2SeqEditorScrollLayout  "right"   0
+            -attachForm      $m2SeqEditorScrollLayout  "bottom"   0
+    $m2SeqEditorAnimClipFormLayout;
+
+    setParent ..;
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Set a unique animation clip name
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_SetUniqueAnimationClipName(string $index, string $name, string $clipNameField)
+{
+    global string $gM2EditorCurrentNode;
+    if(size($name))
+    {
+        int $nbAnimClips = `getAttr -size ($gM2EditorCurrentNode + ".animClips")`;
+        string $clipsName[];
+        
+        for( $i=0; $i < $nbAnimClips; $i++)
+        {
+            $clipsName[size($clipsName)] = `getAttr ($gM2EditorCurrentNode + ".animClips[" + $i + "].animClipName")`;        
+        }
+        
+        //
+        // Give a unique animation clip name
+        //        
+        $name = m2SeqEdit_ProvideUniqueName($name, $clipsName);        
+    }
+   
+    setAttr($gM2EditorCurrentNode + ".animClips[" + $index + "].animClipName") -type "string" $name;
+    textField -e -text $name $clipNameField;
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Returns a unique name based on the name and a list of names to validate the 
+// uniqueness of the name.
+// Ex:
+// aaa      ->  aaa01
+// aaa090   ->  aaa091
+// aaa00099 ->  aaa00100    
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc string m2SeqEdit_ProvideUniqueName(string $name, string $uniqueNameLst[])
+{
+    while(stringArrayCount($name, $uniqueNameLst))
+    {
+        string $endsWithNumber = `match "[0-9]+$" $name`;
+        if(size($endsWithNumber))
+        {             
+            int $nbZeros = 0;    
+            
+            //string to int
+            int $number = $endsWithNumber;
+            
+            int $stringSize = size($endsWithNumber);
+            int $intToStringSizeBefore = size(string($number));
+           
+            // Keep how many zeros we have lost from the string convertion to int Ex: "0010" -> ? 10 : 2 zeros
+            // 
+            if($stringSize != $intToStringSizeBefore)
+            {
+                $nbZeros = ($stringSize - $intToStringSizeBefore);
+            }           
+                        
+            $number++; 
+            
+            int $intToStringSizeAfter = size(string($number));
+                        
+            if($nbZeros && ($intToStringSizeBefore != $intToStringSizeAfter))
+            {         
+                // If the incremented number is +1 digit than before, 
+                // remove one of the zero(s) to add.
+                $nbZeros = $nbZeros - 1;          
+            }
+            
+            // Get the name without the ending digits
+            $name = python("(\"" + $name + "\")[:-" + size($endsWithNumber) + "]");
+            
+            // Add the zero(s) lost in the "string to int" conversion
+            // Also if the incremented number has added one new digit 
+            // a zero will be removed.
+            for( $i=0; $i < $nbZeros; $i++)
+            {
+                $name = ($name + "0");        
+            }
+            
+            $name = ( $name + $number );
+        }
+        else
+        {
+            $name = ($name + "01");            
+        }
+    }  
+    return $name;
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Play animation clip and update stop/play icon.
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_PlayAnimationClip(int $currentIndex)
+{
+    global string $gM2EditorCurrentNode;
+    global int $gM2SeqEditorCurrentClipPlaying;
+    string $playButtonAnimClip = "playButtonAnimClip_";
+    if($currentIndex != $gM2SeqEditorCurrentClipPlaying)
+    {      
+        if($gM2SeqEditorCurrentClipPlaying != -1)
+        {
+            symbolButton -edit 
+                         -image "playClip.png" 
+                         -annotation "Play"
+                         -command ("m2SeqEdit_PlayAnimationClip " + $gM2SeqEditorCurrentClipPlaying) 
+                         ($playButtonAnimClip + $gM2SeqEditorCurrentClipPlaying);
+        }
+        $gM2SeqEditorCurrentClipPlaying = $currentIndex;
+        symbolButton -edit 
+                     -image "stopClip.png" 
+                     -annotation "Stop"
+                     -command ("m2SeqEdit_PlayAnimationClip " + $currentIndex) 
+                     ($playButtonAnimClip + $currentIndex);
+        
+        m2SeqEdit_AdjustTimeline($currentIndex);
+        
+        float $by = `playbackOptions -query -by`;
+        if( `currentTime -q` + $by > `playbackOptions -q -max` ) {
+            currentTime -e `playbackOptions -q -min`;
+        }
+        
+        play -state on;
+    }
+    else
+    {   
+        $gM2SeqEditorCurrentClipPlaying = -1;
+        symbolButton -edit 
+                     -image "playClip.png" 
+                     -annotation "Play"
+                     -command ("m2SeqEdit_PlayAnimationClip " + $currentIndex) 
+                     ($playButtonAnimClip + $currentIndex);
+        play -state off;        
+    }   
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Callback that the "playingBack" stopped. Change the stop icon to play icon.
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_playbackOffCallback()
+{
+    global int $gM2SeqEditorCurrentClipPlaying;
+    if( $gM2SeqEditorCurrentClipPlaying != -1) 
+    {
+        m2SeqEdit_PlayAnimationClip($gM2SeqEditorCurrentClipPlaying);       
+    }   
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Adjust the timeline start/end with the corresponding clip values 
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_AdjustTimeline(int $index)
+{
+    global string $gM2EditorCurrentNode;
+    global int $gM2SeqEditorCurrentClipPlaying;
+    
+	// Change focus to trigger changeCommands and ensure updated fields
+    setFocus sequenceEditorUI;
+	
+    float $startTime = `getAttr ($gM2EditorCurrentNode + ".animClips[" + $index + "].animClipStart")`;
+    float $endTime = `getAttr ($gM2EditorCurrentNode + ".animClips[" + $index + "].animClipEnd")`;
+        
+    playbackOptions -e -minTime $startTime -maxTime $endTime;
+    
+    if(`play -q -state` && ($gM2SeqEditorCurrentClipPlaying != $index))
+    {
+        m2SeqEdit_PlayAnimationClip($index);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Select or deselect all animation clips 
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_ToggleSelectionClips(int $action)
+{
+    global string $gM2EditorCurrentNode;
+       
+    int $nbAnimClips = `getAttr -size ($gM2EditorCurrentNode + ".animClips")`;
+           
+    for($i=0; $i < $nbAnimClips; $i++ )
+    {
+        setAttr ($gM2EditorCurrentNode + ".animClips[" + $i + "].exportAnimClip") $action;
+    }
+    
+    m2SeqEdit_CreateScrollAnimationClipLayout();
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Add a new animation clip
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_AddNewAnimationClip(int $refresh)
+{
+    global string $gM2EditorCurrentNode;
+	
+    // Change focus to trigger changeCommands and ensure updated fields
+    setFocus sequenceEditorUI;
+	
+    int $nbAnimClips = `getAttr -size ($gM2EditorCurrentNode + ".animClips")`;    
+    // Doing a getAttr or setAttr on an index that doesn't exist will create it.        
+    setAttr ($gM2EditorCurrentNode + ".animClips[" + $nbAnimClips + "].animClipStart") `playbackOptions -q -minTime`;
+    setAttr ($gM2EditorCurrentNode + ".animClips[" + $nbAnimClips + "].animClipEnd") `playbackOptions -q -maxTime`;
+    
+    if($refresh)
+    {   
+        $m2SeqEditorScrollLayout = "m2SeqEditorScrollLayout";
+    
+        int $areaValue[] = `scrollLayout -q -scrollAreaValue $m2SeqEditorScrollLayout`; 
+        m2SeqEdit_CreateScrollAnimationClipLayout();
+        // Set the scroll at the bottom, usually a new item is with a height of 25, lets add 50 to be sure that we are
+        // really at the end of the list.
+        evalDeferred("scrollLayout -e -scrollByPixel \"down\" " + ($areaValue[0] + 50) + " " + $m2SeqEditorScrollLayout);     
+    }        
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Insert a new animation clip at the given position
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_InsertNewAnimationClip(int $insertPos)
+{
+    global string $gM2EditorCurrentNode;   
+
+    m2SeqEdit_AddNewAnimationClip(0);
+    
+    int $nbAnimClips = `getAttr -size ($gM2EditorCurrentNode + ".animClips")`;    
+    $nbAnimClips--;
+    
+    // Keep the new added clip values
+    string $name = `getAttr ($gM2EditorCurrentNode+".animClips[" + $nbAnimClips + "].animClipName")`;
+    int $start = `getAttr ($gM2EditorCurrentNode+".animClips[" + $nbAnimClips + "].animClipStart")`;
+    int $end = `getAttr ($gM2EditorCurrentNode+".animClips[" + $nbAnimClips  + "].animClipEnd")`; 
+    int $expClip = `getAttr ($gM2EditorCurrentNode+".animClips[" + $nbAnimClips + "].exportAnimClip")`;
+    
+    // Shift +1 position all items from the position where we insert a new animation clip.      
+    for ($index = $nbAnimClips; $index > $insertPos; $index--)
+    {
+        setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].animClipName")  -type "string" `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index - 1 ) + "].animClipName")`;
+        setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].animClipStart") `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index - 1 ) + "].animClipStart")`;
+        setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].animClipEnd") `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index - 1 ) + "].animClipEnd")`; 
+        setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].exportAnimClip") `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index - 1 ) + "].exportAnimClip")`;            
+    }
+        
+    setAttr ($gM2EditorCurrentNode+".animClips[" + $insertPos + "].animClipName") -type "string" $name;
+    setAttr ($gM2EditorCurrentNode+".animClips[" + $insertPos + "].animClipStart") $start;
+    setAttr ($gM2EditorCurrentNode+".animClips[" + $insertPos + "].animClipEnd") $end; 
+    setAttr ($gM2EditorCurrentNode+".animClips[" + $insertPos + "].exportAnimClip") $expClip;
+    // evalDeferred that re-creation command since it will deleting 
+    // the control that we are currently in.     
+    evalDeferred("m2SeqEdit_CreateScrollAnimationClipLayout");   
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Delete an animation clip
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+global proc m2SeqEdit_DeleteAnimationClipLayout(int $position)
+{
+    global string $gM2EditorCurrentNode;
+
+    $m2SeqEditorScrollLayout = "m2SeqEditorScrollLayout";
+    
+    int $areaValue[] = `scrollLayout -q -scrollAreaValue $m2SeqEditorScrollLayout`;
+    
+	// Change focus to trigger changeCommands and ensure updated fields
+    setFocus sequenceEditorUI;
+	
+    int $nbAnimClips = `getAttr -size ($gM2EditorCurrentNode + ".animClips")`;
+    
+    // Shift -1 position all items from the position that we want to remove and 
+    // remove the last item in order to keep a continuous indexed list.
+    if($nbAnimClips != ($position + 1))
+    {        
+        for ($index = $position; $index < ($nbAnimClips - 1 ); $index++)
+        {
+            setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].animClipName")  -type "string" `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index + 1 ) + "].animClipName")`;
+            setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].animClipStart") `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index + 1 ) + "].animClipStart")`;
+            setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].animClipEnd") `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index + 1 ) + "].animClipEnd")`; 
+            setAttr ($gM2EditorCurrentNode+".animClips[" + $index + "].exportAnimClip") `getAttr ($gM2EditorCurrentNode+".animClips[" + ( $index + 1 ) + "].exportAnimClip")`;            
+        }
+    }
+    
+    removeMultiInstance -break true ($gM2EditorCurrentNode + ".animClips[" + ($nbAnimClips - 1) + "]");
+    m2SeqEdit_CreateScrollAnimationClipLayout();
+    evalDeferred("scrollLayout -e -scrollByPixel \"down\" " + ($areaValue[0] - 25) + " " + $m2SeqEditorScrollLayout);   
+}

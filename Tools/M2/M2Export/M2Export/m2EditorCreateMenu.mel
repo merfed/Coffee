@@ -1,0 +1,88 @@
+global proc m2EditorCreateMenu() {
+	global string $gMainWindow;
+	setParent $gMainWindow;
+	if (!`menuItem -q -exists m2EditorMenu`){
+		menu
+			-label "WoW Tools"
+			-parent $gMainWindow
+			-tearOff true m2EditorMenu;
+			menuItem
+				-label "Sequences"
+				-ann "Define when animations will be played in World of Warcraft"
+				-c "m2SequenceEditor";
+			menuItem
+				-label "Set Mesh Attributes"
+				-ann "Add custom M2 attributes to selected meshes"
+				-c "addMeshAttributes";
+			menuItem
+				-label "Set Joint Attributes"
+				-ann "Add custom M2 attributes to selected joints"
+				-c "addJointAttributes";
+	}
+}
+
+global proc m2EditorDeleteMenu() {
+	if (!`menuItem -q -exists m2EditorMenu`){
+		deleteUI -menu "m2EditorMenu";
+	}
+}
+
+proc addMeshAttributes() {
+	string $select[] = `ls -sl`;
+	string $nodes[] = `ls -sl -dag -lf -type "mesh"`;
+	if(size($nodes) == 0){
+		print("No mesh selected.\n");
+	}
+	for($node in $nodes){
+		print("Adding attributes to " + $node+"\n");
+		// Custom attributes
+		if (!`objExists ($node + ".customAttribute")`) {
+			addAttr 
+				-ln "customAttribute" 
+				-attributeType "float" 
+				-defaultValue 42.0 
+				-minValue 0.0 
+				-maxValue 100.0 $node;
+		}
+	}
+	select -r $select;
+}
+
+proc addJointAttributes() {
+	string $select[] = `ls -sl`;
+	string $nodes[] = `ls -sl -dag -type "joint"`;
+	if(size($nodes) == 0){
+		print("No joint selected.\n");
+	}
+	for($node in $nodes){
+		//TODO add attributes to $node
+		print("Adding attributes to " + $node+"\n");
+	}
+	select -r $select;
+}
+
+proc addMaterialAttributes() {
+	string $select[] = `ls -sl`;
+	for($n in `ls -sl -fl -dag -g`){
+		$shadingEngines=`listConnections -t shadingEngine $n`;
+			for($s in $shadingEngines){
+				$lambertNode = `listConnections  ($s+".surfaceShader")`;
+                print($lambertNode); 
+			}
+    }
+	select -r $select;
+}
+
+// Example of adding node custom attributes
+proc addMyNodeAttributes() {
+	string $select[] = `ls -sl`;
+	string $nodes[] = `ls -sl -dag -type "myNode"`;
+	if(size($nodes) == 0){
+		print("No myNode selected.\n");
+	}
+	for($node in $nodes){
+		//TODO add attributes to $node
+		print("Adding attributes to " + $node+"\n");
+	}
+	select -r $select;
+}
