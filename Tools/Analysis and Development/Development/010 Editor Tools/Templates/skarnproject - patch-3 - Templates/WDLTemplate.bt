@@ -1,0 +1,32 @@
+#include "basics.h"
+
+typedef struct{
+	uint32 offsMARE[4096];
+}MAOF;
+
+typedef struct{
+	short OuterHeight[17*17];
+	short InnerHeight[16*16];
+}MARE;
+
+typedef struct{
+	short Bitmask[16];
+}MAHO;
+
+
+
+void chunk_contents (CHUNK_header& header)
+{
+  if (header.magic._._ == 1297499474) // MVER
+  {
+    _count = 1;
+    unsigned int version;
+  }
+  else
+  {
+    char _[header.size];
+    _known = false;
+  }
+}
+
+all_chunks_via_chunk_contents();

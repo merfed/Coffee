@@ -1,0 +1,53 @@
+struct wdb5_db2_header
+{
+  unsigned int magic <format=hex>;                                               // 'WDB5' for .db2 (database)
+  unsigned int record_count;
+  unsigned int field_count;                                         // now counts arrays as '1'
+  unsigned int record_size;
+  unsigned int string_table_size;                                   // if flags & 0x01 != 0, this field takes on a new meaning - it becomes an absolute offset to the beginning of the offset_map
+  unsigned int table_hash;
+  unsigned int layout_hash;
+  unsigned int min_id;
+  unsigned int max_id;
+  int locale;                                              // as seen in TextWowEnum
+  unsigned int copy_table_size;
+  unsigned int flags;                                               // in WDB3/WCH4, this field was in the WoW executable's DBCMeta; possible values are listed in Known Flag Meanings
+};
+
+struct wdb5_file
+{
+  wdb5_db2_header header;
+  struct field_structure
+  {
+    unsigned short size;                                              // (possibly int16_t?) size in bits as calculated by: byteSize = (32 - size) / 8
+    unsigned short position;                                          // position of the field within the record, relative to the start of the record
+  };
+  field_structure fields[header.field_count];
+  local int i;
+  struct Record { char Data[header.record_size]; };
+  for (i = 0 ; i < header.record_count; ++i)
+     Record rec;
+  char string_table[header.string_table_size];
+  if ((header.flags & 0x01) != 0)
+  {
+    struct offset_map_entry
+    {
+      unsigned int offset;                                          // this offset is absolute, not relative to another structure; this can (and often will) be zero, in which case you should ignore that entry and move on
+      unsigned short length;                                          // this is the length of the record located at the specified offset
+    };
+    offset_map_entry offset_map[header.max_id - header.min_id + 1];
+  }
+  if ((header.flags & 0x04) != 0)
+  {
+    unsigned int IDs[header.record_count];
+  }
+  if (header.copy_table_size > 0)
+  {
+    struct copy_table_entry
+    {
+      unsigned int id_of_new_row;
+      unsigned int id_of_copied_row;
+    };
+    copy_table_entry copy_table[header.copy_table_size / 8];
+  }
+} FILE;

@@ -1,0 +1,45 @@
+//--------------------------------------
+//--- 010 Editor v3.2.2 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+
+typedef struct ch{
+  int magic;
+  int size;
+} ch;
+
+struct TXVR
+{
+  ch _;
+  int version;
+} txvr;
+
+struct TXBT
+{
+  ch _;
+  struct TXBTentry
+  {
+    int filename;
+    int txmdOffset;
+    char sizeX;
+    char sizeY;
+    char type;
+    char flags;
+  } entries[_.size/12];
+} txbt;
+
+struct TXFN
+{
+  ch _;
+  char filenames[_.size];
+} txfn;
+
+struct TXMD
+{
+  ch _;
+  char data[_.size];
+} txmds[txbt._.size/12]<optimize=false>;

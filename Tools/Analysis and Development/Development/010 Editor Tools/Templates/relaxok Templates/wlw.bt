@@ -1,0 +1,26 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+
+#include "basics.h"
+
+uint32_t magic;
+uint16_t used;
+uint16_t unk[3];
+uint32_t count;
+
+struct entry
+{
+C3Vector heightmap[16];
+float a;
+float b;
+
+uint32_t _c[40];
+
+
+} entries[count];

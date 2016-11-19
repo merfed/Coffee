@@ -1,0 +1,42 @@
+#include "basics.h"
+
+struct BLSHeader {
+  uint32 magic;
+  uint32 version;
+  uint32 offset_decompression_info;
+  uint32 count_permutations;
+  uint32 offset_compression_info;
+  uint32 _14;
+  uint32 offset_compressed_data;
+} header;
+
+FSeek (header.offset_decompression_info);
+uint32 decompression_info[header.count_permutations + 1];
+
+FSeek (header.offset_compression_info);
+uint32 compression_info[header._14 + 1];
+
+local int permutation_i = 0;
+for (permutation_i = 0 ; permutation_i < header.count_permutations; permutation_i += 1)
+{
+struct foo{
+local uint32 decompressed_begin = decompression_info[permutation_i];
+local uint32 decompressed_end = decompression_info[permutation_i + 1];
+local uint32 decompressed_size = decompressed_end - decompression_info[permutation_i];
+local uint32 decompressed_begin_upper = decompressed_begin >> 14;
+local int x= 0;
+for(x=0; x <= decompressed_begin_upper; x += 1)
+{
+struct xxx{
+local uint32 add = compression_info[x];
+local int kkk = FTell();
+FSeek (header.offset_compressed_data + compression_info[x]);
+char compressed_data[compression_info[x +1 ] - compression_info[x]];
+FSeek (kkk);
+}yyy;
+}
+local uint32 v8 = decompressed_begin - decompressed_begin & ~0x4000;
+
+local uint32 v21 = decompressed_size < 0x4000 ? decompressed_size : 0x4000;
+} bar;
+}

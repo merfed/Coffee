@@ -1,0 +1,71 @@
+//--------------------------------------
+//--- 010 Editor v6 Binary Template
+//
+// File: LIT_Template.bt
+// Author: Akspa420
+// Revision: 1.0
+// Purpose: Analyze World of Warcraft LIT files
+//--------------------------------------
+#include "basics.h"
+
+typedef struct {
+    uint32 magic;
+    uint32 nSkies;
+} LITFILEHEADER <name="Header">;
+
+typedef struct {
+        local int i <comment="ID">;
+        int32 recordA <name="recordA">;
+        int32 recordB <name="recordB">;
+        int32 recordC <name="recordC">;
+        float x;
+        float y;
+        float z;
+        float smallRadius <name="Smaller Radius for Area">;
+        float largeRadius <name="Larger Radius for Area">;
+        char SkyName[32] <name="Sky Name">;
+  
+} LITDATA <name="Light">;
+
+LittleEndian();
+LITFILEHEADER Header;
+
+// Thanks to Schlumpf for the answer to this -
+LITDATA data[Header.nSkies];
+
+// Position values need to be divided by 36 to get in-game coordinates
+// Need to figure out the next huge block of data
+/* Sky data decoder
+
+https://wowdev.wiki/LIT
+
+Offset 	Type 		Description
+0x0000 	18 * int32 	Lengths
+0x0048 	18 * 64 * int32	Color + time records
+0x1248 	32 * float 	Float values A
+0x12C8 	32 * float 	Float values B
+0x1348 	uint32 		Int value I
+0x134C 	32 * float 	Float values C
+0x13CC 	32 * float 	Float values D
+0x144C 	32 * float 	Float values E
+0x14CC 	32 * float 	Float values F
+0x154C 	uint32 		Int value J
+0x1550 	32 * float 	Float values G
+0x15D0 	8 * uint32 	Padding (all 0)
+
+
+struct skyData
+{
+    int32 skyLength[18];
+    int32 skyColor[18][64];
+    float skyValuesA[32];
+    float skyValuesB[32];
+    uint32 skyIntI;
+    float skyValuesC[32];
+    float skyValuesD[32];
+    float skyValuesE[32];
+    float skyValuesF[32];
+    uint32 skyIntJ;
+    float skyValuesG[32];
+    uint32 skyPadding[8];
+}*/

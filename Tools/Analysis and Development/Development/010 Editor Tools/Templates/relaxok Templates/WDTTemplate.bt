@@ -1,0 +1,74 @@
+#include "basics.h"
+
+void chunk_contents (CHUNK_header& header)
+{
+  if (header.magic._._ == 1297499474) // MVER
+  {
+    uint32_t version;
+  }
+  else if (header.magic._._ == 1297107012) // MPHD
+  {
+    uint32_t flag_global_object : 1;
+    uint32_t flag_vbf_pnc : 1;
+    uint32_t flag_shader_env : 1;
+    uint32_t flag_disablesomething : 1;
+    uint32_t flag_vbf_pnc2 : 1;
+    uint32_t flag_flip : 1;
+    uint32_t flag_unkx40 : 1;
+    uint32_t flag_shader_6 : 1;
+    uint32_t flag_unkx100 : 1;
+  	uint32_t flags : (32-9);
+  	uint32_t something_0;
+  	uint32_t something_1;
+  	uint32_t something_2;
+  	uint32_t something_3;
+  	uint32_t something_4;
+  	uint32_t something_5;
+  	uint32_t something_6;
+  }
+  else if (header.magic._._ == 1296124238) // MAIN
+  {
+      typedef struct 
+      {
+ 	    uint32_t flag_hasADT : 1;
+	    uint32_t flag_AllWater : 1;
+        uint32_t flags : (32-2);
+	    uint32_t asyncID;
+      } SMAreaInfo<read=readSMAreaInfo>;
+
+        typedef struct 
+        {
+            SMAreaInfo _[64];
+        } _SMAreaInfo_row<read=read_SMAreaInfo_row>;
+        _SMAreaInfo_row _[64];
+
+    //SMAreaInfo area_info[header.size / sizeof (SMAreaInfo)];
+  }
+  else
+  {
+    char _[header.size];
+    _known = false;
+  }
+}
+
+string read_SMAreaInfo_row(_SMAreaInfo_row&row)
+{
+    string a;
+    int i;
+    for (i = 0; i < 64; ++i)
+    {
+        SPrintf (a, "%s%c", a, row._[i].flag_hasADT ? '=' : '_');
+    }
+    return a;
+}
+
+string readSMAreaInfo (SMAreaInfo& areaInfo)
+{
+  string a;
+  if (areaInfo.flag_hasADT) SPrintf (a, "%shas ADT", a);
+  if (areaInfo.flags) SPrintf (a, "%s UNKNOWN FLAG %x", a, areaInfo.flags);
+  if (areaInfo.asyncID) SPrintf (a, "%s asyncID %x", a, areaInfo.asyncID);
+  return a;
+}
+
+all_chunks_via_chunk_contents();

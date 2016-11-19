@@ -1,0 +1,30 @@
+//--------------------------------------
+//--- 010 Editor v6.0.1 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+#include "basics.h"
+
+uint32_t unk;
+
+void chunk_contents (CHUNK_header& header)
+{
+  switch (header.magic._._)
+  {
+    case 0x41444942: // BIDA
+      uint16_t bone_ids[header.size/2];
+      break;
+    case 0x544d4f42: // BOMT
+      C44Matrix _[header.size/sizeof(C44Matrix)];
+      break;
+    default:
+      char _[header.size];
+      _known = false;
+      break;
+  }
+}
+
+all_chunks_via_chunk_contents();

@@ -1,0 +1,10 @@
+char magic[4];
+uint32 version;
+byte compression;
+byte alphadepth;
+byte unkalpha;
+byte unkcomp;
+uint32 xres;
+uint32 yres;
+uint32 ofsmipmap[16];
+uint32 sizemipmap[16];

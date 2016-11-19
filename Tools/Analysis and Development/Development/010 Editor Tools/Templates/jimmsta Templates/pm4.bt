@@ -1,0 +1,177 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+
+#include "basics.h"
+
+void chunk_contents (CHUNK_header& header)
+{
+  if (header.magic._._ == 1297499474) // MVER
+  {
+    _count = 1;
+    unsigned int version;
+  }
+  else if (header.magic._._ == 1297303620) // MSHD -- s? header
+  {
+    _count = 1;
+    int unk0;
+    int unk1;
+    int unk2;
+    int unk3;
+    int unk4;
+    int unk5;
+    int unk6;
+    int unk7;
+  }
+  else if (header.magic._._ == 1297305686) // MSPV -- s? portal? vertices
+  {
+    _count = header.size/sizeof(C3Vector);
+    C3Vector vertex[_count];
+  }
+  else if (header.magic._._ == 1297305673) // MSPI --- s? portal? indices
+  {
+    _count = header.size/sizeof(int);
+    int index[_count];
+  }
+  else if (header.magic._._ == 1297302350) // MSCN -- s? c? normals?
+  {
+    _count = header.size/sizeof(C3Vector);
+    C3Vector unk[_count];
+  }
+  else if (header.magic._._ == 1297304651) // MSLK -- s? l? k?
+  {
+    typedef struct 
+    {
+      bitmask flags;
+      int unk0;
+      int24 MSPI_first_index;
+      char MSPI_index_count;
+      int unk2;
+      unsigned short unk3;
+      unsigned short unk_32768;
+    } entry_MSLK<read=read_entry_MSLK, optimize=false>;
+
+    _count = header.size/sizeof (entry_MSLK);
+    entry_MSLK unk[_count];
+  }
+  else if (header.magic._._ == 1297307220) // MSVT -- s? vertex table?
+  {
+    _count = header.size/sizeof(C3Vector);
+    C3Vector point[_count];
+  }
+  else if (header.magic._._ == 1297307209) // MSVI --- s? vertex indices
+  {
+    _count = header.size/sizeof(int);
+    int index[_count];
+  }
+  else if (header.magic._._ == 1297306962) // MSUR --- s? u? r?
+  {
+    typedef struct 
+    {
+      bitmask flags;
+      C3Vector unk;
+      float unk1;
+      int MSVI_first_index;
+      int unk2;
+      unsigned int NULL;
+    } entry_MSUR<read=read_entry_MSUR, optimize=false>;
+
+    _count = header.size/sizeof (entry_MSUR);
+    entry_MSUR unk[_count];
+  }
+  else if (header.magic._._ == 1297109580) // MPRL --- p? r? l?
+  {
+    typedef struct 
+    {
+      unsigned short a; // 0
+      short b; // -1
+      unsigned short c;
+      unsigned short d;
+      C3Vector position;
+      short e;
+      unsigned short f;
+    } entry_MPRL<optimize=false>;
+
+    _count = header.size/sizeof (entry_MPRL);
+    entry_MPRL unk[_count];
+  }
+  else if (header.magic._._ == 1297109586) // MPRR --- p? r? r?
+  {
+    typedef struct 
+    {
+      short unk0;
+      short unk1;
+    } entry_MPRR<optimize=false>;
+
+    _count = header.size/sizeof (entry_MPRR);
+    entry_MPRR unk[_count];
+  }
+  else if (header.magic._._ == 1296319048) // MDBH --- destructible building header
+  {
+    unsigned int count;
+    typedef struct 
+    {
+      CHUNK index;
+      CHUNK filename[3];
+    } entry_MDBH<optimize=false>;
+
+    _count = count;
+    entry_MDBH entries[_count];
+  }
+  // todo : MDBF: char[] filename
+  else if (header.magic._._ == 1296319049) // MDBI --- destructible building index
+  {
+    _count = 1;
+    unsigned int index;
+  }
+  else if (header.magic._._ == 1296322387) // MDOS --- d? o? s?
+  {
+    typedef struct 
+    {
+      int unk0;
+      int unk1;
+    } entry_MDOS<optimize=false>;
+
+    _count = header.size/sizeof (entry_MDOS);
+    entry_MDOS unk[_count];
+  }
+  else if (header.magic._._ == 1296323398) // MDSF --- d? s? f?
+  {
+    typedef struct 
+    {
+      int unk0;
+      int unk1;
+    } entry_MDSF<optimize=false>;
+    
+    _count = header.size/sizeof (entry_MDSF);
+    entry_MDSF unk[_count];
+  }
+  else
+  {
+    char _[header.size];
+    _known = false;
+  }
+}
+
+all_chunks_via_chunk_contents();
+
+string read_entry_MSLK (entry_MSLK& rec)
+{
+  if (rec.unk_32768 != 32768) return "ERROR: unk_32768 != 32768!!!!";
+  string a;
+  if (rec.unk0 != 0) SPrintf (a, "%i", rec.unk0);
+  return a;
+}
+
+string read_entry_MSUR (entry_MSUR& rec)
+{
+  if (rec.NULL != 0) return "ERROR: NULL != 0!!!!!";
+  string a;
+  SPrintf (a, "%i %i", rec.MSVI_first_index, rec.unk2);
+  return a;
+}

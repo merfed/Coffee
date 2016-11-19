@@ -1,0 +1,98 @@
+typedef struct 
+{
+  BigEndian();
+  unsigned int _;
+  LittleEndian();
+}BE_uint32_t<read=readBE_uint32_t>;
+string readBE_uint32_t (BE_uint32_t& e)
+{
+  string a;
+  SPrintf (a, "%u", e._);
+  return a;
+}
+struct BE_uint8_t
+{
+  BigEndian();
+  unsigned char _;
+  LittleEndian();
+};
+
+typedef struct
+{
+  unsigned char _0;
+  unsigned char _1;
+  unsigned char _2;
+  local unsigned int __ = _2 | ((unsigned int)_1 << 8) | ((unsigned int)_0 << 16);
+} BE_uint24<read=read_int24, optimize=false, size=3>;
+
+int value_3int24 (BE_uint24& ref)
+{
+  int _0 = ref._0;
+  int _1 = ref._1;
+  int _2 = ref._2;
+  int combined =  _2 | (_1 << 8) | (_0 << 16);
+  if (combined & 0x800000)
+  {
+    combined = combined | 0xFF000000;
+  }
+  return combined;
+}
+
+string read_int24 (BE_uint24& ref)
+{
+  string a;
+  SPrintf (a, "%i", value_int24 (ref));
+  return a;
+}
+/*
+struct blte_header
+{
+  BE_uint32_t magic;             // 'BLTE';
+  BE_uint32_t data_start;        // relative to begin of file 
+                                 // (size of this header and the infos)
+char unk;
+  BE_uint24 chunk_count;
+} header;
+
+struct blte_chunk_info
+{
+  BE_uint32_t in_file_size;
+  BE_uint32_t logical_size;      // as in, after decoding
+  char decoded_checksum[16];
+} info[header.chunk_count.__];
+*/
+  /*enum encoding_type
+  {
+    None = 'N',                  // plain copy the data
+    Compressed = 'Z',            // zlib deflated: use zlib's inflate
+    Frame = 'F',                 // read data and dive into recursively BLT encoded data (?)
+    Crypt = 'E',                 // read data and decrypt with Salsa20
+  };*/
+    
+char encoding;
+char v8;
+char Seed[v8];
+local int v9 = v8 + 3;
+Assert (v9 <= FileSize());
+FSeek (v8 + 2);
+char v10; 
+Assert (v10 < 0x10);    // 42
+local int v11 = v10 + v9 + 1;
+Assert (v11 <= FileSize());
+FSeek (v8 + 2);
+char size;
+FSeek (v10 + v9);
+char S;
+Assert (S == 'S');
+FSeek (2);
+char key_service_arg[v8];
+FSeek (v9);
+char IV[size];
+
+local unsigned int v12 = 0; // keyservice.vtable._5();
+
+local char  iv[0x10];
+local unsigned int iv_size = size;
+local unsigned int field_14 = v11;
+local char field_18[0x10];
+local unsigned int field_18_size = v12;

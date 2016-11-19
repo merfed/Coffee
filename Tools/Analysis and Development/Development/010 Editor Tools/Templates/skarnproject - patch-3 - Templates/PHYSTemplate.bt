@@ -1,0 +1,27 @@
+#include "basics.h"typedef struct vec4_s{  float _[4];} vec4<read=vec4_>;typedef struct mat4x4_s{  vec4 _[4];} mat4x4<read=mat4x4_>;typedef struct vec3_s{  float _[3];} vec3<read=vec3_>;typedef struct mat3x3_s{  vec3 _[3];} mat3x3<read=mat3x3_>;typedef struct mat4x3_s{  vec3 _[4];} mat4x3<read=mat4x3_>;typedef struct vec2_s{  float _[2];} vec2<read=vec2_>;typedef struct mat2x2_s{  vec2 _[2];} mat2x2<read=mat2x2_>;string vec4_ (vec4& data){  string a;  SPrintf (a, "(%.2f, %.2f, %.2f, %.2f)", data._[0], data._[1], data._[2], data._[3]);  return a;}string mat4x4_ (mat4x4& data){  string a;  SPrintf (a, "(%s, %s, %s, %s)", vec4_ (data._[0]), vec4_ (data._[1]), vec4_ (data._[2]), vec4_ (data._[3]));  return a;}string mat4x3_ (mat4x3& data){  string a;  SPrintf (a, "(%s, %s, %s, %s)", vec3_ (data._[0]), vec3_ (data._[1]), vec3_ (data._[2]), vec3_ (data._[3]));  return a;}string vec3_ (vec3& data){  string a;  SPrintf (a, "(%.2f, %.2f, %.2f)", data._[0], data._[1], data._[2]);  return a;}string mat3x3_ (mat3x3& data){  string a;  SPrintf (a, "(%s, %s, %s)", vec3_ (data._[0]), vec3_ (data._[1]), vec3_ (data._[2]));  return a;}string vec2_ (vec2& data){  string a;  SPrintf (a, "(%.2f, %.2f)", data._[0], data._[1]);  return a;}string mat2x2_ (mat2x2& data){  string a;  SPrintf (a, "(%s, %s)", vec2_ (data._[0]), vec2_ (data._[1]));  return a;}struct PHYS{  CHUNK_header _;  short must_be_null;} phys;void chunk_contents (CHUNK_header& header)
+{
+  if (header.magic._._ == 0x43415053) /* CAPsule Shapes */
+  {    typedef struct    {      vec3 localPosition1;      vec3 localPosition2;      float radius;    } CAPSEntry<optimize=false>;
+    _count = header.size/sizeof (CAPSEntry);
+    CAPSEntry capsuleShapes[_count];
+  }  else if (header.magic._._ == 0x53484150) /* SHAPes */  {    typedef struct    {      short shape_type;      short shape_index;      char UNKNOWN[4];      float friction;      float restitution;      float density;    } SHAPEntry<optimize=false>;
+    _count = header.size/sizeof (SHAPEntry);
+    SHAPEntry shapes[_count];  }  else if (header.magic._._ == 0x424F4459) /* BOD[Y]ies */  {    typedef struct     {      unsigned short type;      char PADDING_a[2];      vec3 position;      unsigned short modelBoneIndex;      char PADDING_b[2];      int shapes_base;      int shapes_count;    } BODYEntry<optimize=false>;
+    _count = header.size/sizeof (BODYEntry);
+    BODYEntry bodies[_count];  }  else if (header.magic._._ == 0x57454C4A) /* WELd Joins */  {    typedef struct     {      mat4x3 frameA;      mat4x3 frameB;      float frequency;      float dampingRatio;    } WELJEntry<optimize=false>;
+    _count = header.size/sizeof (WELJEntry);
+    WELJEntry weldJoins[_count];  }  else if (header.magic._._ == 0x4A4F494E) /* JOINs */  {    typedef struct     {      int bodyAIdx;      int bodyBIdx;      char UNKNOWN[4];      short joint_type;      short joint_id;    } JOINEntry<optimize=false>;
+    _count = header.size/sizeof (JOINEntry);
+    JOINEntry joins[_count];  }  else if (header.magic._._ == 0x424F5853) /* BOX Shapes */  {    typedef struct     {
+      mat4x3 a;
+      vec3 c;    } BOXSEntry<optimize=false>;
+    _count = header.size/sizeof (BOXSEntry);
+    BOXSEntry boxShapes[_count];  }
+  else
+  {
+    char _[header.size];
+    _known = false;
+  }
+}
+
+all_chunks_via_chunk_contents();/*struct BOXS{  CHUNK_header _;  BOXSEntry entries[_.size/sizeof(BOXSEntry)];} boxShapes;*//*unordered:'SPHJ' - size 0x1C'SPHS' sphereShape- size 0x10'SHOJ' shoulderJoint- size 0x6C*/

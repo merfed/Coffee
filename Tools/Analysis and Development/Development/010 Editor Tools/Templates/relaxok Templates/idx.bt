@@ -1,0 +1,19 @@
+//--------------------------------------
+//--- 010 Editor v6.0.1 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+
+#include "basics.h"
+
+uint32_t header_size;
+uint32_t header_hash;
+uint16_t hard_7;
+uint8_t table_index;
+uint8_t hard_0;
+uint8_t hard_4;
+uint8_t hard_5;
+uint8_t hard_9;

@@ -1,0 +1,84 @@
+//--------------------------------------
+//--- 010 Editor v6.0.1 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+
+#include "basics.h"
+/*
+struct 
+{
+  uint16_t MAGIC;
+  uint8_t _1;
+  uint8_t key_size_a;
+  uint8_t size_b;
+  uint8_t key_size_c;
+  uint8_t size_d;
+  uint16_t_BE num_entries;
+  uint8_t _field9;
+} header;
+char unk[19-3];
+char encoding_key[0x10];
+uint32_t_BE uncompressed;
+uint32_t_BE compressed;
+char encoding_format_length;
+char encoding_format[encoding_format_length];
+
+struct
+{
+  uint8_t key[header.key_size_a];
+  uint8_t unk1[0x10];
+  uint32_t_BE offset;
+local int tmp = FTell();
+FSeek (offset._);
+struct
+{
+  local int eof_ = FTell() + (1 << header.size_d);
+  do
+  {
+    struct
+    {
+      uint8_t subentries_count;
+      uint8_t key[header.key_size_a];
+      uint40_t_BE unk;
+      
+      struct 
+      {
+        uint8_t key[header.key_size_a];
+        uint40_t_BE unk;
+        uint8_t key2[header.key_size_c];
+        uint40_t_BE unk2;
+      } subentries[subentries_count]<optimize=false>;
+    } _;
+  } while (ReadByte() && eof_ > FTell());
+} _unk<optimize=false>;
+FSeek (tmp);
+} entries[header.num_entries._]<optimize=false>;
+*/
+FSeek (0xe4e191);
+
+void require_zero (int count)
+{
+  while (count --> 0)
+  {
+    if (ReadByte())
+    {
+      //int ____NON_NULL____[0xffffffff];
+    }
+    FSeek (FTell() + 1);
+  }
+}
+
+struct{
+  char ___[0xf];
+  uint32_t_BE unk0;
+  require_zero (4);
+  uint32_t_BE unk1;
+  require_zero (4);
+  uint16_t_BE unk1;
+  require_zero (2);
+  require_zero (4*3+1);
+} a[81];

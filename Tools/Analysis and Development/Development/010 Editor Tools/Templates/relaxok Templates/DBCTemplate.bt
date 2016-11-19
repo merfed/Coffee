@@ -1,0 +1,836 @@
+#include "basics.h"
+
+// DBC -------------------------------------------------------------------------
+
+struct dbc_header
+{
+  unsigned int magic; // always 'WDBC'
+  unsigned int record_count; // records per file
+  unsigned int field_count; // fields per record
+  unsigned int record_size; // sum (sizeof (field_type_i)) | 0 <= i < field_count. field_type_i is NOT defined in the files.
+  unsigned int string_block_size;
+} header;
+
+// CameraMode.dbc --------------------------------------------------------------
+
+typedef struct
+{
+  int id;
+  stringref name;
+  int type; // CCameraModeTypeLegacy  = 1 CCameraModeTypeLocked  = 2 CCameraModeTypeAnimated  = 3 CCameraModeTypeSimple  = 4
+  bitmask flags; // 2:?, 4:?, 8:?, 16: only use target?, 32: ?, 64: ?, 128: ?, 256: letterbox, hide ui
+  C3Vector position;
+  C3Vector target;
+  float unk1;
+  float unk2;
+  float fov;
+  int unk4; // 2 = fix position, 1 = allow path
+  int unk5;
+  int unk6; // 0, 1 = don't use target
+  int unk7;
+} CameraModeRec<read=CameraModeRead, optimize=false, size=68>;
+
+string CameraModeRead(CameraModeRec& rec)
+{
+  string a;
+  SPrintf (a, "%i %i %s %i %i %i %i", rec.id, rec.type, bitmaskread (rec.flags), rec.unk4, rec.unk5, rec.unk6, rec.unk7);
+  return a;
+}
+
+// SoundEntries.dbc ------------------------------------------------------------
+
+typedef struct
+{
+  int id;
+  int type;
+  stringref name;
+  int file[10];
+  int freq[10];
+  float volume;
+  int flags;
+  float min_distance;
+  float distance_cutoff;
+  int eaxdef;
+  int advanced_id;
+  int unk[6];
+} SoundEntriesRec<read=SoundEntriesRead, optimize=false, size=140>;
+
+string SoundEntriesRead(SoundEntriesRec& rec)
+{
+  string a;
+  SPrintf (a, "%i: %s", rec.id, stringrefread (rec.name));
+  return a;
+}
+
+// SoundEntriesAdvanced.dbc ----------------------------------------------------
+
+typedef struct
+{
+   int m_ID; // +0x0, size 0x4, type 0
+   int m_soundEntryID; // +0x4, size 0x4, type 0
+   float m_innerRadius2D; // +0x8, size 0x4, type 3
+   int m_timeA; // +0xC, size 0x4, type 0
+   int m_timeB; // +0x10, size 0x4, type 0
+   int m_timeC; // +0x14, size 0x4, type 0
+   int m_timeD; // +0x18, size 0x4, type 0
+   int m_randomOffsetRange; // +0x1C, size 0x4, type 0
+   int m_usage; // +0x20, size 0x4, type 0
+   int m_timeIntervalMin; // +0x24, size 0x4, type 0
+   int m_timeIntervalMax; // +0x28, size 0x4, type 0
+   int m_volumeSliderCategory; // +0x2C, size 0x4, type 0
+   float m_duckToSFX; // +0x30, size 0x4, type 3
+   float m_duckToMusic; // +0x34, size 0x4, type 3
+   float m_duckToAmbience; // +0x38, size 0x4, type 3
+   float m_innerRadiusOfInfluence; // +0x3C, size 0x4, type 3
+   float m_outerRadiusOfInfluence; // +0x40, size 0x4, type 3
+   int m_timeToDuck; // +0x44, size 0x4, type 0
+   int m_timeToUnduck; // +0x48, size 0x4, type 0
+   float m_insideAngle; // +0x4C, size 0x4, type 3
+   float m_outsideAngle; // +0x50, size 0x4, type 3
+   float m_outsideVolume; // +0x54, size 0x4, type 3
+   float m_outerRadius2D; // +0x58, size 0x4, type 3
+   stringref m_name; // +0x5C, size 0x4, type 2
+   int unk0;
+   float unk1;
+   float unk2;
+} SoundEntriesAdvancedRec<read=SoundEntriesAdvancedRead, optimize=false, size=108>;
+
+string SoundEntriesAdvancedRead(SoundEntriesAdvancedRec& rec)
+{
+  string a;
+  SPrintf (a, "%i: %s", rec.m_ID, stringrefread (rec.m_name));
+  return a;
+}
+
+// FileData.dbc ------------------------------------------------------------
+
+typedef struct
+{
+  int id;
+  stringref filename;
+  stringref path;
+} FileDataRec<read=FileDataRead, optimize=false, size=12>;
+
+string FileDataRead(FileDataRec& rec)
+{
+  string a;
+  //SPrintf (a, "%i: %s", rec.id, stringrefread (rec.name));
+  return a;
+}
+
+ typedef struct
+ {
+   int m_ID;
+   int m_vendorID;
+   int m_deviceID;
+   int m_farclipIdx;
+   int m_terrainLODDistIdx;
+   int m_terrainShadowLOD;
+   int m_detailDoodadDensityIdx;
+   int m_detailDoodadAlpha;
+   int m_animatingDoodadIdx;
+   int m_trilinear;
+   int m_numLights;
+   int m_specularity;
+   int m_waterLODIdx;
+   int m_particleDensityIdx;
+   int m_unitDrawDistIdx;
+   int m_smallCullDistIdx;
+   int m_resolutionIdx;
+   int m_baseMipLevel;
+   stringref m_oglOverrides;
+   stringref m_d3dOverrides;
+   int m_fixLag;
+   int m_multisample;
+   int m_atlasdisable;
+ } VideoHardwareRec<optimize=false>;
+
+typedef struct  {
+   int m_ID;
+   int m_flags;
+   int m_minLevel;
+   int m_maxLevel;
+   int m_raceMask;
+   int m_classMask;
+   int m_gender;
+   int m_nativeGender;
+   int m_skillID[4];
+   int m_minSkill[4];
+   int m_maxSkill[4];
+   int m_skillLogic;
+   int m_languageID;
+   int m_minLanguage;
+   int m_maxLanguage;
+   int m_minFactionID[3];
+   int m_maxFactionID;
+   int m_minReputation[3];
+   int m_maxReputation;
+   int m_reputationLogic;
+   int m_minPVPRank;
+   int m_maxPVPRank;
+   int m_pvpMedal;
+   int m_prevQuestLogic;
+   int m_prevQuestID[4];
+   int m_currQuestLogic;
+   int m_currQuestID[4];
+   int m_currentCompletedQuestLogic;
+   int m_currentCompletedQuestID[4];
+   int m_spellLogic;
+   int m_spellID[4];
+   int m_itemLogic;
+   int m_itemID[4];
+   int m_itemCount[4];
+   int m_itemFlags;
+   int m_explored[2];
+   int m_time[2];
+   int m_auraSpellLogic;
+   int m_auraSpellID[4];
+   int m_worldStateExpressionID;
+   int m_weatherID;
+   int m_partyStatus;
+   int m_lifetimeMaxPVPRank;
+   int m_achievementLogic;
+   int m_achievement[4];
+   int m_lfgLogic;
+   int m_lfgStatus[4];
+   int m_lfgCompare[4];
+   int m_lfgValue[4];
+   int m_areaLogic;
+   int m_areaID[4];
+   int m_currencyLogic;
+   int m_currencyID[4];
+   int m_currencyCount[4];
+   int m_questKillID;
+   int m_questKillLogic;
+   int m_questKillMonster[4];
+   int m_minExpansionLevel;
+   int m_maxExpansionLevel;
+   int m_minExpansionTier;
+   int m_maxExpansionTier;
+   int m_minGuildLevel;
+   int m_maxGuildLevel;
+   int m_phaseUseFlags;
+   int m_phaseID;
+   int m_phaseGroupID;
+   int m_minAvgItemLevel;
+   int m_maxAvgItemLevel;
+   int m_minAvgEquippedItemLevel;
+   int m_maxAvgEquippedItemLevel;
+   int m_chrSpecializationIndex;
+   int m_chrSpecializationRole;
+   stringref m_failure_description_lang;
+ } PlayerConditionRec<read=readPlayerConditionRec,optimize=false>;
+
+string readPlayerConditionRec(PlayerConditionRec&rec)
+{
+return stringrefread(rec.m_failure_description_lang);
+}
+
+typedef struct  {
+  uint32_t m_ID;
+  uint32_t m_spellID;
+  uint32_t m_difficultyID;
+  uint32_t m_attributes[13];
+  uint32_t m_castingTimeIndex;
+  uint32_t m_durationIndex;
+  uint32_t m_rangeIndex;
+  float m_speed;
+  uint32_t m_spellVisualID[2];
+  uint32_t m_spellIconID;
+  uint32_t m_activeIconID;
+  uint32_t m_schoolMask;
+}SpellMiscRec<optimize=false, size=100>;
+
+struct PhaseRec // sizeof(0xC)
+{
+    int m_ID; // +0x0, size 0x4, type 0
+    stringref m_name; // +0x4, size 0x4, type 2
+    int m_flags; // +0x8, size 0x4, type 0
+};
+
+struct PhaseXPhaseGroupRec {
+  int m_ID;
+  int m_phaseID;
+  int m_phaseGroupID;
+};
+struct PADDER
+{
+char _;
+if (_)
+{
+char __ERROR[0x1000000000];
+}
+};
+struct CharBaseInfoRec {
+  PADDER padding_0[4]<optimize=false>;
+  char m_raceID;
+  char m_classID;
+  PADDER padding_1[2]<optimize=false>;
+};
+
+
+struct SpellItemEnchantmentConditionRec {
+  int m_ID;
+  char m_lt_operandType[5];
+  PADDER padding_0[3]<optimize=false>;
+  int m_lt_operand[5];
+  char m_operator[5];
+  char m_rt_operandType[5];
+  PADDER padding_1[2]<optimize=false>;
+  int m_rt_operand[5];
+  char m_logic[5];
+  PADDER padding_2[3]<optimize=false>;
+};
+// FILE ------------------------------------------------------------------------
+
+struct unk_0x39C
+{
+char _[0x39C];
+};
+
+struct SpellEntry_335
+{
+   uint32      Id;                                             // 0        m_ID
+   uint32      Category;                                       // 1        m_category
+   uint32      Dispel;                                         // 2        m_dispelType
+   uint32      Mechanic;                                       // 3        m_mechanic
+   uint32      Attributes;                                     // 4        m_attribute
+   uint32      AttributesEx;                                   // 5        m_attributesEx
+   uint32      AttributesEx2;                                  // 6        m_attributesExB
+   uint32      AttributesEx3;                                  // 7        m_attributesExC
+   uint32      AttributesEx4;                                  // 8        m_attributesExD
+   uint32      AttributesEx5;                                  // 9        m_attributesExE
+   uint32      AttributesEx6;                                  // 10       m_attributesExF
+   uint32      AttributesEx7;                                  // 11       3.2.0 (0x20 - totems, 0x4 - paladin auras, etc...) --- Even more attributes needed, thanks MrLama for this
+   uint32      Stances;                                        // 12       m_shapeshiftMask
+   uint32      unk_320_2;                                      // 13       3.2.0
+   uint32      StancesNot;                                     // 14       m_shapeshiftExclude
+   uint32      unk_320_3;                                      // 15       3.2.0
+   uint32      Targets;                                        // 16       m_targets
+   uint32      TargetCreatureType;                             // 17       m_targetCreatureType
+   uint32      RequiresSpellFocus;                             // 18       m_requiresSpellFocus
+   uint32      FacingCasterFlags;                              // 19       m_facingCasterFlags
+   uint32      CasterAuraState;                                // 20       m_casterAuraState
+   uint32      TargetAuraState;                                // 21       m_targetAuraState
+   uint32      CasterAuraStateNot;                             // 22       m_excludeCasterAuraState
+   uint32      TargetAuraStateNot;                             // 23       m_excludeTargetAuraState
+   uint32      casterAuraSpell;                                // 24       m_casterAuraSpell
+   uint32      targetAuraSpell;                                // 25       m_targetAuraSpell
+   uint32      excludeCasterAuraSpell;                         // 26       m_excludeCasterAuraSpell
+   uint32      excludeTargetAuraSpell;                         // 27       m_excludeTargetAuraSpell
+   uint32      CastingTimeIndex;                               // 28       m_castingTimeIndex
+   uint32      RecoveryTime;                                   // 29       m_recoveryTime
+   uint32      CategoryRecoveryTime;                           // 30       m_categoryRecoveryTime
+   uint32      InterruptFlags;                                 // 31       m_interruptFlags
+   uint32      AuraInterruptFlags;                             // 32       m_auraInterruptFlags
+   uint32      ChannelInterruptFlags;                          // 33       m_channelInterruptFlags
+   uint32      procFlags;                                      // 34       m_procTypeMask
+   uint32      procChance;                                     // 35       m_procChance
+   uint32      procCharges;                                    // 36       m_procCharges
+   uint32      maxLevel;                                       // 37       m_maxLevel
+   uint32      baseLevel;                                      // 38       m_baseLevel
+   uint32      spellLevel;                                     // 39       m_spellLevel
+   uint32      DurationIndex;                                  // 40       m_durationIndex
+   uint32      powerType;                                      // 41       m_powerType
+   uint32      manaCost;                                       // 42       m_manaCost
+   uint32      manaCostPerlevel;                               // 43       m_manaCostPerLevel
+   uint32      manaPerSecond;                                  // 44       m_manaPerSecond
+   uint32      manaPerSecondPerLevel;                          // 45       m_manaPerSecondPerLeve
+   uint32      rangeIndex;                                     // 46       m_rangeIndex
+   float       speed;                                          // 47       m_speed
+   uint32      modalNextSpell;                                 // 48       m_modalNextSpell
+   uint32      StackAmount;                                    // 49       m_cumulativeAura
+   uint32      Totem[2];                                       // 50-51    m_totem
+   int32       Reagent[8];                                     // 52-59    m_reagent
+   uint32      ReagentCount[8];                                // 60-67    m_reagentCount
+   int32       EquippedItemClass;                              // 68       m_equippedItemClass (value)
+   int32       EquippedItemSubClassMask;                       // 69       m_equippedItemSubclass (mask)
+   int32       EquippedItemInventoryTypeMask;                  // 70       m_equippedItemInvTypes (mask)
+   uint32      Effect[3];                                      // 71-73    m_effect
+   int32       EffectDieSides[3];                              // 74-76    m_effectDieSides
+   float       EffectRealPointsPerLevel[3];                    // 77-79    m_effectRealPointsPerLevel
+   int32       EffectBasePoints[3];                            // 80-82    m_effectBasePoints (don't must be used in spell/auras explicitly, must be used cached Spell::m_currentBasePoints)
+   uint32      EffectMechanic[3];                              // 83-85    m_effectMechanic
+   uint32      EffectImplicitTargetA[3];                       // 86-88    m_implicitTargetA
+   uint32      EffectImplicitTargetB[3];                       // 89-91    m_implicitTargetB
+   uint32      EffectRadiusIndex[3];                           // 92-94    m_effectRadiusIndex - spellradius.dbc
+   uint32      EffectApplyAuraName[3];                         // 95-97    m_effectAura
+   uint32      EffectAmplitude[3];                             // 98-100   m_effectAuraPeriod
+   float       EffectMultipleValue[3];                         // 101-103  m_effectAmplitude
+   uint32      EffectChainTarget[3];                           // 104-106  m_effectChainTargets
+   uint32      EffectItemType[3];                              // 107-109  m_effectItemType
+   int32       EffectMiscValue[3];                             // 110-112  m_effectMiscValue
+   int32       EffectMiscValueB[3];                            // 113-115  m_effectMiscValueB
+   uint32      EffectTriggerSpell[3];                          // 116-118  m_effectTriggerSpell
+   float       EffectPointsPerComboPoint[3];                   // 119-121  m_effectPointsPerCombo
+   uint32      EffectSpellClassMaskA[3];                       // 122-124  m_effectSpellClassMaskA, effect 0
+   uint32      EffectSpellClassMaskB[3];                       // 125-127  m_effectSpellClassMaskB, effect 1
+   uint32      EffectSpellClassMaskC[3];                       // 128-130  m_effectSpellClassMaskC, effect 2
+   uint32      SpellVisual[2];                                 // 131-132  m_spellVisualID
+   uint32      SpellIconID;                                    // 133      m_spellIconID
+   uint32      activeIconID;                                   // 134      m_activeIconID
+   uint32      spellPriority;                                  // 135      m_spellPriority
+   localized_stringref m_name_lang;
+   localized_stringref m_nameSubtext_lang;
+   localized_stringref m_description_lang;
+   localized_stringref m_auraDescription_lang;
+   uint32      ManaCostPercentage;                             // 204      m_manaCostPct
+   uint32      StartRecoveryCategory;                          // 205      m_startRecoveryCategory
+   uint32      StartRecoveryTime;                              // 206      m_startRecoveryTime
+   uint32      MaxTargetLevel;                                 // 207      m_maxTargetLevel
+   uint32      SpellFamilyName;                                // 208      m_spellClassSet
+   uint64      SpellFamilyFlags;                               // 209-210  m_spellClassMask NOTE: size is 12 bytes!!!
+   uint32      SpellFamilyFlags2;                              // 211      addition to m_spellClassMask
+   uint32      MaxAffectedTargets;                             // 212      m_maxTargets
+   uint32      DmgClass;                                       // 213      m_defenseType
+   uint32      PreventionType;                                 // 214      m_preventionType
+   uint32      StanceBarOrder;                                 // 215      m_stanceBarOrder
+   float       DmgMultiplier[3];                               // 216-218  m_effectChainAmplitude
+   uint32      MinFactionId;                                   // 219      m_minFactionID
+   uint32      MinReputation;                                  // 220      m_minReputation
+   uint32      RequiredAuraVision;                             // 221      m_requiredAuraVision
+   uint32      TotemCategory[2];                               // 222-223  m_requiredTotemCategoryID
+   int32       AreaGroupId;                                    // 224      m_requiredAreaGroupId
+   uint32      SchoolMask;                                     // 225      m_schoolMask
+   uint32      runeCostID;                                     // 226      m_runeCostID
+   uint32      spellMissileID;                                 // 227      m_spellMissileID
+   uint32      PowerDisplayId;                                 // 228      PowerDisplay.dbc, new in 3.1
+   float       EffectBonusMultiplier[3];                                   // 229-231  3.2.0
+   uint32      spellDescriptionVariableID;                     // 232      3.2.0
+   uint32      SpellDifficultyId;                              // 233      3.3.0
+};
+
+struct SpellEntry_310
+{
+   uint32      Id;                                             // 0        m_ID
+   uint32      Category;                                       // 1        m_category
+   uint32      Dispel;                                         // 2        m_dispelType
+   uint32      Mechanic;                                       // 3        m_mechanic
+   uint32      Attributes;                                     // 4        m_attribute
+   uint32      AttributesEx;                                   // 5        m_attributesEx
+   uint32      AttributesEx2;                                  // 6        m_attributesExB
+   uint32      AttributesEx3;                                  // 7        m_attributesExC
+   uint32      AttributesEx4;                                  // 8        m_attributesExD
+   uint32      AttributesEx5;                                  // 9        m_attributesExE
+   uint32      AttributesEx6;                                  // 10       m_attributesExF
+   uint32      Stances;                                        // 12       m_shapeshiftMask
+   uint32      StancesNot;                                     // 14       m_shapeshiftExclude
+   uint32      Targets;                                        // 16       m_targets
+   uint32      TargetCreatureType;                             // 17       m_targetCreatureType
+   uint32      RequiresSpellFocus;                             // 18       m_requiresSpellFocus
+   uint32      FacingCasterFlags;                              // 19       m_facingCasterFlags
+   uint32      CasterAuraState;                                // 20       m_casterAuraState
+   uint32      TargetAuraState;                                // 21       m_targetAuraState
+   uint32      CasterAuraStateNot;                             // 22       m_excludeCasterAuraState
+   uint32      TargetAuraStateNot;                             // 23       m_excludeTargetAuraState
+   uint32      casterAuraSpell;                                // 24       m_casterAuraSpell
+   uint32      targetAuraSpell;                                // 25       m_targetAuraSpell
+   uint32      excludeCasterAuraSpell;                         // 26       m_excludeCasterAuraSpell
+   uint32      excludeTargetAuraSpell;                         // 27       m_excludeTargetAuraSpell
+   uint32      CastingTimeIndex;                               // 28       m_castingTimeIndex
+   uint32      RecoveryTime;                                   // 29       m_recoveryTime
+   uint32      CategoryRecoveryTime;                           // 30       m_categoryRecoveryTime
+   uint32      InterruptFlags;                                 // 31       m_interruptFlags
+   uint32      AuraInterruptFlags;                             // 32       m_auraInterruptFlags
+   uint32      ChannelInterruptFlags;                          // 33       m_channelInterruptFlags
+   uint32      procFlags;                                      // 34       m_procTypeMask
+   uint32      procChance;                                     // 35       m_procChance
+   uint32      procCharges;                                    // 36       m_procCharges
+   uint32      maxLevel;                                       // 37       m_maxLevel
+   uint32      baseLevel;                                      // 38       m_baseLevel
+   uint32      spellLevel;                                     // 39       m_spellLevel
+   uint32      DurationIndex;                                  // 40       m_durationIndex
+   uint32      powerType;                                      // 41       m_powerType
+   uint32      manaCost;                                       // 42       m_manaCost
+   uint32      manaCostPerlevel;                               // 43       m_manaCostPerLevel
+   uint32      manaPerSecond;                                  // 44       m_manaPerSecond
+   uint32      manaPerSecondPerLevel;                          // 45       m_manaPerSecondPerLeve
+   uint32      rangeIndex;                                     // 46       m_rangeIndex
+   float       speed;                                          // 47       m_speed
+   uint32      modalNextSpell;                                 // 48       m_modalNextSpell
+   uint32      StackAmount;                                    // 49       m_cumulativeAura
+   uint32      Totem[2];                                       // 50-51    m_totem
+
+   int32       m_reagent[8];
+   uint32      m_reagentCount[8];
+
+   int32       EquippedItemClass;                              // 68       m_equippedItemClass (value)
+   int32       EquippedItemSubClassMask;                       // 69       m_equippedItemSubclass (mask)
+   int32       EquippedItemInventoryTypeMask;                  // 70       m_equippedItemInvTypes (mask)
+
+   uint32      m_effect[3];
+
+   int32       EffectDieSides[3];                              // 74-76    m_effectDieSides
+uint32 _1;
+uint32 _2;
+uint32 _3;
+   float       EffectRealPointsPerLevel[3];                    // 77-79    m_effectRealPointsPerLevel
+   int32       EffectBasePoints[3];                            // 80-82    m_effectBasePoints (don't must be used in spell/auras explicitly, must be used cached Spell::m_currentBasePoints)
+   uint32      EffectMechanic[3];                              // 83-85    m_effectMechanic
+   uint32      EffectImplicitTargetA[3];                       // 86-88    m_implicitTargetA
+   uint32      EffectImplicitTargetB[3];                       // 89-91    m_implicitTargetB
+   uint32      EffectRadiusIndex[3];                           // 92-94    m_effectRadiusIndex - spellradius.dbc
+   uint32      EffectApplyAuraName[3];                         // 95-97    m_effectAura
+   uint32      EffectAmplitude[3];                             // 98-100   m_effectAuraPeriod
+   float       EffectMultipleValue[3];                         // 101-103  m_effectAmplitude
+   uint32      EffectChainTarget[3];                           // 104-106  m_effectChainTargets
+   uint32      EffectItemType[3];                              // 107-109  m_effectItemType
+   int32       EffectMiscValue[3];                             // 110-112  m_effectMiscValue
+   int32       EffectMiscValueB[3];                            // 113-115  m_effectMiscValueB
+   uint32      EffectTriggerSpell[3];                          // 116-118  m_effectTriggerSpell
+   float       EffectPointsPerComboPoint[3];                   // 119-121  m_effectPointsPerCombo
+   uint32      EffectSpellClassMaskA[3];                       // 122-124  m_effectSpellClassMaskA, effect 0
+   uint32      EffectSpellClassMaskB[3];                       // 125-127  m_effectSpellClassMaskB, effect 1
+   uint32      EffectSpellClassMaskC[3];                       // 128-130  m_effectSpellClassMaskC, effect 2
+   uint32      SpellVisual[2];                                 // 131-132  m_spellVisualID
+uint32 _4;
+   uint32      SpellIconID;                                    // 133      m_spellIconID
+   uint32      activeIconID;                                   // 134      m_activeIconID
+   uint32      spellPriority;                                  // 135      m_spellPriority
+
+uint32 _5;
+uint32 _6;
+
+   localized_stringref m_name_lang;
+   localized_stringref m_nameSubtext_lang;
+   localized_stringref m_description_lang;
+   localized_stringref m_auraDescription_lang;
+
+   uint32      ManaCostPercentage;                             // 204      m_manaCostPct
+   uint32      StartRecoveryCategory;                          // 205      m_startRecoveryCategory
+   uint32      StartRecoveryTime;                              // 206      m_startRecoveryTime
+   uint32      MaxTargetLevel;                                 // 207      m_maxTargetLevel
+   uint32      SpellFamilyName;                                // 208      m_spellClassSet
+   char      SpellClassMask[0xc];                               // 209-210  m_spellClassMask
+   uint32      MaxAffectedTargets;                             // 212      m_maxTargets
+   uint32      DmgClass;                                       // 213      m_defenseType
+   uint32      PreventionType;                                 // 214      m_preventionType
+   uint32      StanceBarOrder;                                 // 215      m_stanceBarOrder
+   float       EffectChainAmplitude[3];                               // 216-218  m_effectChainAmplitude
+   uint32      MinFactionId;                                   // 219      m_minFactionID
+   uint32      MinReputation;                                  // 220      m_minReputation
+   uint32      RequiredAuraVision;                             // 221      m_requiredAuraVision
+   uint32      TotemCategory[2];                               // 222-223  m_requiredTotemCategoryID
+   int32       AreaGroupId;                                    // 224      m_requiredAreaGroupId
+   uint32      SchoolMask;                                     // 225      m_schoolMask
+   uint32      runeCostID;                                     // 226      m_runeCostID
+   uint32      spellMissileID;                                 // 227      m_spellMissileID
+};
+
+ struct LightSkyboxRec {
+   uint32 m_ID;
+   stringref m_name;
+   uint32 m_flags;    // &1: animation syncs with time of day (. &2:  &4: do procedural fog
+ };
+
+string readLightSkyboxRec (LightSkyboxRec& rec)
+{
+  string ret;
+  SPrintf (ret, "%s%s%s%s %s", rec.m_flags & 1 ? "S" : "_",  rec.m_flags & 2 ? "?" : "_",  rec.m_flags & 4 ? "F" : "_", rec.m_flags & 0xFFFFFFF8 ? "!!!" : "", stringrefread (rec.m_name));
+  return ret;
+}
+
+typedef struct  {
+  uint32_t m_ID;
+  stringref m_Directory;
+  uint32_t m_InstanceType;
+  uint32_t m_Flags;                                 // 0x10000: limit farclip to 727.0
+  uint32_t m_MapType;
+  stringref m_MapName_lang;
+  uint32_t m_areaTableID;
+  stringref m_MapDescription0_lang;
+  stringref m_MapDescription1_lang;
+  uint32_t m_LoadingScreenID;
+  float m_minimapIconScale;
+  uint32_t m_corpseMapID;
+  float m_corpse[2];
+  uint32_t m_timeOfDayOverride;
+  uint32_t m_expansionID;
+  uint32_t m_raidOffset;
+  uint32_t m_maxPlayers;
+  uint32_t m_parentMapID;
+  uint32_t m_cosmeticParentMapID;
+  uint32_t m_timeOffset;
+} MapRec<size=264, read=readMapRec>;
+
+string readMapRec(MapRec&rec)
+{
+string a;
+SPrintf(a, "%i %s", rec.m_ID, stringrefread (rec.m_Directory));
+return a;
+}
+
+typedef struct  {
+  uint32_t m_ID;
+  uint32_t m_difficultyID;
+  uint32_t m_effect;
+  float m_effectAmplitude;
+  uint32_t m_effectAura;
+  uint32_t m_effectAuraPeriod;
+  uint32_t m_effectBasePoints;
+  float m_effectBonusCoefficient;
+  float m_effectChainAmplitude;
+  uint32_t m_effectChainTargets;
+  uint32_t m_effectDieSides;
+  uint32_t m_effectItemType;
+  uint32_t m_effectMechanic;
+  uint32_t m_effectMiscValue[2];
+  float m_effectPointsPerResource;
+  uint32_t m_effectRadiusIndex[2];
+  float m_effectRealPointsPerLevel;
+  uint32_t m_effectSpellClassMask[4];
+  uint32_t m_effectTriggerSpell;
+  float m_effectPos_facing;
+  uint32_t m_implicitTarget[2];
+  uint32_t m_spellID;
+  uint32_t m_effectIndex;
+  uint32_t m_effectAttributes;
+  float m_bonusCoefficientFromAP;
+} SpellEffectRec<size=124, read=readSpellEffectRec>;
+
+string readSpellEffectRec (SpellEffectRec& rec)
+{
+  string a;
+  if (rec.m_effectAura == 273)
+{
+  SPrintf (a, "xray vision");
+}
+return a;
+}
+
+typedef struct  {
+  uint32_t m_ID;
+  stringref m_Name;
+  uint32_t m_Flags;
+  uint32_t m_Fallback;
+  uint32_t m_BehaviorID;
+  uint32_t m_BehaviorTier;
+}AnimationDataRec <read=readAnimationDataRec>;
+string readAnimationDataRec (AnimationDataRec& rec)
+{
+string a;
+SPrintf(a, "%s = %i,", stringrefread (rec.m_Name), rec.m_ID);
+return a;
+}
+typedef struct  {
+  uint32_t m_ID;
+  uint32_t m_reputationIndex;
+  uint32_t m_reputationRaceMask[4];
+  uint32_t m_reputationClassMask[4];
+  uint32_t m_reputationBase[4];
+  uint32_t m_reputationFlags[4];
+  uint32_t m_parentFactionID;
+  float m_parentFactionMod[2];
+  uint32_t m_parentFactionCap[2];
+  stringref m_name_lang;
+  stringref m_description_lang;
+  uint32_t m_expansion;
+  uint32_t m_flags;
+  uint32_t m_friendshipRepID;
+} FactionRec<read=readFactionRec>;
+string readFactionRec (FactionRec&rec)
+{
+string a;
+SPrintf(a, "%i %x %s", rec.m_ID, rec.m_flags, stringrefread (rec.m_name_lang));
+return a;
+}
+
+typedef struct {
+  uint32_t m_ID;
+  uint32_t m_doodadId[4];
+  uint32_t m_doodadWeight[4];
+  uint32_t m_density;
+  uint32_t m_sound;
+}GroundEffectTextureRec<read=readGroundEffectTextureRec>;
+string readGroundEffectTextureRec (GroundEffectTextureRec&rec)
+{
+string a;
+SPrintf(a, "%i", rec.m_ID);
+return a;
+}
+
+typedef struct  {
+  uint32_t m_ID;
+  uint32_t m_mapID;
+  uint32_t m_rangeIndex;
+  uint32_t m_minLevel;
+  uint32_t m_maxLevel;
+} PvpDifficultyRec<read=readPvpDifficultyRec>;
+string readPvpDifficultyRec (PvpDifficultyRec& rec)
+{
+string a;
+if (rec.m_rangeIndex > 13)SPrintf (a, "%i", rec.m_rangeIndex);
+return a;
+}
+
+typedef struct  {
+  uint32_t m_ID;
+  uint32_t m_WMOID;
+  uint32_t m_NameSetID;
+  uint32_t m_WMOGroupID;
+  uint32_t m_SoundProviderPref;
+  uint32_t m_SoundProviderPrefUnderwater;
+  uint32_t m_AmbienceID;
+  uint32_t m_ZoneMusic;
+  uint32_t m_IntroSound;
+  uint32_t m_flags;
+  uint32_t m_AreaTableID;
+  stringref m_AreaName_lang;
+  uint32_t m_uwIntroSound;
+  uint32_t m_uwZoneMusic;
+  uint32_t m_uwAmbience;
+} WMOAreaTableRec<read=readWMOAreaTableRec>;
+string readWMOAreaTableRec (WMOAreaTableRec& rec)
+{
+string a;
+SPrintf (a, "%i.%i %s %i", rec.m_WMOID, rec.m_WMOGroupID, stringrefread (rec.m_AreaName_lang), rec.m_AreaTableID);
+return a;
+}
+typedef struct  {
+  uint32_t m_ID;
+  uint8_t m_raceID;
+  uint8_t m_classID;
+  uint8_t m_sexID;
+  uint8_t m_outfitID;
+  uint32_t m_ItemID[24];
+  uint32_t m_DisplayItemID[24];
+  uint32_t m_InventoryType[24];
+  uint32_t m_petDisplayID;
+  uint32_t m_petFamilyID;
+} CharStartOutfitRec;
+
+typedef struct  {
+  uint32_t m_ID;
+  stringref m_fileName;
+  uint32_t m_Sound[4];
+  C3Vector m_geoBoxMin;
+  C3Vector m_geoBoxMax;
+} GameObjectDisplayInfoRec<read=readGameObjectDisplayInfoRec>;
+string readGameObjectDisplayInfoRec (GameObjectDisplayInfoRec& rec)
+{
+string a;
+SPrintf (a, "%i %s", rec.m_ID, stringrefread (rec.m_fileName));
+return a;
+}
+
+typedef struct  {
+  uint32_t m_ID;
+  uint32_t m_continentID;
+  float m_x; // (0,0,0) = global light, used as fallback if in no other light.
+  float m_y;
+  float m_z;
+  float m_falloffStart;
+  float m_falloffEnd;
+  uint32_t m_lightParamsID[8];
+} LightRec<read=readLightRec>;
+
+string readLightRec (LightRec& rec)
+{
+  string ret;
+if (rec.m_continentID==43)
+  SPrintf (ret, "%i", rec.m_continentID);
+  return ret;
+}
+
+local string t_name = FileNameGetBase(GetFileName());
+
+if(t_name == "Map.dbc")
+{
+    MapRec records[header.record_count]<optimize=false>;
+}
+
+else if(t_name == "LightSkybox.dbc")
+{
+    LightSkyboxRec records[header.record_count]<optimize=false>;
+}
+
+else if(t_name == "Light.dbc")
+{
+    LightRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "CameraMode.dbc")
+{
+    CameraModeRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "SoundEntries.dbc")
+{
+    SoundEntriesRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "SoundsEntriesAdvanced.dbc")
+{
+    SoundEntriesAdvancedRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "FileData.dbc")
+{
+    FileDataRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "VideoHardware.dbc")
+{
+    VideoHardwareRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "PlayerCondition.dbc")
+{
+    PlayerConditionRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "SpellMisc.dbc")
+{
+    SpellMiscRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "CharBaseInfo.dbc")
+{
+    CharBaseInfoRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "SpellItemEnchantmentCondition.dbc")
+{
+    SpellItemEnchantmentConditionRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "SpellEffect.dbc")
+{
+    SpellEffectRec records[header.record_count]<optimize=false>;
+}  
+
+else if(t_name == "AnimationData.dbc")
+{
+    AnimationDataRec records[header.record_count]<optimize=false>;
+}
+  
+else if(t_name == "Faction.dbc")
+{
+    FactionRec records[header.record_count]<optimize=false>;
+} 
+ 
+else if(t_name == "GroundEffectTexture.dbc")
+{
+    GroundEffectTextureRec records[header.record_count]<optimize=false>;
+}
+  
+else if(t_name == "PvpDifficulty.dbc")
+{
+    PvpDifficultyRec records[header.record_count]<optimize=false>;
+}
+  
+else if(t_name == "WMOAreaTable.dbc")
+{
+    WMOAreaTableRec records[header.record_count]<optimize=false>;
+} 
+ 
+else if(t_name == "CharStartOutfit.dbc")
+{
+    CharStartOutfitRec records[header.record_count]<optimize=false>;
+}  
+ 
+ else if(t_name == "GameObjectDisplayInfo.dbc")
+{
+    GameObjectDisplayInfoRec records[header.record_count]<optimize=false>;
+} 
+ 

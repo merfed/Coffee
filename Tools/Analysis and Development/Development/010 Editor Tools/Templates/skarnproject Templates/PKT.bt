@@ -1,0 +1,128 @@
+//------------------------------------------------
+//--- 010 Editor v7.0 Binary Template
+//
+//      File: PKT.bt
+//   Authors: DDuarte
+//   Version: 1.0
+//   Purpose: Parse multiple versions of the PKT format (WoW)
+//  Category: wow010
+// File Mask: *.pkt
+//  ID Bytes: 
+//   History:
+//   1.0    2016-04-25 Initial release.
+//
+// More information available at:
+//  https://github.com/TrinityCore/WowPacketParser/blob/master/WowPacketParser/Loading/BinaryPacketReader.cs
+//------------------------------------------------
+
+enum <int16> PktVersion {
+    V2_1 = 0x201,
+    V2_2 = 0x202,
+    V3_0 = 0x300,
+    V3_1 = 0x301
+};
+
+enum <byte> PacketDirectionOld {
+    SMSG = 0xff,
+    CMSG = 0x00
+};
+
+enum <uint32> PacketDirection {
+    ServerToClient = 0x47534d53, // SMSG
+    ClientToServer = 0x47534d43, // CMSG
+    BNServerToClient = 0x4e425f53, // BN_S
+    BNClientToServer = 0x4e425f43  // BN_C
+};
+
+struct Header {
+    byte Pkt[3];
+    PktVersion Version;
+    switch (Version) {
+        case V2_1:
+            uint16 ClientBuild;
+            ubyte SessionKey[40];
+            break;
+        case V2_2:
+            byte SnifferId;
+            uint16 ClientBuild;
+            byte ClientLocale[4];
+            ubyte PacketKey[20];
+            byte RealmName[64];
+            break;
+        case V3_0:
+            byte SnifferId;
+            uint32 ClientBuild;
+            byte ClientLocale[4];
+            ubyte SessionKey[40];
+            int32 AdditionalLength;
+            if (AdditionalLength > 0)
+                byte OptionalData[AdditionalLength];
+            break;
+        case V3_1:
+            byte SnifferId;
+            uint32 ClientBuild;
+            byte ClientLocale[4];
+            ubyte SessionKey[40];
+            time_t StartTime;
+            uint32 StartTickCount;
+            int32 AdditionalLength;
+            if (AdditionalLength > 0)
+                ubyte OptionalData[AdditionalLength];
+            break;
+    }
+};
+
+local int64 pos = FTell();
+local PktVersion version = V3_1;
+
+if (ReadByte(pos) == 'P' && ReadByte(pos + 1) == 'K' && ReadByte(pos + 2) == 'T') {
+    struct Header header;
+    version = header.Version;
+}
+
+while (!FEof()) {
+    struct Packet {
+        switch (version) {
+            case V2_1:
+            case V2_2:
+                PacketDirectionOld Direction;
+                time_t Time;
+                int32 TickCount;
+                int32 Length;
+                if (Direction == SMSG) {
+                    int16 Opcode;
+                    ubyte Data[Length - 2];
+                } else {
+                    int16 Opcode;
+                    ubyte Data[Length - 4];
+                }
+                break;     
+            case V3_0:
+            case V3_1:
+                PacketDirection Direction;
+                if (header.Version == V3_0) {
+                    time_t Time;
+                    uint32 TickCount;
+                } else {
+                    int32 CIndex; // session id, connection index
+                    uint32 TickCount;
+                }
+
+                int32 AdditionalSize;
+                int32 Length;
+                if (AdditionalSize > 0)
+                    ubyte OptionalData[AdditionalSize];
+                int32 Opcode;
+                if (Length > 4)
+                    ubyte Data[Length - 4];
+                break;
+        }
+    } packet<read=ReadPacket>;
+}
+
+string ReadPacket(Packet& packet)
+{
+    string s;
+    SPrintf(s, "%s 0x%x (%d)", EnumToString(packet.Direction), packet.Opcode, packet.Length);
+    return s;
+}

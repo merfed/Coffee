@@ -1,0 +1,85 @@
+#include "basics.h"
+
+typedef enum <uchar>  {
+    TU_Animated = 0, 
+    TU_Static = 16
+} TEXUNITFLAGS;
+
+typedef struct {
+  uint32 nIndices;		
+  uint32 ofsIndices <format=hex>;		// Indices used in this View.
+  uint32 nTriangles;		
+  uint32 ofsTriangles <format=hex>;		// The triangles made with them.
+  uint32 nProperties;		
+  uint32 ofsProperties <format=hex>;		// Properties of the vertices.
+  uint32 nSubmeshes;		
+  uint32 ofsSubmeshes <format=hex>;		// Submeshes (Geosets) of this View.
+  uint32 nTextureUnits;	
+  uint32 ofsTextureUnits <format=hex>;	// Texture Units.
+  uint32 LOD;			// LOD distance or something else
+  uint32 n_shadowbatches;
+  uint32 ofs_shadowbatches<format=hex>;
+} M2SkinProfile;
+
+typedef struct {
+   uint16 Indices[3];		// Three indices which make up a triangle.
+} TRI;
+
+typedef struct {
+   byte BoneIndices[4];		// Usually 0? Purpose unknown.
+} VERTPROP<read=readVERTPROP>;
+string readVERTPROP(VERTPROP&v)
+{string a;
+SPrintf(a, "%i %i %i %i", v.BoneIndices[0], v.BoneIndices[1], v.BoneIndices[2], v.BoneIndices[3]);
+return a;}
+
+typedef struct 
+{
+  uint16 SubmeshID;          // Mesh part ID, see below.
+  uint16 Level;              // (level << 16) is added (|ed) to startTriangle and alike to avoid having to increase those fields to uint32s.
+  uint16 StartVertex;        // Starting vertex number.
+  uint16 nVertices;          // Number of vertices.
+  uint16 StartTriangle;      // Starting triangle index (that's 3* the number of triangles drawn so far).
+  uint16 nTriangles;         // Number of triangle indices.
+  uint16 nBones;             // Number of elements in the bone lookup table.
+  uint16 StartBones;         // Starting index in the bone lookup table.
+  uint16 boneInfluences;     // <= 4    
+  uint16 RootBone;  
+  C3Vector CenterMass;         // Average position of all the vertices in the submesh.
+  C3Vector CenterBoundingBox;  // The center of the box when an axis aligned box is built around the vertices in the submesh.
+  float Radius;                // Distance of the vertex farthest from CenterBoundingBox.
+} M2SkinSection;
+
+struct M2Batch 
+{
+  unsigned char flags;             // probably two uint8_t? -- Usually 16 for static textures, and 0 for animated textures. &0x1: materials invert something; &0x2: transform &0x4: projected texture?; &0x10: something something batch compatible; &0x20: projected texture?; &0x40: transparency something
+  unsigned char flags_2;
+  uint16 shader_id;         // See below.
+  uint16 submesh_index;     // A duplicate entry of a submesh from the list above.
+  uint16 submesh_index2;    // See below.
+  int16 color_index;        // A Color out of the Colors-Block or -1 if none.
+  uint16 render_flags;      // The renderflags used on this texture-unit.
+  uint16 tex_unit_number;   // Index into the texture unit lookup table.
+  uint16 op_count;          // 1 to 4. See below. Also seems to be the number of textures to load, starting at the texture lookup in the next field (0x10).
+  uint16 texture;           // Index into Texture lookup table
+  uint16 tex_unit_number2;  // Duplicate of TexUnitNumber.
+  uint16 transparency;      // Index into transparency lookup table.
+  uint16 texture_anim;      // Index into uvanimation lookup table. 
+};
+
+//---------------------------------------------------
+
+FSeek(0);
+char magic[4];
+M2SkinProfile SkinHeader;
+FSeek(SkinHeader.ofsIndices);
+uint16_t Indices[SkinHeader.nIndices];
+FSeek(SkinHeader.ofsTriangles);
+TRI Triangles[SkinHeader.nTriangles / 3];
+FSeek(SkinHeader.ofsProperties);
+VERTPROP Properties[SkinHeader.nProperties];
+FSeek(SkinHeader.ofsSubmeshes);
+M2SkinSection Submeshes[SkinHeader.nSubmeshes];
+FSeek(SkinHeader.ofsTextureUnits);
+M2Batch TextureUnits[SkinHeader.nTextureUnits];
+

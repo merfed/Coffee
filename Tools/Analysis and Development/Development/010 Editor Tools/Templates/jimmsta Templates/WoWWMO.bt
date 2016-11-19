@@ -1,0 +1,509 @@
+#include "basics.h"
+
+/*
+
+// Its unordered with unknown number of items
+// MOTX
+//--------------------------------------------------
+typedef struct { 
+    _chunk hdr;
+    local int i=0;
+
+    if(hdr.byte_size!=0) {
+        // catch texture files
+        while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+            paddedFilename texture;
+            i++;
+        }
+    }
+} paddedFileList<read=paddedFileListRead>;
+    
+    // how many?
+    string paddedFileListRead(paddedFileList &o) {
+        string s;
+        SPrintf( s, "%i Files", o.i);
+        return s;
+    }
+
+
+// offsList - List of many Offsets
+// MMID, MWID
+//--------------------------------------------------
+typedef struct {
+    _chunk hdr;
+    
+    local int i;
+    for(i=0; (i*sizeof(uint32))<hdr.byte_size; i++)
+        offset offs;
+} offsList<read=readOffsList>;
+
+    // how many?
+    string readOffsList(offsList &o) {
+        string s;
+        SPrintf( s, "%i Offsets", o.i);
+        return s;
+    }    */
+
+void chunk_contents (CHUNK_header& header)
+{
+  if (header.magic._._ == 1297499474) // MVER
+  {
+    uint32_t version;
+  }
+  else if (header.magic._._ == 1297041476) // MOHD
+  {
+    uint32_t nTextures;  // number of textures (BLP Files)
+    uint32_t nGroups;    // number of WMO groups
+    uint32_t nPortals;   // number of portals
+    uint32_t nLights;    // number of lights
+    uint32_t nModels;    // number of M2 models imported
+    uint32_t nDoodads;   // number of doodads (M2 instances)
+    uint32_t nSets;      // number of doodad sets
+    CArgb ambientColor;	
+    uint32_t WMO_ID;     // (column 2 in WMOAreaTable.dbc)
+    CAaBox bounding;
+    uint32_t flag_0x1 : 1;
+    uint32_t flag_do_not_add_base_color_to_MOCV : 1;
+    uint32_t flag_liquid_related_0x4 : 1;
+    uint32_t flag_has_some_outdoor_groups : 1;
+    uint32_t flag_Lod : 1;
+    uint32_t flags : (32 - 5);
+  }
+  else if (header.magic._._ == 1297041232) // MOGP
+  {
+    uint32_t group_name;
+    uint32_t descriptive_group_name;
+
+    uint32_t flag_has_mobn_and_mobr : 1;
+    uint32_t flag_fix_mocv_with_header_color : 1;
+    uint32_t flag_has_vertex_colors : 1;
+    uint32_t flag_EXTERIOR : 1;
+
+    uint32_t flag_0x10 : 1;
+    uint32_t flag_0x20 : 1;
+    uint32_t flag_0x40 : 1;
+    uint32_t flag_UNREACHABLE : 1;
+
+    uint32_t flag_0x100 : 1;
+    uint32_t flag_has_lights : 1;
+    uint32_t flag_has_MPBV_MPBP_MPBI_MPBG : 1;
+    uint32_t flag_has_doodads : 1;
+
+    uint32_t flag_LIQUIDSURFACE : 1;
+    uint32_t flag_INTERIOR : 1;
+    uint32_t flag_0x4000 : 1;
+    uint32_t flag_0x8000 : 1;
+
+    uint32_t flag_ALWAYSDRAW : 1;
+    uint32_t flag_has_MORI_MORB : 1;
+    uint32_t flag_show_skybox : 1;
+    uint32_t flag_is_not_water_but_ocean : 1;
+
+    uint32_t flag_0x100000 : 1;
+    uint32_t flag_0x200000 : 1;
+    uint32_t flag_0x400000 : 1;
+    uint32_t flag_0x800000 : 1;
+
+    uint32_t flag_CVERTS2 : 1;
+    uint32_t flag_TVERTS2 : 1;
+    uint32_t flag_always_antiportal : 1;
+    uint32_t flag_0x8000000 : 1;
+
+    uint32_t flag_0x10000000 : 1;
+    uint32_t flag_0x20000000 : 1;
+    uint32_t flag_0x40000000 : 1;
+    uint32_t flag_0x80000000 : 1;
+
+    CAaBox bounding;
+    uint16_t mopr_index;
+    uint16_t mopr_count;
+    uint16_t batches_a;
+    uint16_t batches_interior;
+    uint32_t batches_exterior;
+    uint8_t fogs[4];
+    uint32_t liquid_thing;
+    uint32_t group_id;
+    uint32_t flag_can_cut_terrain : 1;
+    uint32_t flags2 : (32-1);
+    uint32_t unk;
+
+    chunks_via_chunk_contents(header.size - 0x44);
+  }
+  else if (header.magic._._ == 1297043532) // MOPL
+  {
+    C4Plane terrain_cutting_planes[_count = header.size / sizeof (C4Plane)];
+  }
+  else if (header.magic._._ == 1195788612) // GFID
+  {
+    uint32_t group_file_ids[_count = header.size / sizeof (uint32_t)];
+  }
+  else if (header.magic._._ == 1297040452) // MODD
+  {
+    typedef struct
+    {
+      uint32_t file;
+      C3Vector pos;
+      C4Quaternion rotation;
+      float scale;
+      CArgb col;
+    } SMODoodadDef;
+    SMODoodadDef doodad_defs[_count = header.size / sizeof (SMODoodadDef)];
+  }
+  else if (header.magic._._ == 1297040467) // MODS
+  {
+    typedef struct 
+    {
+      char name[20];
+      uint32_t firstinstanceindex;
+      uint32_t numDoodads;
+      uint32_t unused;
+    } SMODoodadSet;
+    SMODoodadSet doodad_sets[_count = header.size / sizeof (SMODoodadSet)];
+  }
+else if (header.magic._._ == 1297042772) // MOMT
+{
+typedef struct  // based on: 03-29-2005 By ObscuR // --schlumpf_ 18:36, 5 August 2009 (CEST), Kjasi 06-04-2015
+{
+/*000h*/  uint32_t flags;		
+/*004h*/  uint32_t shader;		// Index into CMapObj::s_wmoShaderMetaData. See below (shader types).
+/*008h*/  uint32_t blendMode;		// Blending: 0 for opaque, 1 for transparent
+/*00Ch*/  uint32_t texture_1;		// offset into MOTX
+/*010h*/  uint32_t color_1;		// rgba8 (four uint8s)
+/*014h*/  uint32_t flags_1;
+/*018h*/  uint32_t texture_2;
+/*01Ch*/  uint32_t color_2;
+/*020h*/  uint32_t TerrainType;		// Id from TerrainType.dbc according to CMapObjDef::GetGroundType this is ground_type.
+/*024h*/  uint32_t texture_3; 	
+/*028h*/  uint32_t color_3;
+/*02Ch*/  uint32_t flags_3;	
+/*030h*/  uint32_t runTimeData[4];	// This data is explicitly nulled upon loading. Contains textures or similar stuff.
+/*034h*/  		
+/*038h*/
+/*03Ch*/ 
+/*040h*/ 
+} SMOMaterial;
+SMOMaterial materials[_count = header.size / sizeof (SMOMaterial)];
+}
+else if (header.magic._._ == 1297039937) // MOBA
+{
+typedef struct
+{
+  /*0x00*/ int16_t  a[5];        // indices? a box? (-2,-2,-1,2,2,3 in cameron)
+  uint16_t materialId_legion;
+  /*0x0C*/ uint32_t first_index;   // index of the first face index used in MOVI
+  /*0x10*/ uint16_t num_indices;   // number of indices used
+  /*0x12*/ uint16_t first_vertex;  // index of the first vertex used in MOVT
+  /*0x14*/ uint16_t last_vertex;   // index of the last vertex used (batch includes this one)
+  /*0x16*/ uint8_t flag_0 : 1;
+uint8_t flag_use_uint16_t_material : 1; // Legion+. instead of materialId use a uint16_t at 0xB (a[5])
+uint8_t flags_unk : 6;
+  /*0x17*/ uint8_t  materialId;    // index in MOMT
+uint64_t alpha;
+} SMOBatch;
+SMOBatch batches[_count = header.size / sizeof (SMOBatch)];
+}
+else if (header.magic._._ == 1297039950) // MOBN
+{
+typedef struct 
+{	
+  uint16_t planeType;    // 4: leaf, 0 for YZ-plane, 1 for XZ-plane, 2 for XY-plane
+  int16_t  children[2];  // index of bsp child node (right in this array)
+  uint16_t numFaces;     // num of triangle faces in MOBR
+  uint32_t firstFace;    // index of the first triangle index(in MOBR)
+  float    fDist;
+} t_BSP_NODE;
+t_BSP_NODE bsp_nodes[_count = header.size / sizeof (t_BSP_NODE)];
+}
+  else
+  {
+    char _[header.size];
+    _known = false;
+  }
+}
+
+all_chunks_via_chunk_contents();
+
+/*
+
+// MOMT - Materials
+//--------------------------------------------------
+typedef struct {
+    UINT32 version;		
+    UINT32 shader_type;
+    UINT32 blendMode;		
+    offset texture_1<format=hex>; 	
+        texture_1.upperChunkOffset = wmo_file.refTo;
+        texture_1.doString = 1;
+    rgb    color_1;	
+    uint32 flags_1;
+    offset texture_2<format=hex>; 	
+        texture_2.upperChunkOffset = wmo_file.refTo;
+        texture_2.doString = 1;	
+    rgb    color_2;	
+    UINT32 terrain_type;		
+    float text3;		
+    float col3;		
+    float flags3;		
+    UINT32 unk4;		
+    UINT32 unk5;			
+    UINT32 Texture1_null;		
+    UINT32 Texture2_null;
+} MOMT_Entry<read=MOMT_EntryRead>;
+    string MOMT_EntryRead(MOMT_Entry &o) {
+        string s;
+        SPrintf( s, "%i", o.shader_type);
+
+        if(o.flags_1!=0){SPrintf( s, "%sflags_1 ( ", s);
+        if(o.flags_1 & 0x00001) SPrintf( s, "%s 0x1 ", s);
+        if(o.flags_1 & 0x00002) SPrintf( s, "%s 0x2 ", s);
+        if(o.flags_1 & 0x00004) SPrintf( s, "%s 0x4 ", s);
+        if(o.flags_1 & 0x00008) SPrintf( s, "%s 0x8 ", s);
+        if(o.flags_1 & 0x00010) SPrintf( s, "%s 0x10 ", s);
+        if(o.flags_1 & 0x00020) SPrintf( s, "%s 0x20 ", s);
+        if(o.flags_1 & 0x00040) SPrintf( s, "%s 0x40 ", s);
+        if(o.flags_1 & 0x00080) SPrintf( s, "%s 0x80 ", s);
+        if(o.flags_1 & 0x00100) SPrintf( s, "%s 0x100 ", s);
+        if(o.flags_1 & 0x00200) SPrintf( s, "%s 0x200 ", s);
+        if(o.flags_1 & 0x00400) SPrintf( s, "%s 0x400 ", s);
+        if(o.flags_1 & 0x00800) SPrintf( s, "%s 0x800 ", s);
+        if(o.flags_1 & 0x01000) SPrintf( s, "%s 0x1000 ", s);
+        if(o.flags_1 & 0x02000) SPrintf( s, "%s 0x2000 ", s);
+        if(o.flags_1 & 0x04000) SPrintf( s, "%s 0x4000 ", s);
+        if(o.flags_1 & 0x08000) SPrintf( s, "%s 0x8000 ", s);
+        if(o.flags_1 & 0x10000) SPrintf( s, "%s 0x10000 ", s);
+        if(o.flags_1 & 0x20000) SPrintf( s, "%s 0x20000 ", s);
+        if(o.flags_1 & 0x40000) SPrintf( s, "%s 0x40000 ", s);
+        if(o.flags_1 & 0x80000) SPrintf( s, "%s 0x80000 ", s);
+        if(o.flags_1 & 0xFFF00000) SPrintf( s, "%s bigflag ", s);
+        SPrintf( s, "%s ), ", s);}
+
+
+        return s;
+    } 
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+    
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MOMT_Entry entry;
+        i++;
+    }    
+} MOMT<read=MOMTRead>;
+    string MOMTRead(MOMT &o) {
+        string s;
+        SPrintf( s, "%i Materials (prob. wrong structure)", o.i);
+        return s;
+    } 
+
+
+// MOGI - WMO Group infos
+typedef struct {
+    UINT32      flags<format=binary>;  		
+CAaBox bounding;
+    INT32 nameoffset; 
+} MOGI_Entry<read=MOGI_EntryRead>;
+    string MOGI_EntryRead(MOGI_Entry &o) {
+        string s;
+        if(o.flags != 0)
+        {
+            SPrintf( s, "%s (", s);
+            if(o.flags & 0x00001) SPrintf( s, "%s 0x1 ", s);
+            if(o.flags & 0x00002) SPrintf( s, "%s 0x2 ", s);
+            if(o.flags & 0x00004) SPrintf( s, "%s 0x4 ", s);
+            if(o.flags & 0x00008) SPrintf( s, "%s outdoors ", s);
+            if(o.flags & 0x00010) SPrintf( s, "%s 0x10 ", s);
+            if(o.flags & 0x00020) SPrintf( s, "%s 0x20 ", s);
+            if(o.flags & 0x00040) SPrintf( s, "%s 0x40 ", s);
+            if(o.flags & 0x00080) SPrintf( s, "%s 0x80 ", s);
+            if(o.flags & 0x00100) SPrintf( s, "%s 0x100 ", s);
+            if(o.flags & 0x00200) SPrintf( s, "%s 0x200 ", s);
+            if(o.flags & 0x00400) SPrintf( s, "%s 0x400 ", s);
+            if(o.flags & 0x00800) SPrintf( s, "%s 0x800 ", s);
+            if(o.flags & 0x01000) SPrintf( s, "%s hasMLIQ ", s);
+            if(o.flags & 0x02000) SPrintf( s, "%s indoors ", s);
+            if(o.flags & 0x04000) SPrintf( s, "%s 0x4000 ", s);
+            if(o.flags & 0x08000) SPrintf( s, "%s 0x8000 ", s);
+            if(o.flags & 0x10000) SPrintf( s, "%s stormwind? ", s);
+            if(o.flags & 0x20000) SPrintf( s, "%s 0x20000 ", s);
+            if(o.flags & 0x40000) SPrintf( s, "%s skybox? ", s);
+            if(o.flags & 0x80000) SPrintf( s, "%s 0x80000 ", s);
+            if(o.flags & 0xFFF00000) SPrintf( s, "%s bigflag ", s);
+            SPrintf( s, "%s )", s);
+        }
+        else
+            SPrintf( s, "%s ( no flags )", s );
+        
+        return s;
+    } 
+/*Flag		Meaning
+0x8 		Outdoor (use global lights?)
+0x40		?
+0x80 		?
+0x2000		Indoor (use local lights?)
+0x8000		Unknown, but frequently used
+0x10000 	Used in Stormwind?
+0x40000		Show skybox if the player is "inside" the group
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MOGI_Entry entry;
+        i++;
+    }
+} MOGI<read=MOGIRead>; 
+    string MOGIRead(MOGI &o) {
+        string s;
+        SPrintf( s, "%i WMO Sets", o.i);
+        return s;
+    } 
+
+// MODS
+typedef struct {
+    char name[20];	
+    uint32 first;
+    uint32 num;
+    uint32 unk;
+} MODS_Entry;
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MODS_Entry entry;
+        i++;
+    }
+} MODS<read=MODSRead>; 
+    string MODSRead(MODS &o) {
+        string s;
+        SPrintf( s, "%i doodad sets", o.i);
+        return s;
+    } 
+// MODD
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MODD_Entry entry;
+        i++;
+    }
+} MODD<read=MODDRead>; 
+    string MODDRead(MODD &o) {
+        string s;
+        SPrintf( s, "%i doodad instance(s)", o.i);
+        return s;
+    } 
+
+// MFOG
+typedef struct {
+    UINT32 flags;		
+    Vector3D pos;		
+    float radius[2];		
+    float end;			
+    float startmult;		
+    rgb color;
+    float fogs[2];
+    rgb color2;
+} MFOG_Entry;
+
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        MFOG_Entry entry;
+        i++;
+    }
+} MFOG<read=MFOGRead>; 
+    string MFOGRead(MFOG &o) {
+        string s;
+        SPrintf( s, "%i fog entries", o.i);
+        return s;
+    } 
+
+struct ch{  int magic;  int size;};typedef struct UNKNOWN_s{  ch _;  char data[_.size];} UNKNOWN;
+
+/*******************************************************
+ *  3.  WMO File
+******************************************************
+struct  {
+        MVER mver;  // version
+
+//        fileList mmdx;  // model files
+//        offsList mmid;  // str offsets
+
+        // dirty lookahead .. 
+        local int pos = FTell();
+
+        if(nextChar()=='D') 
+        {   // Root File
+            MOHD            mohd;
+            paddedFileList  motx;
+local int refTo = motx.hdr.myDataStart;
+            MOMT            momt;
+            fileList        mogn;   // its not a file list .. but im lazy
+            MOGI            mogi;
+            unk_chunk       mosb; 
+            unk_chunk       mopv; 
+            unk_chunk       mopt; 
+            unk_chunk       mopr;
+            unk_chunk       movv; 
+            unk_chunk       movb;
+            unk_chunk       molt; 
+            MODS            mods;
+            paddedFileList       modn; 
+            MODD       modd; 
+            MFOG       mfog; 
+            unk_chunk       gfid; 
+        } else if(nextChar()=='P') 
+        {   // Group File
+            char mogp[8];
+uint32_t name;
+uint32_t descript;
+uint32_t flags<format=binary>;
+CAaBox bounding;
+char mogp_rest[2*4+4+4+4+4+4+4];
+            UNKNOWN mopy;
+            UNKNOWN movi;
+uint32_t movt_magic;
+uint32_t movt_size;
+C3Vector movt[movt_size/sizeof (C3Vector)];
+
+uint32_t monr_magic;
+uint32_t monr_size;
+C3Vector monr[monr_size/sizeof (C3Vector)];
+
+uint32_t motv_magic;
+uint32_t motv_size;
+C2Vector motv[motv_size/sizeof (C2Vector)];
+uint32_t moba_magic;
+uint32_t moba_size;
+struct Batch
+{
+  /*0x00 int16_t  a[2*3];        // indices? a box? (-2,-2,-1,2,2,3 in cameron)
+  /*0x0C uint32_t first_index;   // index of the first face index used in MOVI
+  /*0x10* uint16_t num_indices;   // number of indices used
+  /*0x12* uint16_t first_vertex;  // index of the first vertex used in MOVT
+  /*0x14* uint16_t last_vertex;   // index of the last vertex used (batch includes this one)
+  /*0x16* uint8_t  unused;
+  /*0x17* uint8_t  materialId;    // index in MOMT
+} moba[moba_size/sizeof (Batch)];
+
+
+            UNKNOWN moba;
+            UNKNOWN mobs;
+            UNKNOWN mobn;
+            UNKNOWN mobr;
+uint32_t mocv_magic;
+uint32_t mocv_size;
+CArgb mocv[mocv_size/sizeof (CArgb)];
+        }        
+
+} wmo_file;
+
+*/

@@ -1,0 +1,437 @@
+/*
+	MDX Template for WoW Alpha mdx
+	--Tigurius
+
+*/
+
+// colors for special puposes
+local int cOffset = cLtYellow;
+local int cFileName = cLtAqua;
+local int cVector = cLtPurple;
+
+/*******************************************************
+ *  1.  BASIC TYPES
+*******************************************************/
+
+typedef union {
+    UBYTE   byteValues[4];
+    UINT32  intValue;
+} unkown;
+
+// basic chunk structure
+//--------------------------------------------------
+typedef struct {
+    // always important to know!
+    local uint32 myOffset = FTell();
+    local uint32 myDataStart = myOffset + 8;
+
+    // color
+    SetColor( cWhite, cDkRed );
+
+    // magic value
+    char magic[4];
+
+    // color #2
+    SetColor( cBlack, 0x99CCFF );
+    
+    // data size
+    uint32 byte_size;
+
+    // normal color plz
+    SetStdColor();
+} _chunk <read=chunkGetMagic>;
+
+    // displays the magic and the size of this chunk
+    string chunkGetMagic(_chunk &c) {
+        string s;
+        SPrintf( s, 
+            "%c%c%c%c: %i Byte", 
+			//in mdx we have the cunk names in correct order!
+            c.magic[0], c.magic[1], c.magic[2], c.magic[3], c.byte_size
+        ); 
+        return s;
+    };
+	
+	
+	// unknown chunk - yes! Whenever we dont know anything!
+//--------------------------------------------------
+typedef struct {
+    local int i=0;
+    _chunk hdr;
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        unkown value;
+        i++;
+    }
+} unk_chunk<read=uChunkGetMagic>;
+        string uChunkGetMagic(unk_chunk &c) {
+        string s;
+        SPrintf( s, 
+            "%c%c%c%c: %i Byte", 
+            c.hdr.magic[0], c.hdr.magic[1], c.hdr.magic[2], 
+            c.hdr.magic[3], c.hdr.byte_size
+        ); 
+        return s;
+    };
+	
+	
+	// offset including features
+//--------------------------------------------------
+typedef struct {
+    // we store this value for calculations
+    local uint32 upperChunkOffset = 0;
+
+    SetColor( cBlack, cOffset );
+    
+    UINT32 adress   <format=hex>;
+    
+    SetStdColor();
+}offset <read=offsetGetADR>;
+
+    // displays where this pointer is pointing to
+    string offsetGetADR(offset &o) {
+        string s;
+        // just an offset ?
+        if(o.upperChunkOffset==0) {
+            SPrintf( s, "+ %i Byte", o.adress);
+        }
+        // global offset
+        else {
+            // zero?
+            if(o.adress==0) return "- unused - ";
+            SPrintf( s, "-> 0x%02X", o.adress+o.upperChunkOffset);
+        }
+        return s;
+    }
+	
+	
+// filename - ... because 010 want it so
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cFileName );
+   
+    string value;
+
+    SetStdColor();
+} filename <read=filenameRead>;
+    
+    string filenameRead(filename &f) {
+        return f.value;
+    };
+	
+// Vector3D
+//--------------------------------------------------
+typedef struct {
+    SetColor( cBlack, cVector );
+   
+    float x, y, z;
+
+    SetStdColor();
+} Vector3D;
+
+typedef struct{
+	SetColor( cBlack, cVector );
+   
+    float w,x, y, z;
+
+    SetStdColor();
+}Quaternion;
+
+typedef struct {
+    SetColor( cBlack, cVector );
+   
+    Vector3D min,max;
+
+    SetStdColor();
+} Vector6D;
+
+typedef struct {
+    SetColor( cBlack, cVector );
+   
+    float u,v;
+
+    SetStdColor();
+} Vector2D;
+
+typedef struct {
+    SetColor( cBlack, cVector );
+   
+    short x,y,z;
+
+    SetStdColor();
+} Triangle;
+
+
+// RGB
+//--------------------------------------------------
+typedef struct {
+    ubyte   r;
+    ubyte   g;
+    ubyte   b;
+} rgb<read=rgbRead>;
+    // display the color a bit more nice
+    string rgbRead(rgb &f) {
+        local string s;
+        SPrintf( s, "#%02X%02X%02X", f.r, f.g, f.b);
+        return s;
+    };
+	
+/*******************************************************
+ *  2.  Chunk Def.
+*******************************************************/
+
+// MVER - Versions Header
+//--------------------------------------------------
+typedef struct {
+    _chunk hdr;
+    unsigned byte version[4] <format=hex>;
+} VERS;
+
+typedef struct {
+    _chunk hdr;
+
+    char Name[80];
+	char AnimationFileName[260];
+	float BoundsRadius;
+	Vector3D MinimumExtent;
+	Vector3D MaximumExtent;
+	int BlendTime;
+	char unk;//oO
+} MODL;
+
+
+typedef struct     //NrOfSequences = ChunkSize / 132
+  {
+	
+    char Name[80];
+
+    int IntervalStart;
+    int IntervalEnd;
+    float MoveSpeed;
+    int Flags;                       //0 - Looping
+                                       //1 - NonLooping
+    Vector3D MinimumExtent;
+    Vector3D MaximumExtent;   
+	float Rarity;
+    int SyncPoint;
+
+    float BoundsRadius;
+	int null;
+	int PlaybackSpeed;//?
+  }SequEntry;
+
+typedef struct {
+	local int i=0;
+    _chunk hdr;
+	int nSequences;
+    while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+        SequEntry entry;
+        i++;
+    }
+
+} SEQS;
+
+typedef struct
+{
+  local int i=0;
+  _chunk hdr;
+
+  while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+    int GlobalSequence;
+    i++;
+  }
+} GLBS;
+
+typedef struct{
+	int InclusiveSize;
+    int PriorityPlane;
+    int Flags;                       //#1  - ConstantColor
+                                       //#2  - ???
+                                       //#4  - ???
+                                       //#8  - SortPrimitivesNearZ
+                                       //#16 - SortPrimitivesFarZ
+                                       //#32 - FullResolution
+	int InclusiveSize2;
+    int FilterMode;                  //0 - None
+                                       //1 - Transparent
+                                       //2 - Blend
+                                       //3 - Additive
+                                       //4 - AddAlpha
+                                       //5 - Modulate
+                                       //6 - Modulate2x
+    int ShadingFlags;                //#1   - Unshaded
+                                       //#2   - SphereEnvironmentMap
+                                       //#4   - ???
+                                       //#8   - ???
+                                       //#16  - TwoSided
+                                       //#32  - Unfogged
+                                       //#64  - NoDepthTest
+                                       //#128 - NoDepthSet
+    int TextureId;
+    int TextureAnimationId;
+    int CoordId;
+    float Alpha;
+}MatEntry;
+
+typedef struct
+{
+  local int i=0;
+  _chunk hdr;
+  int nMaterials;
+  int unk;
+  while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+    MatEntry Material;
+    i++;
+  }
+} MTLS;
+
+typedef struct{
+    int ReplaceableId;
+
+    char FileName[260] ;
+    int Flags;                       //#1 - WrapWidth
+                                       //#2 - WrapHeight	
+}TexEntry;
+
+typedef struct
+{
+  local int i=0;
+  _chunk hdr;
+  while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+    TexEntry Texture;
+    i++;
+  }
+} TEXS;
+
+
+
+typedef struct{
+
+    char vert[4];
+    int NrOfVertexPositions;
+    Vector3D vpos[NrOfVertexPositions];
+
+
+    char norm[4];
+    int NrOfVertexNormals;
+	Vector3D vnorm[NrOfVertexNormals];
+
+    char uvas[4];
+    int NrOfTextureVertexGroups;
+	Vector2D unk[NrOfVertexNormals];
+    char ptyp[4];
+    int NrOfFaceTypeGroups;
+
+    char FaceType[NrOfFaceTypeGroups];
+                        //4   - Triangles
+                                       //??? - Triangle fan
+                                       //??? - Triangle strip
+                                       //??? - Quads
+                                       //??? - Quad strip
+
+
+    char pcnt[4];
+    int NrOfFaceGroups;
+
+    int NrOfIndexes[NrOfFaceGroups];
+
+
+    char pvtx[4];
+    int TotalNrOfIndexes;
+	local int TotalNrOfFaces = TotalNrOfIndexes / 3;
+	Triangle Face[TotalNrOfFaces] ;
+    //TotalNrOfFaces = TotalNrOfIndexes / 3
+
+
+    char gndx[4];
+    int NrOfVertexGroups;
+
+    byte MatrixGroup[NrOfVertexGroups];
+
+
+    char mtgc[4];
+    int NrOfMatrixGroups;
+
+    int MatrixGroupSize[NrOfMatrixGroups];
+
+
+    char mats[4];
+    int  NrOfMatrixIndexes;
+
+    int MatrixIndex[NrOfMatrixIndexes];
+	
+	char bidx[4];
+	int nBidx;
+	int Bidx[nBidx];
+	char bwgt[4];
+	int nBwgt;
+	float Bwgt[nBwgt];
+
+		
+    int MaterialId;
+    int SelectionGroup;
+   int SelectionFlags;              //0  - None
+                                       //#1 - ???
+                                       //#2 - ???
+                                       //#4 - Unselectable
+
+    float BoundsRadius;
+    Vector3D MinimumExtent;
+    Vector3D MaximumExtent;
+
+    int NrOfExtents;
+
+    Vector6D Extent[NrOfExtents];
+
+
+
+	float unk_[15];
+   //int NrOfVertexTexturePositions;
+
+  //  Vector2D VertexTexturePosition[NrOfVertexTexturePositions];
+
+ }GeosetEntry;
+ 
+ typedef struct
+{
+  local int i=0;
+  _chunk hdr;
+  int nGeos;
+  int unk;
+  while( FTell() < (hdr.byte_size + hdr.myDataStart) ) {
+    GeosetEntry Geoset;
+    i++;
+  }
+} GEOS;
+
+/*******************************************************
+ *  3.  MDX File
+*******************************************************/
+struct  {
+	// magic value == MDLX
+    char magic[4];
+	VERS vers;
+	MODL modl;
+	SEQS seqs;
+	GLBS glbs;
+	MTLS mtls;
+	TEXS texs;
+	GEOS geos;
+}mdx_file;
+
+
+/*******************************************************
+ *  4. Helpers
+*******************************************************/
+    
+    // im soo lazy
+void SetStdColor() {
+    SetColor( cBlack, cWhite );
+}
+    
+    // whats comming next?
+char nextChar() {
+    return ReadByte(FTell());
+}
+
+int checkHeader(string magic){
+}

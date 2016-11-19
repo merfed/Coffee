@@ -1,0 +1,162 @@
+//------------------------------------------------
+//--- 010 Editor v7.0 Binary Template
+//
+//      File: MAP.bt
+//   Authors: DDuarte
+//   Version: 1.0
+//   Purpose: Parse map files created by TrinityCore/MaNGOS map_extractor
+//  Category: wow010
+// File Mask: *.map
+//  ID Bytes: 4D 41 50 53
+//   History:
+//   1.0    2016-04-26 Initial release.
+//
+// More information available at:
+//  https://github.com/TrinityCore/TrinityCore/blob/6.x/src/tools/map_extractor/System.cpp
+//------------------------------------------------
+
+const int ADT_CELLS_PER_GRID = 16;
+const int ADT_CELL_SIZE      = 8;
+const int ADT_GRID_SIZE      = (ADT_CELLS_PER_GRID*ADT_CELL_SIZE);
+
+struct map_fileheader
+{
+    byte mapMagic[4];
+    byte versionMagic[4];
+    uint32 buildMagic;
+    uint32 areaMapOffset;
+    uint32 areaMapSize;
+    uint32 heightMapOffset;
+    uint32 heightMapSize;
+    uint32 liquidMapOffset;
+    uint32 liquidMapSize;
+    uint32 holesOffset;
+    uint32 holesSize;
+} map<bgcolor=cLtBlue>;
+
+const int MAP_AREA_NO_AREA = 0x0001;
+
+struct map_areaHeader
+{
+    byte fourcc[4];
+    uint16 flags;
+    uint16 gridArea;
+} areaHeader<bgcolor=cLtRed>;
+
+if (!(areaHeader.flags & MAP_AREA_NO_AREA)) {
+    struct {
+        uint16 row[ADT_CELLS_PER_GRID];
+    } area_ids[ADT_CELLS_PER_GRID];
+}
+
+const int MAP_HEIGHT_NO_HEIGHT         = 0x0001;
+const int MAP_HEIGHT_AS_INT16          = 0x0002;
+const int MAP_HEIGHT_AS_INT8           = 0x0004;
+const int MAP_HEIGHT_HAS_FLIGHT_BOUNDS = 0x0008;
+
+struct map_heightHeader
+{
+    byte fourcc[4];
+    uint32 flags;
+    float  gridHeight;
+    float  gridMaxHeight;
+} heightHeader<bgcolor=cLtGreen>;
+
+if (!(heightHeader.flags & MAP_HEIGHT_NO_HEIGHT)) {
+    if (heightHeader.flags & MAP_HEIGHT_AS_INT16) {
+        struct {
+            uint16 rows[ADT_GRID_SIZE + 1];
+        } uint16_V9[ADT_GRID_SIZE + 1];
+
+        struct {
+            uint16 rows[ADT_GRID_SIZE];
+        } uint16_V8[ADT_GRID_SIZE];
+    } else if (heightHeader.flags & MAP_HEIGHT_AS_INT8) {
+        struct {
+            ubyte rows[ADT_GRID_SIZE + 1];
+        } uint8_V9[ADT_GRID_SIZE + 1];
+
+        struct {
+            ubyte rows[ADT_GRID_SIZE];
+        } uint8_V8[ADT_GRID_SIZE];
+    } else {
+        struct {
+            float rows[ADT_GRID_SIZE + 1];
+        } V9[ADT_GRID_SIZE + 1];
+
+        struct {
+            float rows[ADT_GRID_SIZE];
+        } V8[ADT_GRID_SIZE];
+    }
+}
+
+if (heightHeader.flags & MAP_HEIGHT_HAS_FLIGHT_BOUNDS) {
+    struct {
+        int16 rows[3];
+    } flight_box_max[3];
+
+    struct {
+        int16 rows[3];
+    } flight_box_min[3];
+}
+
+const int MAP_LIQUID_TYPE_NO_WATER   = 0x00;
+const int MAP_LIQUID_TYPE_WATER      = 0x01;
+const int MAP_LIQUID_TYPE_OCEAN      = 0x02;
+const int MAP_LIQUID_TYPE_MAGMA      = 0x04;
+const int MAP_LIQUID_TYPE_SLIME      = 0x08;
+const int MAP_LIQUID_TYPE_DARK_WATER = 0x10;
+const int MAP_LIQUID_TYPE_WMO_WATER  = 0x20;
+
+const int MAP_LIQUID_NO_TYPE         = 0x0001;
+const int MAP_LIQUID_NO_HEIGHT       = 0x0002;
+
+struct map_liquidHeader {
+    byte fourcc[4];
+    uint16 flags;
+    uint16 liquidType<read=readLiquidType>;
+    ubyte  offsetX;
+    ubyte  offsetY;
+    ubyte  width;
+    ubyte  height;
+    float  liquidLevel;
+};
+
+string readLiquidType(uint16& liquidType) {
+    string s;
+    if (liquidType == 0) s = "NO_WATER";
+    if (liquidType & MAP_LIQUID_TYPE_WATER) s = "WATER ";
+    if (liquidType & MAP_LIQUID_TYPE_OCEAN) s += "OCEAN ";
+    if (liquidType & MAP_LIQUID_TYPE_MAGMA) s += "MAGMA ";
+    if (liquidType & MAP_LIQUID_TYPE_SLIME) s += "SLIME ";
+    if (liquidType & MAP_LIQUID_TYPE_DARK_WATER) s += "DARK_WATER ";
+    if (liquidType & MAP_LIQUID_TYPE_WMO_WATER) s += "WMO_WATER";
+    SPrintf(s, "%u (%s)", liquidType, s);
+    return s;
+}
+
+if (map.liquidMapOffset) {
+    struct map_liquidHeader liquidHeader<bgcolor=cLtRed>;
+
+    if (!(liquidHeader.flags & MAP_LIQUID_NO_TYPE)) {
+        struct {
+            uint16 rows[ADT_CELLS_PER_GRID];
+        } liquid_entry[ADT_CELLS_PER_GRID];
+
+        struct {
+            ubyte rows[ADT_CELLS_PER_GRID];
+        } liquid_flags[ADT_CELLS_PER_GRID];
+    }
+
+    if (!(liquidHeader.flags & MAP_LIQUID_NO_HEIGHT)) {
+        struct {
+            float rows[liquidHeader.width];
+        } heights[liquidHeader.height]<optimize=true>;
+    }
+}
+
+if (map.holesSize > 0) {
+    struct {
+        uint16 rows[ADT_CELLS_PER_GRID];
+    } holes[ADT_CELLS_PER_GRID];
+}

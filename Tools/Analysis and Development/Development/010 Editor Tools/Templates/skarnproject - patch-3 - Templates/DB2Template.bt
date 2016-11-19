@@ -1,0 +1,572 @@
+#include "basics.h"
+
+// DB2 -------------------------------------------------------------------------
+
+// SceneScriptPackage.db2 ------------------------------------------------------
+
+typedef struct 
+{
+  int id;
+  stringref name;
+} SceneScriptPackageRec<read=SceneScriptPackageRead, optimize=false>;
+
+string SceneScriptPackageRead (SceneScriptPackageRec& rec)
+{
+    string a;
+    SPrintf (a, "%i: %s", rec.id, stringrefread(rec.name));
+    return a;
+}
+
+// SceneScriptPackageMember.db2 ------------------------------------------------
+
+typedef struct
+{
+    int id;
+    int package;
+    int script;
+    int sequence;
+    int d;
+} SceneScriptPackageMemberRec<read=SceneScriptPackageMemberRead, optimize=false, size=20>;
+
+string SceneScriptPackageMemberRead (SceneScriptPackageMemberRec& rec)
+{
+    string a;
+    SPrintf (a, "%i: %i -> %i. %i (%i)\n", rec.id, rec.package, rec.sequence, rec.script, rec.d);
+    return a;
+}
+
+// SceneScript.db2 -------------------------------------------------------------
+
+typedef struct
+{
+    int id;
+    stringref name;
+    stringref content;
+    int previous_script;
+    int next_script;
+} SceneScriptRec<read=SceneScriptRead, optimize=false, size=20>;
+
+typedef struct
+{
+    stringref name;
+    stringref content;
+    short previous_script;
+    short next_script;
+} SceneScriptRec_Legion<read=SceneScriptRead, optimize=false, size=12>;
+
+string SceneScriptRead (SceneScriptRec& rec)
+{
+    string a;
+    if (rec.previous_script)
+        SPrintf (a, "%i -> ", rec.previous_script);
+    SPrintf (a, "%s%i", a, rec.id);
+    if ( rec.next_script)
+        SPrintf (a, "%s -> %i", a, rec.next_script); 
+    SPrintf (a, "%s: %s: %s", a, stringrefread(rec.name), stringrefread(rec.content));
+    return a;
+}
+
+// GameObjects.db2 -------------------------------------------------------------
+
+typedef struct 
+{
+    int object_id;
+    int map_id;
+    int display_info_id;
+    C3Vector position;
+    C4Quaternion rotation;
+    float scale;
+    int unk;
+    int flag_1;
+    int flag_2;
+    int unk2;
+    int unk3;
+    stringref name;
+} GameObjectsRec<read=GameObjectsRead, optimize=false, size=0x44>;
+
+string GameObjectsRead(GameObjectsRec& rec)
+{
+    string a;
+    if(rec.unk != 5)
+    SPrintf(a, "%i: %s\n", rec.object_id, ReadString(string_block_to_global (rec.name)));
+else
+SPrintf(a, "");
+    return a;
+}
+
+// Creature.db2 ----------------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    int unk[4];
+    int display_id;
+    int unk4[3];
+float unk2[4];
+    stringref name;
+    stringref guild;
+int unk3[3];
+} CreatureRec<read=CreatureRead, optimize=false, size=72>;
+
+string CreatureRead(CreatureRec& rec)
+{
+    string a;
+    SPrintf(a, "%i: %s <%s>\n", rec.id, stringrefread (rec.name), stringrefread (rec.guild));
+    return a;
+}
+
+// Locale.db2 ------------------------------------------------------------------
+
+typedef struct 
+{
+    int unk[6];
+} LocaleRec<read=LocaleRead, optimize=false, size=24>;
+
+string LocaleRead(LocaleRec& rec)
+{
+    string a;
+    //SPrintf(a, "%i: %s <%s>\n", rec.id, ReadString(string_block_to_global (rec.name)), ReadString(string_block_to_global (rec.guild)));
+    return a;
+}
+
+// Location.db2 ----------------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    C3Vector position;
+    C3Vector rotation;
+} LocationRec<read=LocationRead, optimize=false, size=28>;
+
+string LocationRead(LocationRec& rec)
+{
+    string a;
+    SPrintf(a, "%i: %s %s \n", rec.id, C3VectorRead (rec.position), C3VectorRead (rec.rotation));
+    return a;
+}
+
+// Path.db2 --------------------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    int unk0; // 1-5
+    int unk1; // enum 0-3
+    int unk2; // 0-255
+    int unk3; // 0-255
+    int unk4; // 0-255
+    int unk5; // 0-255 (only 255 or 254)
+    int unk6; // bool, most have pathpropertyrec
+} PathRec<read=PathRead, optimize=false, size=32>;
+
+string PathRead(PathRec& rec)
+{
+    string a;
+    SPrintf(a, "%i", rec.id);
+    if (rec.unk6) SPrintf(a, "%s -- %i", a, rec.unk6);
+    SPrintf (a, "%s\n", a);
+    return a;
+}
+
+// PathProperty.db2 ------------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    int path_id;
+    int type;
+    int data; 
+} PathPropertyRec<read=PathPropertyRead, optimize=false, size=16>;
+
+string PathPropertyRead(PathPropertyRec& rec)
+{
+    string a;
+    SPrintf(a, "%i.%i %i\n", rec.path_id, rec.type, rec.data);
+    return a;
+}
+
+// PathNode.db2 ----------------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    int path_id;
+    int index_in_sequence;
+    int location_id;
+} PathNodeRec<read=PathNodeRead, optimize=false, size=16>;
+
+string PathNodeRead(PathNodeRec& rec)
+{
+    string a;
+    SPrintf (a, "%i.%i %i\n", rec.path_id, rec.index_in_sequence, rec.location_id);
+    return a;
+}
+
+// PathNodeProperty.db2 --------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    int path_id;
+    int index_in_sequence;
+    int type;
+    int data;
+} PathNodePropertyRec<read=PathNodePropertyRead, optimize=false, size=20>;
+
+string PathNodePropertyRead(PathNodePropertyRec& rec)
+{
+    string a;
+    SPrintf (a, "%i.%i.%i %i\n", rec.path_id, rec.index_in_sequence, rec.type, rec.data);
+    return a;
+}
+
+// Curve.db2 -------------------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    int interpolation_type; // 0, 1, 2, 3
+    int unk1; // bool
+} CurveRec<read=CurveRead, optimize=false, size=12>;
+
+string CurveRead(CurveRec& rec)
+{
+    string a;
+    SPrintf(a, "%i: %i %i\n", rec.id, rec.interpolation_type, rec.unk1);
+    return a;
+}
+
+// CurvePoint.db2 --------------------------------------------------------------
+
+typedef struct 
+{
+    int id;
+    int curve_id; // CurveRec.id
+    int index_in_sequence;
+    float x;
+    float y;
+} CurvePointRec<read=CurvePointRead, optimize=false, size=20>;
+
+string CurvePointRead(CurvePointRec& rec)
+{
+    string a;
+    SPrintf(a, "%i.%i: %f %f\n", rec.curve_id, rec.index_in_sequence, rec.x, rec.y);
+    return a;
+}
+
+// BroadcastText.db2 -----------------------------------------------------------
+
+typedef struct
+{
+  int id;
+  int unk0; // null
+  stringref text0;
+  stringref text1;
+  int unk2;
+  int unk3; // 1, 5, 6
+  int unk4; // null
+  int unk5; // null
+  int unk6; // 0, 500
+  int unk7; // null
+  int maybe_soundentry;
+  int unk9;
+  int unk10; // type?
+} BroadcastTextRec<read=BroadcastTextRead, optimize=false, size=52>;
+
+string BroadcastTextRead(BroadcastTextRec& rec)
+{
+    string a;
+    if (rec.unk10) SPrintf(a, "%i: %i\n", rec.id, rec.unk10);
+    return a;
+}
+
+// ItemAppearance_18716.db2
+
+typedef struct
+{
+  int a;
+  int b;
+} ItemAppearance_18716<optimize=false, size=8>;
+
+// itemsparse_some.db2
+
+typedef struct
+{
+  unsigned int padd_before[11];
+  unsigned int to_change;
+  unsigned int to_change_2;
+  unsigned char padd_after[536-2*4-11*4];
+} itemsparse_some<optimize=false, size=536>;
+
+// OverrideSpellData.db2
+
+typedef struct {
+  uint32_t m_ID;
+  uint32_t m_spells[10];
+  uint32_t m_flags_can_use_item : 1;
+  uint32_t m_flags_can_enter_melee_combat : 1;
+  uint32_t m_flags_can_cast_other_spells : 1;
+  uint32_t m_flags_use_extra_override_bar : 1;
+  uint32_t m_flags : 28;
+  uint32_t m_playerActionbarFileDataID;
+} OverrideSpellDataRec<optimize=false, size=52>;
+
+// SpellMisc.db2
+
+typedef struct
+{
+    if (header.build < 20900)
+    {
+      uint32_t m_ID;
+      uint32_t m_attributes[14];
+      uint32_t m_castingTimeIndex;
+      uint32_t m_durationIndex;
+      uint32_t m_rangeIndex;
+      float m_speed;
+      uint32_t m_spellIconID;
+      uint32_t m_activeIconID;
+      uint32_t m_schoolMask;
+      uint32_t unk;
+    }
+    else if (header.build >= 20900)
+    {
+        DWORD field00[14]; // size 56, type 0, unk 0
+        float field38; // size 4, type 3, unk 0
+        float field3C; // size 4, type 3, unk 0
+        WORD field40; // size 2, type 5, unk 4
+        WORD field42; // size 2, type 5, unk 4
+        WORD field44; // size 2, type 5, unk 4
+        WORD field46; // size 2, type 5, unk 4
+        WORD field48; // size 2, type 5, unk 4
+        BYTE field4A; // size 1, type 4, unk 4
+    }
+} SpellMiscRec<optimize=false>;
+
+typedef struct {
+  uint32_t m_EnumID;
+  stringref m_Name;
+} SoundBusNameRec<optimize=false, size=8>;
+
+typedef struct
+{
+  uint32_t m_fileDataID;
+  C3Vector m_geoBoxMin;
+  C3Vector m_geoBoxMax;
+  float m_overrideLootEffectScale;
+  float m_overrideNameScale;
+  uint16_t m_Sound[10];
+  uint16_t m_objectEffectPackageID;
+} GameObjectDisplayInfoRec<optimize=false, size=60>;
+
+typedef struct
+{
+  uint32_t _0;
+  uint8_t _1;
+  uint8_t _2;
+  uint8_t _3;
+} CharacterFaceBoneSetRec<optimize=false, size=8>;
+
+typedef struct 
+{
+  int field_0;
+  int DHGeosetsModelFileDataID;
+  char m_RaceID;
+  char m_SexID;
+  char m_VariationID;
+  char m_VariationType;
+  char m_GeosetID;
+  char m_GeosetType;
+  char m_Showscalp;
+  char m_ColorIndex;
+} CharHairGeosetsRec<optimize=false, size=16>;
+
+typedef struct
+{
+    uint32_t m_id; // size 4, type 0, unk 0
+    uint32_t m_flags; // size 4, type 0, unk 0
+    stringref m_ClientPrefix; // size 4, type 2, unk 0
+    stringref m_clientFileString; // size 4, type 2, unk 0
+    stringref m_name_lang; // size 4, type 2, unk 0
+    stringref m_name_female_lang; // size 4, type 2, unk 0
+    stringref m_name_male_lang; // size 4, type 2, unk 0
+    stringref field1C[2]; // size 8, type 2, unk 0
+    stringref field24; // size 4, type 2, unk 0
+    uint32_t m_createScreenFileDataID; // size 4, type 0, unk 0
+    uint32_t m_selectScreenFileDataID; // size 4, type 0, unk 0
+    float m_maleCustomizeOffset[3]; // size 12, type 3, unk 0
+    float m_femaleCustomizeOffset[3]; // size 12, type 3, unk 0
+    uint32_t m_lowResScreenFileDataID; // size 4, type 0, unk 0
+    uint16_t field4C; // size 2, type 5, unk 0
+    uint16_t field4E; // size 2, type 5, unk 0
+    uint16_t m_MaleDisplayId[2];
+    uint16_t field54; // size 2, type 5, unk 0
+    uint16_t field56; // size 2, type 5, unk 0
+    uint16_t field58; // size 2, type 5, unk 0
+    uint16_t field5A; // size 2, type 5, unk 0
+    uint16_t field5C; // size 2, type 5, unk 0
+    uint16_t field5E[2];
+    uint16_t field62; // size 2, type 5, unk 4
+    uint8_t field64; // size 1, type 4, unk 0
+    uint8_t field65; // size 1, type 4, unk 0
+    uint8_t field66; // size 1, type 4, unk 0
+    uint8_t field67; // size 1, type 4, unk 0
+    uint8_t field68; // size 1, type 4, unk 0
+    uint8_t field69; // size 1, type 4, unk 0
+    uint8_t field6A; // size 1, type 4, unk 0
+    uint8_t field6B; // size 1, type 4, unk 0
+    uint8_t field6C; // size 1, type 4, unk 0
+} ChrRacesRec<optimize=false, size=0x70>;
+
+typedef struct 
+{
+    uint32_t id;
+    uint32_t _4;
+    stringref names[6];
+    uint32_t values[6];
+} BattlePetEffectPropertiesRec<optimize=false, size=56, read=readBattlePetEffectPropertiesRec>;
+
+string readBattlePetEffectPropertiesRec(BattlePetEffectPropertiesRec&rec)
+{
+string a;
+if (rec._4 || rec.values[0] || rec.values[1] || rec.values[2] || rec.values[3] || rec.values[4] || rec.values[5])
+SPrintf (a, "%i %i %i %i %i %i %i"
+, rec._4
+, rec.values[0], rec.values[1], rec.values[2], rec.values[3], rec.values[4], rec.values[5]);
+return a;
+}
+
+// FILE ------------------------------------------------------------------------
+
+void records (uint32_t table_hash)
+{
+switch (table_hash)
+{
+    case 0xE8CB5E09:
+        SceneScriptPackageRec rec[header.record_count];
+        break;
+    case 0xE44DB71C:
+        SceneScriptPackageMemberRec rec[header.record_count];
+        break;
+    case 0xD4B163CC:
+        SceneScriptRec_Legion rec[header.record_count];
+        break;
+    case 0x13C403A5:
+        GameObjectsRec rec[header.record_count];
+        break;
+    case 0xC9D6B6B3:
+        CreatureRec rec[header.record_count];
+        break;
+    case 0x3F85ABB7:
+        LocaleRec rec[header.record_count];
+        break;
+    case 0x394C3727:
+        LocationRec rec[header.record_count];
+        break;
+    case 0x94F46395:
+        PathRec rec[header.record_count];
+        break;
+    case 0x8E54F60:
+        PathPropertyRec rec[header.record_count];
+        break;
+    case 0x3B9E4CA2:
+        PathNodeRec rec[header.record_count];
+        break;
+    case 0xFE21C024:
+        PathNodePropertyRec rec[header.record_count];
+        break;
+    case 0x4BD9DF7A:
+        CurveRec rec[header.record_count];
+        break;
+    case 0x700ECA3A:
+        CurvePointRec rec[header.record_count];
+        break;
+    case 0x021826BB:
+        BroadcastTextRec rec[header.record_count];
+        break;
+    case 0x42261B89:  
+        ItemAppearance_18716 rec[header.record_count];
+        break;
+    case 0x919BE54E:
+        itemsparse_some rec[header.record_count];
+        break;
+    case 0xCA75DF1C:
+        OverrideSpellDataRec rec[header.record_count];
+        break;
+    case 0xC603EE28:
+        SpellMiscRec rec[header.record_count];
+        break;
+    case 0x4AF60401:
+        SoundBusNameRec rec[header.record_count];
+        break;
+    case 0x6D100DCB:
+        GameObjectDisplayInfoRec rec[header.record_count];
+        break;
+    case 0x4D62306F:
+        CharacterFaceBoneSetRec rec[header.record_count];
+        break;
+    case 0x53F1783C:
+        ChrRacesRec rec[header.record_count];
+        break;
+    case 0x11D3EE9C:
+        CharHairGeosetsRec rec[header.record_count];
+        break;
+    case 0x63B4C4BA:
+        BattlePetEffectPropertiesRec rec[header.record_count];
+        break;
+
+    default:
+        struct { char _[header.record_size]; } rec[header.record_count];
+        break;
+}
+}
+
+
+if (ReadInt() == 876758103) // WDB4
+{
+struct wdb4_db2_header
+{
+  uint32_t magic;                                               // 'WDB4' for .db2 (database), 'WCH5' for .adb (cache)
+  uint32_t record_count;
+  uint32_t field_count;
+  uint32_t record_size;
+  uint32_t string_table_size;                                   // string block almost always contains at least one zero-byte
+  uint32_t table_hash;
+  uint32_t build;
+  uint32_t timestamp_last_written;                              // set to time(0); when writing in WowClientDB2_Base::Save()
+  uint32_t min_id;
+  uint32_t max_id;
+  uint32_t locale;                                              // as seen in TextWowEnum
+  uint32_t copy_table_size;
+  uint32_t flags;                                               // in WDB3/WCH4, this field was in the WoW executable's DBCMeta; possible values are listed in Known Flag Meanings
+} header;
+
+records (header.table_hash);
+char string_table[header.string_table_size];
+
+} else if (ReadInt() == 106898) // WDB2
+{
+struct DB2Header
+{
+  uint32_t magic;
+  uint32_t record_count;
+  uint32_t field_count;
+  uint32_t record_size;
+  uint32_t string_table_size;
+  uint32_t table_hash<format=hex>;
+  uint32_t build;
+  uint32_t timestamp_last_written;
+  uint32_t min_id;
+  uint32_t max_id;
+  int32_t locale;
+  uint32_t unk2;
+  local int diff = max_id - min_id + 1;
+  if (magic != 859980887 && max_id != 0)
+  {
+    uint32_t indices[diff];
+    uint16_t mem[diff];
+  }
+} header;
+
+records (header.table_hash);
+
+}

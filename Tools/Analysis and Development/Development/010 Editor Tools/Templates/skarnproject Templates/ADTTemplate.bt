@@ -1,0 +1,463 @@
+#include "basics.h"
+/*
+  struct MODFEntry {
+    uint32_t mwidEntry;           // references an entry in the MWID chunk, specifying the model to use.
+    uint32_t uniqueId;            // this ID should be unique for all ADTs currently loaded. Best, they are unique for the whole map.
+    C3Vector position;
+    C3Vector rotation;            // same as in MDDF.
+    CAaBox bounds;        
+    uint16_t flags;               // values from enum MODFFlags.
+    uint16_t doodadSet;           // which WMO doodad set is used.
+    uint16_t nameSet;             // which WMO name set is used. Used for renaming goldshire inn to northshire inn while using the same model.
+    uint16_t padding;             // it reads only a WORD into the WMAPOBJDEF structure for name. I don't know about the rest.
+  };
+
+  struct MDDFEntry {
+    uint32_t mmidEntry;           // references an entry in the MMID chunk, specifying the model to use.
+    uint32_t uniqueId;            // this ID should be unique for all ADTs currently loaded. Best, they are unique for the whole map. Blizzard has these unique for the whole game.
+    C3Vector position;
+    C3Vector rotation;            // same as in MDDF.
+    uint16_t scale;               // 1024 is the default size equaling 1.0f.
+    uint16_t flags;               // values from enum MDDFFlags.
+  };
+
+struct obj_adt
+{
+    DUMMY mmdx;
+    DUMMY mmid;
+    DUMMY mwmo;
+    DUMMY mwid;
+    mddf_obj mddf;
+    modf_obj modf;
+    DUMMY mcnk[256]<optimize=false>;
+};
+
+struct mcnk_tex
+{
+    ch _;
+    DUMMY mcly;
+    DUMMY mcsh;
+    DUMMY mcal;
+};
+
+struct tex_adt
+{
+    DUMMY mamp;
+    DUMMY mtex;
+    mcnk_tex mcnk[256]<optimize=false>;
+};
+
+struct mcnk_root_header
+{
+    int flags;
+    int cx;
+    int cy;
+    int unk[23];
+    vec3_s pos;
+    int unk2[3];
+};
+
+struct mcnk_root
+{
+    ch _;
+    mcnk_root_header header<size=0x80>;
+    local int consumed = sizeof (header);
+    while (consumed < _.size)
+    {
+        DUMMY unk;
+        consumed += unk._.size + sizeof (ch);
+    }
+};
+*/
+
+/*DUMMY mbmh;
+
+typedef struct MBMI_ENTRY_s
+{
+  short a;
+  short b;
+  short c;
+} MBMI_ENTRY<read=mbmi_entry_>;
+
+struct MBMI
+{
+  ch _;
+  MBMI_ENTRY data[_.size/sizeof(MBMI_ENTRY)];
+} mbmi;
+
+typedef struct MBMV_ENTRY_s
+{
+  vec3 position;
+  vec3 normal;
+  float g;
+  float h;
+  int i;
+  int j;
+} MBMV_ENTRY;
+
+struct MBMV
+{
+  ch _;
+  MBMV_ENTRY data[_.size/sizeof(MBMV_ENTRY)];
+} mbmv;
+
+
+string mbmi_entry_ (MBMI_ENTRY& data)
+{
+  string a;
+  SPrintf ( a, "%i, %i, %i -> %s, %s, %s"
+          , data.a, data.b, data.c
+          , vec3_(mbmv.data[data.a].position)
+          , vec3_(mbmv.data[data.b].position)
+          , vec3_(mbmv.data[data.c].position)
+          );
+  return a;
+}
+
+DUMMY mfbo;
+*/
+
+typedef struct 
+{
+  uint32_t offset_info;
+  uint32_t layers;
+  uint32_t offset_attribs;
+} SMLiquidChunk;
+
+typedef struct
+{
+  uint16_t liquid_type_id;
+  uint16_t liquid_object_id;
+float min_height_level;
+float max_height_level;
+uint8_t x_offset;
+uint8_t y_offset;
+uint8_t width;
+uint8_t height;
+uint32_t offset_existance;
+uint32_t offset_vertex_data;
+} SMLiquidInstance;
+
+typedef struct 
+{
+  uint32_t do_not_load_specular_or_height_texture : 1; // probably just 'disable_all_shading'
+  uint32_t _unk1 : 3;
+  uint32_t texture_scale : 4;
+  uint32_t _unk2 : 24; 
+} SMTextureFlags<read=readSMTextureFlags>;
+
+string readSMTextureFlags(SMTextureFlags& rec)
+{
+  string a;
+  SPrintf (a, "scale=%i%s%s%s", rec.texture_scale, rec.do_not_load_specular_or_height_texture ? " do_not_load_specular_or_height_texture" : ""
+, rec._unk1 ? " UNK2" : "", rec._unk1 ? " UNK2" : "");
+  return a;
+}
+
+typedef struct 
+{
+  SMTextureFlags flags;
+  float unk1; // default 0.0 (possibly displacement factor)
+  float unk2; // default 1.0 (seems to be texture scale)
+  uint32_t unk3; // padding? (no default)
+} SMTextureParams<read=readSMTextureParams>;
+
+string readSMTextureParams(SMTextureParams& rec)
+{
+  string a;
+  SPrintf (a, "%s %f %f %s", readSMTextureFlags(rec.flags), rec.unk1, rec.unk2, rec.unk3 ? "xxxxxxx" : "");
+  return a;
+}
+
+void chunk_contents (CHUNK_header& header)
+{
+  if (header.magic._._ == 1297499474) // MVER
+  {
+    uint32_t version;
+  }
+  else if (header.magic._._ == 1296577103) // MH2O
+  {
+    local int pos = FTell();
+/*    SMLiquidChunk headers[16*16];
+
+    FSeek (pos + headers[0].offset_info);
+    SMLiquidInstance instances[headers[0].layers];
+    FSeek (pos + instances.offset_vertex_data);
+    float heightmap[(instances.height  + 1) *(instances.width + 1)];
+    uint8_t depth[(instances.height  + 1) *(instances.width + 1)];
+    FSeek (pos + headers[0].offset_attribs);
+uint64_t fishable;
+uint64_t deep;*/
+/*    local int entry;
+    for (entry = 0; entry < 16*16; ++entry)
+    {
+      struct
+      {
+        SMLiquidInstance _[headers[entry].layers];
+      } instances;
+    }*/
+  
+   
+    FSeek(header.size + pos);
+  }
+  else if (header.magic._._ == 1297373264) // MTXP
+  {
+    SMTextureParams _[header.size/sizeof (SMTextureParams)];
+  }
+  else if (header.magic._._ == 1297373254) // MTXF
+  {
+    SMTextureFlags _[header.size/sizeof (SMTextureFlags)];
+  }
+else if (header.magic._._ == 1296319558 || header.magic._._ == 1296843844) // MDDF or MLDD
+{
+  enum MDDFFlags {
+    mddf_biodome = 1,             // this sets internal flags to | 0x800 (WDOODADDEF.var0xC).
+    mddf_shrubbery = 2,           // the actual meaning of these is unknown to me. maybe biodome is for really big M2s. 6.0.1.18179 seems not to check 
+                                  // for this flag
+  };
+  struct MDDFEntry { // SMDoodadDef
+    uint32_t mmidEntry;           // references an entry in the MMID chunk, specifying the model to use.
+    uint32_t uniqueId;            // this ID should be unique for all ADTs currently loaded. Best, they are unique for the whole map. Blizzard has 
+                                  // these unique for the whole game.
+    C3Vector position;            // This is relative to a corner of the map. Subtract 17066 from the non vertical values and you should start to see 
+                                  // something that makes sense. You'll then likely have to negate one of the non vertical values in whatever coordinate 
+                                  // system you're using to finally move it into place.
+    C3Vector rotation;            // degrees. This is not the same coordinate system orientation like the ADT itself! (see history.)
+    uint16_t scale;               // 1024 is the default size equaling 1.0f.
+    uint16_t flags;               // values from enum MDDFFlags.
+  } doodadDefs[header.size / sizeof (MDDFEntry)];
+}
+else if (header.magic._._ == 1297040454) // MODF
+{
+  enum MODFFlags {
+    modf_destroyable = 1,         // set for destroyable buildings like the tower in DeathknightStart. This makes it a server-controllable game object.
+    modf_use_lod = 2,             // WoD(?)+: also load _LOD1.WMO for use dependent on distance
+  };
+  struct MODFEntry {
+    uint32_t mwidEntry;           // references an entry in the MWID chunk, specifying the model to use.
+    uint32_t uniqueId;            // this ID should be unique for all ADTs currently loaded. Best, they are unique for the whole map.
+    C3Vector position;            // This is relative to a corner of the map. Subtract 17066 from the non vertical values and you should start to see 
+                                  // something that makes sense. You'll then likely have to negate one of the non vertical values in whatever coordinate 
+                                  // system you're using to finally move it into place.
+    C3Vector rotation;            // degrees. This is not the same coordinate system orientation like the ADT itself! (see history.)
+    CAaBox bounds; //if they are rendered as well as collision.
+    uint16_t flags;               // values from enum MODFFlags.
+    uint16_t doodadSet;           // which WMO doodad set is used.
+    uint16_t nameSet;             // which WMO name set is used. Used for renaming goldshire inn to northshire inn while using the same model.
+    uint16_t padding;             // it reads only a WORD into the WMAPOBJDEF structure for name. I don't know about the rest.
+  } objectDefs[header.size / sizeof (MODFEntry)];
+
+}
+  else if (header.magic._._ == 1296843864 || header.magic._._ == 1296846168) // MLDX
+  {
+    struct {
+      CAaBox bounding;
+      float radius;
+    } _[header.size/(sizeof (CAaBox) + sizeof (float))];
+  }
+else if (header.magic._._ == 1297566020 || header.magic._._ == 1296910660) // MWID, MMID
+{
+uint32_t offset[header.size/4];
+}
+else if (header.magic._._ == 1296909400 || header.magic._._ == 1297567055) // MMDX, MWMO
+{
+char filenames[header.size];
+}
+else if (header.magic._._ == 1296846148) // MLMD
+{
+  struct MLMDEntry {
+    uint32_t mwidEntry;           // references an entry in the MWID chunk, specifying the model to use.
+    uint32_t uniqueId;            // this ID should be unique for all ADTs currently loaded. Best, they are unique for the whole map.
+    C3Vector position;            // This is relative to a corner of the map. Subtract 17066 from the non vertical values and you should start to see 
+                                  // something that makes sense. You'll then likely have to negate one of the non vertical values in whatever coordinate 
+                                  // system you're using to finally move it into place.
+    C3Vector rotation;            // degrees. This is not the same coordinate system orientation like the ADT itself! (see history.)
+    uint16_t flags;               // values from enum MODFFlags.
+    uint16_t doodadSet;           // which WMO doodad set is used.
+    uint16_t nameSet;             // which WMO name set is used. Used for renaming goldshire inn to northshire inn while using the same model.
+    uint16_t padding;             // it reads only a WORD into the WMAPOBJDEF structure for name. I don't know about the rest.
+  } lod_object_defs[header.size / sizeof (MLMDEntry)];
+
+}
+else if (header.magic._._ == 1296190792) // MBMH
+{
+struct mbmh_t // blend mesh header
+{
+  uint32_t mapObjectID; // (unique ID)
+  uint32_t textureId; // of linked WMO
+  uint32_t unknown_0;
+  uint32_t unknown_1;
+  uint32_t unknown_2;
+  uint32_t mbmi_base; // first index into MBMI for this mesh
+  uint32_t mbnv_base; // first index into MBNV for this mesh
+} headers[header.size / sizeof (mbmh_t)];
+}
+else if (header.magic._._ == 1296187970) // MBBB
+{
+struct mbbb_t // blend mesh bounding boxes
+{
+  uint32_t mapObjectID; // (unique ID)
+CAaBox bounding;
+} bounding_boxes[header.size / sizeof (mbbb_t)];
+}
+else if (header.magic._._ == 1296256587) // MCNK
+{
+  local unsigned int skip = 0;
+  if (!RegExMatch (GetFileName(), ".*_(obj|tex)[01].adt$"))
+  {
+struct SMChunk // --schlumpf_ 17:01, 10 August 2009 (CEST), based on: 03-29-2005 By ObscuR, 11-08-2008 by Tharo
+{
+/*0x000*/  UINT32 flags;
+/*0x004*/  UINT32 IndexX;
+/*0x008*/  UINT32 IndexY;
+/*0x00C*/  UINT32 nLayers;				// maximum 4
+/*0x010*/  UINT32 nDoodadRefs;
+/*0x014*/  UINT32 ofsHeight;
+/*0x018*/  UINT32 ofsNormal;
+/*0x01C*/  UINT32 ofsLayer;
+/*0x020*/  UINT32 ofsRefs;
+/*0x024*/  UINT32 ofsAlpha;
+/*0x028*/  UINT32 sizeAlpha;
+/*0x02C*/  UINT32 ofsShadow;				// only with flags&0x1
+/*0x030*/  UINT32 sizeShadow;
+/*0x034*/  UINT32 areaid;
+/*0x038*/  UINT32 nMapObjRefs;
+/*0x03C*/  uint16_t holes_low_res;
+/*0x03E*/  uint16_t unknown_but_used;
+/*0x040*/  char ReallyLowQualityTextureingMap[16];	// It is used to determine which detail doodads to show. Values are an array of two bit 
+/*0x044*/
+/*0x048*/
+/*0x04C*/
+/*0x050*/  UINT32 predTex;				// 03-29-2005 By ObscuR; TODO: Investigate    ---  WoD:  inlined MCDD chunk begins here
+/*0x054*/  UINT32 noEffectDoodad;				// 03-29-2005 By ObscuR; TODO: Investigate
+/*0x058*/  UINT32 ofsSndEmitters;
+/*0x05C*/  UINT32 nSndEmitters;				//will be set to 0 in the client if ofsSndEmitters doesn't point to MCSE!
+/*0x060*/  UINT32 ofsLiquid;
+/*0x064*/  UINT32 sizeLiquid;  			// 8 when not used; only read if >8.
+/*0x068*/  C3Vector position;
+/*0x06C*/  
+/*0x070*/ 
+/*0x074*/  UINT32 ofsMCCV; 				// only with flags&0x40, had UINT32 textureId; in ObscuR's structure.
+/*0x078*/  UINT32 ofsMCLV; 				// introduced in Cataclysm
+/*0x07C*/  UINT32 unused; 			                                // currently unused
+/*0x080*/
+} mcnk;
+    skip = sizeof (mcnk);
+  }
+  chunks_via_chunk_contents (header.size - skip);
+}
+else if (header.magic._._ == 1296257604) // MCRD
+{
+  uint32_t doodad_entry[header.size / sizeof (uint32_t)];
+}
+else if (header.magic._._ == 1296257623) // MCRW
+{
+  uint32_t object_entry[header.size / sizeof (uint32_t)];
+}
+else if (header.magic._._ == 1296256089) // MCLY
+{
+  struct SMLayer
+  {
+    uint32_t textureId; 
+    uint32_t flags;		
+    uint32_t offsetInMCAL;
+    uint32_t effectId;
+  };
+
+  SMLayer layer[header.size / sizeof (SMLayer)];
+}
+else if (header.magic._._ == 1296844868) // MLHD
+{
+  struct
+  {
+    uint32_t _0;
+    CAaBox _1;
+  } mlhd;
+}
+else if (header.magic._._ == 1296848456) // MLVH
+{
+  typedef float MLVH;
+  MLVH mlv_heightmap[header.size / sizeof (MLVH)];
+}
+else if (header.magic._._ == 1296848457) // MLVI
+{
+  typedef uint16_t MLVI;
+  MLVI mlv_i[header.size / sizeof (MLVI)];
+}
+else if (header.magic._._ == 1296845900) // MLLL
+{
+  struct MLLL
+  {
+    float _0; // some kind of size
+    uint32_t _1;
+    uint32_t _2;
+    uint32_t _3;
+    uint32_t _4;
+  };
+  MLLL mlll[header.size / sizeof (MLLL)];
+}
+else if (header.magic._._ == 1296846404) // MLND
+{
+  struct MLND
+  {
+    uint32_t _0;
+    uint32_t _1;
+    uint32_t _2;
+    uint32_t _3;
+    uint16_t indices[4];
+  };
+  MLND mlll[header.size / sizeof (MLND)];
+}
+else if (header.magic._._ == 1296847689) // MLSI
+{
+  struct MLSI
+  {
+    uint16_t _;
+  };
+  MLSI mlll[header.size / sizeof (MLSI)];
+}
+else if (header.magic._._ == 1296845897) // MLLI
+{
+  C3sVector ml_liquid_indices[header.size / sizeof (C3sVector)];
+}
+else if (header.magic._._ == 1296845910) // MLLV
+{
+  C3Vector ml_liquid_vertices[header.size / sizeof (C3Vector)];
+}
+else if (header.magic._._ == 1296845902) // MLLN
+{
+  struct MLLN
+  {
+    uint32_t liquidType;
+    uint32_t num_indices;
+    uint32_t _2;
+    uint16_t _3a;
+    uint16_t _3b;
+    uint32_t _4;
+    uint32_t _5;
+  };
+  MLLN ml_liquid_n;
+}
+else if (header.magic._._ == 1296845892) // MLLD
+{
+  struct SMLodLiquidData 
+  {
+    enum
+    {
+      Flag_HasTileData = 1,
+      _compressed_A = 2,
+      _compressed_B = 4,
+    };
+    uint32_t m_flags;
+    uint32_t _1;
+  };
+  SMLodLiquidData mlld[header.size / sizeof (SMLodLiquidData)];
+}
+  else
+  {
+    char _[header.size];
+    _known = false;
+  }
+}
+
+all_chunks_via_chunk_contents();
