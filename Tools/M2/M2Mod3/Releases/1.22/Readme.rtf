@@ -1,0 +1,172 @@
+{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset0 Courier New;}}
+{\colortbl ;\red0\green0\blue255;\red102\green102\blue102;\red0\green0\blue0;}
+{\*\generator Msftedit 5.41.21.2509;}\viewkind4\uc1\pard\sl276\slmult1\lang9\b\f0\fs48 M2Mod Readme \b0\fs16 v1.1\b\fs32\par
+\b0\fs18 main thread:\fs32  \fs18{\field{\*\fldinst{HYPERLINK "http://www.darknestfantasyerotica.com/phpBB3/viewtopic.php?f=11&t=32810&start=0"}}{\fldrslt{\ul\cf1 http://www.darknestfantasyerotica.com/phpBB3/viewtopic.php?f=11&t=32810&start=0}}}\b\f0\fs32\par
+\par
+\par
+\fs48 Usage\fs32\par
+\b0\fs22 For a more in-depth usage guide, please download and read the \b M2ModGuide\b0  from the main thread. This guide only covers the how without the why.\par
+\b\fs32\par
+\b0\fs22 There are 2 ways of configuring and using M2Mod, either through initialization files (\b INI\b0 ) which is the main way, or though the command line (\b CL\b0 ) which is more advanced but often times more productive:\par
+\b\par
+\fs28 INI\b0  \fs22 usage involves opening \b M2Mod.ini\b0  in a text editor (like notepad), editing it, saving it, and then running \b M2Mod.exe\b0  to perform the operations configured in the INI file. If you're new to modding, using the INI file is the easier way to go. Lines of text in the INI that begin with a number sign '#' are considered to be comments and are ignored by the program. By selectively commenting or uncommenting certain lines, different operations can be performed. So in the examples, pay attention to which lines are commented or not.\par
+\par
+\b\fs28 CL\b0  \fs22 usage is more advanced and involves calling \b M2Mod.exe\b0  from the command line or a \b batch file\b0 . If your project is small in scale you can get by fine with \b INI\b0 , but if it gets larger, you should look into invoking M2Mod through batch files to automatically perform repetative tasks and increase your productivity.\par
+\par
+\par
+\par
+\par
+\b\fs48 Configuration\b0\fs22\par
+\par
+\cf2 ini\tab\cf0\b\f1 [input]\par
+\cf2\b0\f0 cl\tab not available\cf0\par
+input category. the following settings are part of this category:\par
+\par
+\cf2 ini\tab\cf0\b\f1 InputM2=(FILENAME)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b InputM2 "(FILENAME)"\b0\par
+\f0 Full path to input M2. This is the M2 file that will be loaded. This input is always required.\par
+\par
+\cf2 ini\tab\cf0\b\f1 OutputM2I=(FILENAME)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b OutputM2I "(FILENAME)"\b0\par
+\f0 Full path to output M2I. If set, InputM2 will be converted and saved as OutputM2I. If the file does not exist, it will be created. If the file already exists, it will be overwritten.\par
+\par
+\cf2 ini\tab\cf0\b\f1 InputM2I=(FILENAME)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b InputM2I "(FILENAME)"\b0\f0\par
+Full path to input M2I. If set, InputM2I will be merged with InputM2 to produce a modified M2 which can be saved as OutputM2.\par
+\par
+\cf2 ini\tab\cf0\b\f1 InputM2Copy=(FILENAME)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b InputM2Copy "(FILENAME)"\b0\par
+\f0 Full path to another M2 that you want to copy bounding data from. If set, bounding data will be copied from InputM2Copy to the loaded M2. This paramter is situational and is intended to be used for model swaps to preserve bounding data from the original model to the swapped model. In most situations this is not needed. You can probably get by OK without using this setting. Using this incorrectly is probably risky if it gets detected on a live server.\par
+\par
+\cf2 ini\tab\cf0\b\f1 OutputM2=(FILENAME)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b OutputM2 "(FILENAME)"\b0\par
+\f0 Full path to output M2. If set, the loaded M2 will be saved here. If the file does not exist, it will be created. If the file already exists, it will be overwritten. This is the final output M2 that can be used in game.\par
+\par
+\par
+\cf2 ini\tab\cf0\b\f1 [options]\par
+\cf2\b0\f0 cl\tab not available\cf0\b\par
+\b0 options category. the following settings are part of this category:\par
+\par
+\cf2 ini\tab\cf0\b\f1 SubmeshPositionalTolerance = (0.0 - 0.005)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b SubmeshPositionalTolerance (0.0 - 0.005)\b0\par
+\f0 default: 0.0005\par
+compares vertices within submeshes. vertices who's positions and normals are within positional and angular tolerance levels are determined to be duplicates and will have their positions and normals merged.\par
+\par
+\cf2 ini\tab\cf0\b\f1 SubmeshAngularTolerance = (0.0 - 90.0)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b SubmeshAngularTolerance (0.0 - 90.0)\b0\par
+\f0 default: 60\par
+compares vertices within submeshes. vertices who's positions and normals are within positional and angular tolerance levels are determined to be duplicates and will have their positions and normals merged. this fixes seams within submeshes.\par
+\par
+\cf2 ini\tab\cf0\b\f1 BodyPositionalTolerance = (0.0 - 0.005)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b BodyPositionalTolerance (0.0 - 0.005)\b0\par
+\f0 default: 0.0005\par
+compares vertices accross body submeshes. vertices who's positions and normals are within positional and angular tolerance levels are determined to be duplicates and will have their positions and normals merged.\par
+\par
+\cf2 ini\tab\cf0\b\f1 BodyAngularTolerance = (0.0 - 90.0)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b BodyAngularTolerance (0.0 - 90.0)\b0\par
+\f0 default: 90\par
+compares vertices accross body submeshes. vertices who's positions and normals are within positional and angular tolerance levels are determined to be duplicates and will have their positions and normals merged. this fixes seams between body submeshes.\par
+\par
+\cf2 ini\tab\cf0\b\f1 ClothingPositionalTolerance = (0.0 - 0.005)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b ClothingPositionalTolerance (0.0 - 0.005)\b0\par
+\f0 default: 0.0005\par
+compares vertices across body and clothing submeshes. vertices who's positions and normals are within positional and angular tolerance levels are determined to be duplicates and will have their positions and normals merged.\par
+\par
+\cf2 ini\tab\cf0\b\f1 ClothingAngularTolerance = (0.0 - 90.0)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b ClothingAngularTolerance (0.0 - 90.0)\b0\par
+\f0 default: 45\par
+compares vertices across body and clothing submeshes. vertices who's positions and normals are within positional and angular tolerance levels are determined to be duplicates and will have their positions and normals merged. this fixes seams between clothing and body submeshes.\par
+\par
+\cf2 ini\tab\cf0\b\f1 IgnoreExtras=(0|1)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b IgnoreExtras\b0\par
+\f0 default: 0\par
+If set, program will merge only geometry and ignore everything else like bones, attachments, and cameras. This is designed to be used when migrating edits from an old version to a new version.\par
+\par
+\cf2 ini\tab\cf0\b\f1 MirrorCamera=(0|1)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b MirrorCamera\b0\f0\par
+default: 0\par
+If set, program will mirror the camera accross the model's Y axis, so if the camera was looking left, it will now be looking right, and if it was looking right it will now be looking left. Use during M2I to M2 merge.\par
+\par
+\par
+\cf2 ini\tab\cf0\b\f1 [debug]\par
+\cf2\b0\f0 cl\tab not available\cf0\b\par
+\b0 debug category. the following settings are part of this category:\par
+\b\par
+\cf2\b0 ini\tab\cf0\b\f1 ShowVersion=(0|1)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b ShowVersion\f0\par
+\b0 If set, program will show it's version number. default value is 0.\b\par
+\b0\par
+\cf2 ini\tab\cf0\b\f1 Verbose=(0|1|2|3)\par
+\cf2\b0\f0 cl\tab\f1 /\cf0\b Verbose (0|1|2|3)\b0\f0\par
+Number. Set to 0, 1, 2, or 3, to choose level of diagnostic text output. Default is 0. The value of this setting is really up to you. It doesn't affect the function of the tool. Just gives you some feedback to monitor progress. default value is 0.\par
+\par
+\par
+\par
+\par
+\b\fs48 INI Examples\fs32\par
+\b0\fs22 These examples show different ways to configure the INI file to perform different tasks.\par
+\par
+\par
+\b\fs32 M2 to M2I conversion\b0\fs22\par
+\par
+In this example we will convert an M2 (InputM2) to an M2I (OutputM2I) that can be imported into Blender. \par
+\par
+\f1 [input]\par
+InputM2 =       C:\\mod\\wow\\model\\data\\HumanFemale.m2\par
+OutputM2I =     C:\\mod\\wow\\model\\data\\HumanFemale.m2i\par
+\cf2 #InputM2I =     ...\par
+#OutputM2 =     ...\cf0\f0\par
+\par
+\par
+\b\fs32 M2I to M2 merge\b0\fs22\par
+\par
+In this example, we load the original M2 (InputM2) and merge it with the edited M2I exported from Blender (InputM2I) and save the result as the modified M2 (OutputM2) which can be put in a patch MPQ and used in game.\par
+\par
+\f1 [input]\par
+InputM2 =       C:\\mod\\wow\\model\\data\\HumanFemale.m2\par
+\cf2 #OutputM2I =    ...\cf0\par
+InputM2I =      C:\\mod\\wow\\model\\data\\out\\HumanFemale.m2i\par
+OutputM2 =      C:\\mod\\wow\\model\\data\\out\\HumanFemale.m2\f0\par
+\par
+\par
+\b\fs32 M2 version update/animation fix\par
+\b0\fs22\par
+If you have a model edit that was made for an older version of the game (for example 3.0) and you want to update it to work with the newer version of the game (3.1), it is a 2 step process. The main reason incompatibilites arise with model edits after a patch is because new animations were added to the game that aren't in the old models. So when the game tries to play an animation that doesn't exist, the game usually crashes. The main function of this update process is to keep the geometry from the edited M2 but update the bones, attachments, cameras, animations, and anything else to the newer version. To do this, we use the \f1 IgnoreExtras\f0  flag.\par
+\par
+In this example, \f1 BloodElfFemale_old.m2 \f0 is an edited model from an older version of the game that you want to upgrade to the current version of the game. \f1 BloodElfFemale_new.m2 \f0 is the M2 extracted from the current version of the game, which is the target version for this upgrade conversion process. \f1 BloodElfFemale_final.m2 \f0 is the result of the upgrade and is a current version model with geometry from the old model.\par
+\par
+\b Step 1 configuration:\b0\par
+\f1 [input]\par
+InputM2 =\tab\tab C:\\mod\\wow\\model\\data\\BloodElfFemale_old.m2\par
+OutputM2I =\tab C:\\mod\\wow\\model\\data\\BloodElfFemale_old.m2i\par
+\cf2 #InputM2I =\tab ...\par
+#OutputM2 =\tab ...\par
+\par
+\cf3 [options]\par
+\cf2 #IgnoreExtras =\tab 1\cf0\par
+\f0\par
+\b Step 2 configuration:\par
+\b0\f1 [input]\par
+InputM2 =\tab\tab C:\\mod\\wow\\model\\data\\BloodElfFemale_new.m2\tab\par
+\cf2 #OutputM2I =\tab ...\cf0\par
+InputM2I =\tab\tab C:\\mod\\wow\\model\\data\\BloodElfFemale_old.m2i\par
+OutputM2 =\tab\tab C:\\mod\\wow\\model\\data\\BloodElfFemale_final.m2\tab\par
+\cf3\par
+[options]\par
+\cf0 IgnoreExtras = 1\par
+\f0\par
+Using these steps, it should also be possible to downdate in version. But it always requires the original M2 file from the version you are targeting.\par
+\par
+\par
+\par
+\par
+\b\fs48 Command Line Examples\par
+\b0\fs22 Actually, this is just a syntax example. It doesn't matter what order the inputs are in, as long as they are sparated by spaces in the right places. Note that some inputs require an argument as well, like /InputM2 and /Verbose, in these cases the arguement is expected to follow after the space. It is generally a good idea to surround filenames with quotes, because if they contain spaces they will be parsed into separate arguements by the command line parser unless they are quoted. Note that for inputs like /IgnoreExtras, /MirrorCamera, and /ShowVersion, no extra arguement is expected to follow, which is different from the INI counterpart, their presence alone is the switch.\par
+\par
+\f1 M2Mod.exe /InputM2 "(FILENAME)" [/OutputM2I "(FILENAME)"] [/InputM2I "(FILENAME)"] [/InputM2Copy "(FILENAME)"] [/OutputM2 "(FILENAME)"] [SubmeshPositionalTolerance (0.0 - 0.005)] [SubmeshAngularTolerance (0.0 - 90.0)] [BodyPositionalTolerance (0.0 - 0.005)] [BodyAngularTolerance (0.0 - 90.0)] [ClothingPositionalTolerance (0.0 - 0.005)] [ClothingAngularTolerance (0.0 - 90.0)] [/IgnoreExtras] [/MirrorCamera] [/ShowVersion] [/Verbose (0|1|2|3)]\par
+\f0\par
+If you find yourself performing the same operations again and again and having to edit the INI every time between configurations, you should definitely look into learning more about how to use the command line and batch files. Batch files can greatly improve productivity, especially when performing many or repetative tasks. Search the internet for more info.\par
+\par
+\par
+}
+ 

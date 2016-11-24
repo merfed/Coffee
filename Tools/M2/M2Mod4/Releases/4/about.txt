@@ -1,0 +1,75 @@
+M2Mod
+v4.0 for Cataclysm
+made by redaxle
+special thanks to Trollpaxton who shared the source code for his M2 mod tool which served as a great reference point for this tool, especially with fixing animation offsets.
+special thanks to WoW Model Viewer source code on google code and everybody who works on that project that had a trickle effect on my work.
+special thanks to the wowdev and source peek wikis and whoever edits those pages with the reverse engineered file format information needed to make something like this possible.
+thanks to everybody on darknest who makes mods.
+thanks to everybody on darknest who uses mods.
+
+main thread:
+http://www.darknestfantasyerotica.com/phpBB3/viewtopic.php?f=11&t=32810&start=0
+
+
+Version History
+v0.1 beta
+initial release
+
+v0.1.1 beta
+fixed one bug. added more detailed error messages. changed configuration file format, added categories. updated Blender import/export scripts. updated documentation.
+
+v0.2 beta
+improved duplicate vertex detection and normals smoothing to be less dumb.
+added command line support.
+added MirrorCamera option, to mirror the camera accross the model's y axis.
+added IgnoreExtras option, to merge only geometry from the M2I and ignore everything else, which is useful for updating old edits to the current game version.
+
+v0.2a beta
+improved import/export scripts, it is now safe to remove doubles from the mesh and use quads (although using quads is still not advisable because they will be triangulated on export and they might not triangulate favorably). vertices are now exported in the order that they are used.
+
+v0.2b beta
+changed import script, removed remove doubles on import because it messes with 2 sided geometry like skirts.
+
+v1.0
+fixed the MWV issue, added missing list length assignments for vertex and bone lists which was causing models to explode when opened in WoW Model Viewer because of indices indexing vertices that were outside the range of the loaded vertex list.
+
+v1.1
+updated the import script to make imported meshes smooth so it's easier to see seams in the mesh. improved seam fixing logic during merge. added the capability to specify the tolerances used during the 3 seam fixing phases.
+
+
+v1.2
+fixed a bug with bounding data calculation being calculated out of order and using the old vertex data from the original M2 vs the imported M2I.
+added support for static M2s, these are M2s used for doodads and world objects and other things that don't move.
+
+v1.21
+fixed bug with seam fixing being applied on old vertices from original M2 rather than new vertices from after M2I import.
+
+v4.0
+updated for Cataclysm.
+skipped a bunch of version numbers just to get version number in sync with the current WoW version number, 4.0.
+modified the M2I format a little bit, M2I is now also at v4.0.
+updated and fixed errors in M2I file format documentation.
+Blender 2.49 M2I import/export scripts updated. imports from v4.0 and v3.0 M2I. exports as v4.0 M2I only.
+took out bounding box copy option.
+changed IgnoreExtras option to be on by default to help with migrating mods from v3.0 to v4.0.
+added new IgnoreMaterials option which is on by default and should to help when migrating mods from v3.0 to v4.0.
+
+v4.01
+turned off IgnoreMaterials by default, so materials are taken from the imported M2I rather than from the input M2. IgnoreMaterials is still bugged on some models however.
+turned off IgnoreExtras by default.
+removed internal function PrintInfo() from being called and generating a TXT file along side the input M2 containing info about the M2 (if you have these TXT files left over from the last version you may delete them).
+
+v4.02
+removed IgnoreExtras, split it into 3 options:
+added IgnoreBones, IgnoreAttachments, IgnoreCameras.
+
+v4.03
+fixed the seam fixing algorithm to actually work now. it will close all the gaps between body and non-body meshes and copy vertex weights from the body mesh to the non-body mesh. it wasn't working at all before beacuse of some stupid mistake on my part. in order for it to work, close all the gaps between clothing and body meshes so M2Mod can detect it and copy the bone weights from the body to the clothing.
+
+v4.04
+fixed a goof up, because i got confused and released an incomplete version that didn't work as advertised.
+
+v4.05
+(trying to put things back the way they're supposed to be... i goofed up and got the source code versions mixed up and released some hybrid version that added some features and brought back some old bugs.)
+once again disabled internal function PrintInfo() from being called and generating TXT files.
+once again fixed a bug with bounding data calculation being calculated out of order
