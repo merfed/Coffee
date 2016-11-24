@@ -1,0 +1,6 @@
+SetFileInterface("Hex");
+SetCursorPos(0x0);
+DeleteBytes(GetCursorPos()+0,8);
+SetCursorPos(0x4);
+WriteUInt(GetCursorPos(),0x110);
+FileSave();
