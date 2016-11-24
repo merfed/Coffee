@@ -1,4 +1,5 @@
 Hello Everyone. Many people have been asking me how I ripped the female troll from classic WoW alpha. Here is the tutorial. If done well, only takes 5 minutes. With this method you will be able to extract only the geometry. It doesn't work for particles or animations.
+
 Tested in WoW alpha version 0.5.3.3368.
 
 ## Tools

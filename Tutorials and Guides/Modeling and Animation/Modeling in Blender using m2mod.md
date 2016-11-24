@@ -86,3 +86,6 @@ I assume you know how to compile a patch using Ladik's MPQ Editor.
 Enjoy your edited model!
 
 ![9](images/mibumm-9.jpg)
+
+## Credit
+Skarn
