@@ -1,0 +1,59 @@
+Filter "Text (*.txt, *.ini)"
+{
+  "txt",
+  "ini"
+}
+
+Filter "Sylk (*.slk)"
+{
+  "slk"
+}
+
+Filter "Scripts (*.ai, *.wai, *.j, *.js, *.pld)"
+{
+  "ai",
+  "wai",
+  "j",
+  "js",
+  "pld"
+}
+
+Filter "Html (*.htm, *.html)"
+{
+  "htm",
+  "html"
+}
+
+Filter "Models (*.mdl, *.mdx)"
+{
+  "mdl",
+  "mdx"
+}
+
+Filter "Images (*.bmp, *.tga, *.jpg, *.jpeg, *.pcx, *.blp)"
+{
+  "bmp",
+  "tga",
+  "jpg",
+  "jpeg",
+  "pcx",
+  "blp"
+}
+
+Filter "Maps (*.w3m, *.w3x, *.w3n)"
+{
+  "w3m",
+  "w3x",
+  "w3n"
+}
+
+Filter "Sounds (*.wav)"
+{
+  "wav"
+}
+
+Filter "Music (*.mp3, *.mid)"
+{
+  "mp3",
+  "mid"
+}

@@ -1,0 +1,51 @@
+//+-----------------------------------------------------------------------------
+//| Input structure
+//+-----------------------------------------------------------------------------
+struct PS_IN
+{
+  float2 TexturePosition : TEXCOORD0;
+  float4 Color : COLOR0;
+};
+
+
+//+-----------------------------------------------------------------------------
+//| Output structure
+//+-----------------------------------------------------------------------------
+struct PS_OUT
+{
+  float4 Color : COLOR;
+};
+
+
+//+-----------------------------------------------------------------------------
+//| Global variables
+//+-----------------------------------------------------------------------------
+float4x4 WorldMatrix;
+float4x4 ViewMatrix;
+float4x4 ProjectionMatrix;
+float4x4 WorldViewProjectionMatrix;
+float4 CameraPosition;
+float4 CameraDirection;
+float4 AmbientColor;
+float4 DiffuseColor;
+float4 SpecularColor;
+float SpecularPower;
+
+
+//+-----------------------------------------------------------------------------
+//| The texture
+//+-----------------------------------------------------------------------------
+sampler2D Texture;
+
+
+//+-----------------------------------------------------------------------------
+//| Main shader function
+//+-----------------------------------------------------------------------------
+PS_OUT main(PS_IN In)
+{
+  PS_OUT Out;
+
+  Out.Color = tex2D(Texture, In.TexturePosition.xy) * In.Color;
+
+  return Out;
+}

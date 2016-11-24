@@ -1,0 +1,66 @@
+//+-----------------------------------------------------------------------------
+//| Input structure
+//+-----------------------------------------------------------------------------
+struct PS_IN
+{
+  float4 Position : POSITION;
+  float2 TexturePosition : TEXCOORD0;
+  float4 Color : COLOR0;
+  float3 Light : TEXCOORD1;
+  float3 Normal : TEXCOORD2;
+  float3 View : TEXCOORD3;
+};
+
+
+//+-----------------------------------------------------------------------------
+//| Output structure
+//+-----------------------------------------------------------------------------
+struct PS_OUT
+{
+  float4 Color : COLOR;
+};
+
+
+//+-----------------------------------------------------------------------------
+//| Global variables
+//+-----------------------------------------------------------------------------
+float4x4 WorldMatrix;
+float4x4 ViewMatrix;
+float4x4 ProjectionMatrix;
+float4x4 WorldViewProjectionMatrix;
+float4 CameraPosition;
+float4 CameraDirection;
+float4 AmbientColor;
+float4 DiffuseColor;
+float4 SpecularColor;
+float SpecularPower;
+
+
+//+-----------------------------------------------------------------------------
+//| The texture
+//+-----------------------------------------------------------------------------
+sampler2D Texture;
+
+
+//+-----------------------------------------------------------------------------
+//| Main shader function
+//+-----------------------------------------------------------------------------
+PS_OUT main(PS_IN In)
+{
+  PS_OUT Out;
+
+  float3 Light = normalize(In.Light);
+  float3 Normal = normalize(In.Normal);
+  float3 View = normalize(In.View);
+  float DiffuseFactor = saturate(dot(Light, Normal));
+  float3 Reflect = normalize(2 * DiffuseFactor * Normal - Light);
+  float4 SpecularFactor = pow(saturate(dot(Reflect, View)), SpecularPower);
+  float4 Color1 = AmbientColor + (DiffuseColor * DiffuseFactor);
+  float4 Color2 = (SpecularColor * SpecularFactor);
+  Color1.a = 1.0f;
+  Color2.a = 0.0f;
+
+  Out.Color = (Color1 * tex2D(Texture, In.TexturePosition.xy) * In.Color) + Color2;
+
+  return Out;
+}

@@ -1,0 +1,30 @@
+Background 90 90 90
+Ambient 128 128 128
+Diffuse 192 192 192
+Specular 0 0 0
+Power 8
+FillMode Solid
+NearDistance 1
+FarDistance 30000
+UseLighting True
+UseShaders True
+RelativeZoom True
+RelativeMove True
+ClockwiseCulling True
+UseGroundTexture False
+GroundTextureScale 250
+ShowDebug False
+ShowAxises True
+ShowLights False
+ShowBones False
+ShowCameras False
+ShowAttachments False
+ShowCollisionShapes False
+BlpQuality 90
+GroundTexture TerrainArt\Ashenvale\Ashen_DirtGrass.blp
+ReplaceableTexture11 ReplaceableTextures\Cliff\Cliff0.blp
+ReplaceableTexture31 ReplaceableTextures\LordaeronTree\LordaeronSummerTree.blp
+ReplaceableTexture32 ReplaceableTextures\AshenvaleTree\AshenTree.blp
+ReplaceableTexture33 ReplaceableTextures\BarrensTree\BarrensTree.blp
+ReplaceableTexture34 ReplaceableTextures\NorthrendTree\NorthTree.blp
+ReplaceableTexture35 ReplaceableTextures\Mushroom\MushroomTree.blp
