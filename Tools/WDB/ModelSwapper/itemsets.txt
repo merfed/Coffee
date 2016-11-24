@@ -1,0 +1,120 @@
+--Priest
+Prophecy(Tier 1 Priest Raid Set):hands@16812:head@16813:legs@16814:shoulders@16816:chest@16815:bracers@16819:belt@16817:boots@16811
+Transcendence(Tier 2 Priest Raid Set):hands@16920:head@16921:legs@16922:shoulders@16924:chest@16923:bracers@16926:belt@16925:boots@16919
+Faith(Tier 3 Priest Raid Set):hands@22517:head@22514:legs@22513:shoulders@22515:chest@22512:bracers@22519:belt@22518:boots@22516
+Incarnate(Tier 4 Priest Raid Set):hands@29055:head@29049:legs@29053:shoulders@29054:chest@29050
+Avatar(Tier 5 Priest Raid Set):hands@30151:head@30152:legs@30153:shoulders@30154:chest@30150
+Absolution(Tier 6 Priest Raid Set):hands@31061:head@31064:legs@31067:shoulders@31070:chest@31065:bracers@34434:belt@34528:boots@34563
+Valorous Ragalia(Tier 7.5 Priest Raid Set):hands@40454:head@40456:legs@40457:shoulders@40459:chest@40458
+Gladiator's Raiment/Investiture(S1 Priest Set):hands@31409:head@31410:legs@31411:shoulders@31412:chest@31413
+Merciless Gladiator Raiment/Investiture(S2 Priest Set):hands@32015:head@32016:legs@32017:shoulders@32018:chest@32019
+Vengeful Gladiator Raiment/Investiture(S3 Priest Set):hands@33717:head@33718:legs@33719:shoulders@33720:chest@33721
+Brutal Gladiator Raiment/Investiture(S4 Priest Set):hands@35053:head@35054:legs@35055:shoulders@35056:chest@35057
+Deadly Gladiator Raiment/Investiture(S5 Epic Priest Set):hands@41873:head@41853:legs@41863:shoulders@41868:chest@41858
+--Rogue
+Nightslayer(Tier 1 Rogue Raid Set):hands@16826:head@16821:legs@16822:shoulders@16823:chest@16820:bracers@16825:belt@16827:boots@16824
+Bloodfang(Tier 2 Rogue Raid Set):hands@16907:head@16908:legs@16909:shoulders@16832:chest@16905:bracers@16911:belt@16910:boots@16906
+Bonescythe(Tier 3 Rogue Raid Set):hands@22481:head@22478:legs@22477:shoulders@22479:chest@22476:bracers@22483:belt@22482:boots@22480
+Netherblade(Tier 4 Rogue Raid Set):hands@29048:head@29044:legs@29046:shoulders@29047:chest@29045
+Deathmantle(Tier 5 Rogue Raid Set):hands@30145:head@30146:legs@30148:shoulders@30149:chest@30144
+Slayers(Tier 6 Rogue Raid Set):hands@31026:head@31027:legs@31029:shoulders@31030:chest@31028:bracers@34448:belt@34558:boots@34575
+Valorous Bonescythe(Tier 7.5 Rogue Raid Set):hands@40496:head@40499:legs@40500:shoulders@40502:chest@40495
+Gladiator's Vestments(S1 Rogue Set):hands@25834:head@25830:legs@25833:shoulders@25832:chest@25831
+Merciless Gladiator's Vestments(S2 Rogue Set):hands@31998:head@31999:legs@32000:shoulders@32001:chest@32002
+Vengeful Gladiator's Vestments(S3 Rogue Set):hands@33700:head@33701:legs@33702:shoulders@33703:chest@33704
+Brutal Gladiator's Vestments(S4 Rogue Set):hands@35032:head@35033:legs@35034:shoulders@35035:chest@35036
+Deadly Gladiator's Vestments(S5 Rogue Set):hands@41766:head@41671:legs@41654:shoulders@41682:chest@41649
+--Druid
+Cenarion Raiment(Tier 1 Druid Raid Set):hands@16831:head@16834:legs@16835:shoulders@16836:chest@16833:bracers@16830:belt@16828:boots@16829
+Stormrage Raiment(Tier 2 Druid Raid Set):hands@16899:head@16900:legs@16901:shoulders@16902:chest@16897:bracers@16904:belt@16903:boots@16898
+Dreamwalker Raiment(Tier 3 Druid Raid Set):hands@22493:head@22490:legs@22489:shoulders@22491:chest@22488:bracers@22495:belt@22494:boots@22492
+Malorne Raiment(Tier 4 Druid Raid Set):hands@29090:head@29086:legs@29088:shoulders@29089:chest@29087
+Nordrassil Raiment(Tier 5 Druid Raid Set):hands@30217:head@30219:legs@30220:shoulders@30221:chest@30216
+Thunderheart Raiment(Tier 6 Druid Raid Set):hands@31032:head@31037:legs@31045:shoulders@31047:chest@31041:bracers@34445:belt@34554:boots@34571
+Valorous Dreamwalker Ragalia(Tier 7.5 Druid Raid Set):hands@40460:head@40461:legs@40462:shoulders@40465:chest@40463
+Gladiator's Refuge(S1 Druid Set):hands@31375:head@31376:legs@31377:shoulders@31378:chest@31379
+Merciless Gladiator's Refuge(S2 Druid Set):hands@31987:head@31988:legs@31989:shoulders@31990:chest@31991
+Vengeful Gladiator's Refuge(S3 Druid Set):hands@33690:head@33691:legs@33692:shoulders@33693:chest@33694
+Brutal Gladiator's Refuge(S4 Druid Set):hands@35022:head@35023:legs@35024:shoulders@35025:chest@35026
+Deadly Gladiator's Refuge(S5 Druid Set):hands@41286:head@41320:legs@41297:shoulders@41274:chest@41309
+--Hunter
+Giantstalker Armor(Tier 1 Hunter Raid Set):hands@16852:head@16846:legs@16847:shoulders@16848:chest@16845:bracers@16850:belt@16851:boots@16849
+Dragonstalker Armor(Tier 2 Hunter Raid Set):hands@16940:head@16939:legs@16938:shoulders@16837:chest@16942:bracers@16935:belt@16936:boots@16941
+Cryptstalker Armor(Tier 3 Hunter Raid Set):hands@22440:head@22438:legs@22437:shoulders@22439:chest@22436:bracers@22443:belt@22442:boots@22440
+Demon Stalker Armor(Tier 4 Hunter Raid Set):hands@29085:head@29081:legs@29083:shoulders@29084:chest@29082
+Rift Stalker Armor(Tier 5 Hunter Raid Set):hands@30140:head@40141:legs@40142:shoulders@40143:chest@30139
+Gronnstalker Armor(Tier 6 Hunter Raid Set):hands@31001:head@31003:legs@31005:shoulders@31006:chest@31004:bracers@34443:belt@34549:boots@34570
+Valorous Cryptstalker(Tier 7.5 Hunter Raid Set):hands@40504:head@40505:legs@40506:shoulders@40507:chest@40503
+Gladiator's Pursuit(S1 Hunter Set):hands@28335:head@28331:legs@28332:shoulders@28333:chest@28334
+Merciless Gladiator's Persuit(S2 Hunter Set):hands@31961:head@31962:legs@31963:shoulders@31964:chest@31960
+Vengeful Gladiator's Persuit(S3 Hunter Set):hands@33665:head@33666:legs@33667:shoulders@33668:chest@33664
+Brutal Gladiator's Persuit(S4 Hunter Set):hands@34991:head@34992:legs@34993:shoulders@34994:chest@34990
+Deadly Gladiator's Persuit(S5 Hunter Set):hands@41142:head@41156:legs@41204:shoulders@41216:chest@41086
+--Mage
+Arcanist Ragalia(Tier 1 Mage Raid Set):hands@16801:head@16795:legs@16796:shoulders@16797:chest@16798:bracers@16799:belt@16802:boots@16800
+Netherwind Ragalia(Tier 2 Mage Raid Set):hands@16913:head@16914:legs@16915:shoulders@16917:chest@16916:bracers@16918:belt@16818:boots@16912
+Frostfire Ragalia(Tier 3 Mage Raid Set):hands@22501:head@22498:legs@22497:shoulders@22499:chest@22496:bracers@22503:belt@22502:boots@22500
+Aldor Ragalia(Tier 4 Mage Raid Set):hands@29080:head@29076:legs@29078:shoulders@29079:chest@29077
+Tirisfal Ragalia(Tier 5 Mage Raid Set):hands@30205:head@30206:legs@30207:shoulders@30210:chest@30196
+Tempest Ragalia(Tier 6 Mage Raid Set):hands@31055:head@31056:legs@31058:shoulders@31059:chest@31057:bracers@34447:belt@34557:boots@34574
+Valorous Frostfire(Tier 7.5 Mage Raid Set):hands@40415:head@40416:legs@40417:shoulders@40419:chest@40418
+Gladiator's Ragalia(S1 Mage Set):hands@25857:head@25855:legs@25858:shoulders@25854:chest@25856
+Merciless Gladiator's Ragalia(S2 Mage Set):hands@32049:head@32048:legs@32051:shoulders@32047:chest@32050
+Vengeful Gladiator's Ragalia(S3 Mage Set):hands@33759:head@33758:legs@33761:shoulders@33757:chest@33760
+Brutal Gladiator's Ragalia(S4 Mage Set):hands@35098:head@35097:legs@35100:shoulders@35096:chest@35099
+Deadly Gladiator's Ragalia(S5 mage Set):hands@41970:head@41945:legs@41958:shoulders@41964:chest@41951
+--Paladin
+Lawbringer Armor(Tier 1 Paladin Raid Set):hands@16860:head@16854:legs@16855:shoulders@16856:chest@16853:bracers@16857:belt@16858:boots@16859
+Judgement Armor(Tier 2 Paladin Raid Set):hands@16956:head@16955:legs@16954:shoulders@16953:chest@16958:bracers@16951:belt@16952:boots@16957
+Redemption Armor(Tier 3 Paladin Raid Set):hands@22426:head@22428:legs@22427:shoulders@22429:chest@22425:bracers@22424:belt@22431:boots@22430
+Justicar Armor(Tier 4 Paladin Raid Set):hands@29067:head@29068:legs@29069:shoulders@29070:chest@29066
+Crystalforge Armor(Tier 5 Paladin Raid Set):hands@30124:head@30125:legs@30126:shoulders@30127:chest@30123
+Lightbringer Armor(Tier 6 Paladin Raid Set):hands@30985:head@30987:legs@30995:shoulders@30998:chest@30991:bracers@34433:belt@34488:boots@34560
+Valorous Redemption(Tier 7.5 Paladin Raid Set):hands@40575:head@40576:legs@40577:shoulders@40578:chest@40574
+Gladiator's Aegis(S1 Paladin Set):hands@27703:head@27704:legs@27705:shoulders@27706:chest@27702
+Merciless Gladiator's Aegis(S2 Paladin Set):hands@31993:head@31997:legs@31995:shoulders@31996:chest@31992
+Vengeful Gladiator's Aegis(S3 Paladin Set):hands@33696:head@33697:legs@33698:shoulders@33699:chest@33695
+Brutal Gladiator's Aegis(S4 Paladin Set):hands@35028:head@35029:legs@35030:shoulders@35031:chest@35027
+Deadly Gladiator's Aegis(S5 Paladin Set):hands@40926:head@40932:legs@40938:shoulders@40962:chest@40905
+--Shaman
+The Earthfury(Tier 1 Shaman Raid Set):hands@16839:head@16842:legs@16843:shoulders@16844:chest@16841:bracers@16840:belt@16838:boots@16837
+The Ten Storms(Tier 2 Shaman Raid Set):hands@16948:head@16947:legs@16946:shoulders@16945:chest@16950:bracers@16943:belt@16944:boots@16949
+The Earthshatterer(Tier 3 Shaman Raid Set):hands@22469:head@22466:legs@22465:shoulders@22467:chest@22464:bracers@22471:belt@22470:boots@22468
+Cyclone Harness(Tier 4 Shaman Raid Set):hands@29039:head@29040:legs@29042:shoulders@29043:chest@29038
+Cataclysm Harness(Tier 5 Shaman Raid Set):hands@30189:head@30190:legs@30192:shoulders@30194:chest@30185
+Skyshatter Harness(Tier 6 Shaman Raid Set):hands@31011:head@31015:legs@31021:shoulders@31024:chest@31018:bracers@34439:belt@34545:boots@34567
+Valorous Earthshatter(Tier 7.5 Shaman Raid Set):hands@40520:head@40521:legs@40522:shoulders@40524:chest@40523
+Gladiator's Earthshaker(S1 Shaman Set):hands@26000:head@25998:legs@26001:shoulders@25999:chest@25997
+Merciless Gladiator's Earthshaker(S2 Shaman Set):hands@32005:head@32006:legs@32007:shoulders@32008:chest@32004
+Vengeful Gladiator's Earthshaker(S3 Shaman Set):hands@33707:head@33708:legs@33709:shoulders@33710:chest@33706
+Brutal Gladiator's Earthshaker(S4 Shaman Set):hands@35043:head@35044:legs@35045:shoulders@35046:chest@35042
+Deadly Gladiator's Earthshaker(S5 Shaman Set):hands@41136:head@41150:legs@41198:shoulders@41210:chest@41080
+--Warlock
+Felheart Raiment(Tier 1 Warlock Raid Set):hands@16805:head@16808:legs@16810:shoulders@16807:chest@16809:bracers@16804:belt@16806:boots@16803
+Nemesis Raiment(Tier 2 Warlock Raid Set):hands@16928:head@16929:legs@16930:shoulders@16932:chest@16931:bracers@16934:belt@16933:boots@16927
+Plagueheart Raiment(Tier 3 Warlock Raid Set):hands@22509:head@22506:legs@22505:shoulders@22507:chest@22504:bracers@22511:belt@22510:boots@22508
+Voidheart Raiment(Tier 4 Warlock Raid Set):hands@28968:head@28963:legs@28966:shoulders@28967:chest@28964
+Corruptor Raiment(Tier 5 Warlock Raid Set):hands@30211:head@30212:legs@30213:shoulders@30215:chest@30214
+Malefic Raiment(Tier 6 Warlock Raid Set):hands@31050:head@31051:legs@31053:shoulders@31054:chest@31052:bracers@34436:belt@34541:boots@34564
+Valorous Plagueheart(Tier 7.5 Warlock Raid Set):hands@40420:head@40421:legs@40422:shoulders@40424:chest@40423
+Gladiator's Dreadgear(S1 Warlock Set):hands@24556:head@24553:legs@24555:shoulders@24554:chest@24552
+Merciless Gladiator's Dreadgear(S2 Warlock Set):hands@31973:head@31974:legs@31976:shoulders@31976:chest@31977
+Vengeful Gladiator's Dreadgear(S3 Warlock Set):hands@33676:head@33677:legs@33678:shoulders@33679:chest@33680
+Brutal Gladiator's Dreadgear(S4 Warlock Set):hands@35003:head@35004:legs@35005:shoulders@35006:chest@35007
+Deadly Gladiator's Felshroud(S5 Warlock Set):hands@42016:head@41992:legs@42004:shoulders@42010:chest@41997
+--Warrior
+Battlegear of Might(Tier 1 Warrior Raid Set):hands@16863:head@16866:legs@16867:shoulders@16868:chest@16865:bracers@16861:belt@16864:boots@16862
+Battlegear of Wrath(Tier 2 Warrior Raid Set):hands@16964:head@16963:legs@16962:shoulders@16961:chest@16966:bracers@16959:belt@16960:boots@16965
+Deadnaught's Battlegear(Tier 3 Warrior Raid Set):hands@22421:head@22418:legs@22417:shoulders@22419:chest@22416:bracers@22423:belt@22422:boots@22420
+Warbringer Battlegear(Tier 4 Warrior Raid Set):hands@29020:head@29021:legs@29022:shoulders@29023:chest@29019
+Destroyer Battlegear(Tier 5 Warrior Raid Set):hands@30119:head@30120:legs@30121:shoulders@30122:chest@30118
+Onslaught Battlegear(Tier 6 Warrior Raid Set):hands@30969:head@30972:legs@30977:shoulders@30979:chest@30975:bracers@34441:belt@34546:boots@34569
+Valorous Dreadnaught(Tier 7.5 Warrior Raid Set):hands@40527:head@40528:legs@40529:shoulders@40530:chest@40525
+Gladiator's Battlegear(S1 Warrior Set):hands@24549:head@24545:legs@24547:shoulders@24546:chest@24544
+Merciless Gladiator's Battlegear(S2 Warrior Set):hands@30487:head@30488:legs@30489:shoulders@30490:chest@30486
+Vengeful Gladiator's Battlegear(S3 Warrior Set):hands@33729:head@33730:legs@33731:shoulders@33732:chest@33728
+Brutal Gladiator's Battlegear(S4 Warrior Set):hands@35067:head@35068:legs@35069:shoulders@35070:chest@35066
+Deadly Gladiator's Battlegear(S5 Warrior Set):hands@40804:head@40823:legs@40844:shoulders@40862:chest@40786
+--Death Knight
+Valorous Scourgeborne(Tier 7.5 Death Knight Raid Set):hands@40552:head@40554:legs@40556:shoulders@40557:chest@40550
+Deadly Gladiator's Desecration(S5 Death Knight Set):hands@40806:head@40824:legs@40845:shoulders@40863:chest@40784
